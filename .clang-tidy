@@ -1,0 +1,8 @@
+Checks: >
+  -*,
+  bugprone-*,
+  misc-*,
+  modernize-*, -modernize-use-trailing-return-type,
+  performance-*,
+  portability-*,
+  readability-*,
