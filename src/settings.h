@@ -1,9 +1,10 @@
 #pragma once
 
-class game_settings {
-public:
-    inline static const char* WINDOW_TITLE = "raylib";
-    static const int WINDOW_SIZE_X = 1024;
-    static const int WINDOW_SIZE_Y = 576;
-    static const int TARGET_FPS = 60;
+namespace game_settings {
+
+inline const char* WINDOW_TITLE = "raylib";
+const int WINDOW_SIZE_X = 1024;
+const int WINDOW_SIZE_Y = 576;
+const int TARGET_FPS = 60;
+
 };
