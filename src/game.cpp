@@ -2,25 +2,25 @@
 #include "game-element.h"
 #include <list>
 
-GameElement* Game::_root = nullptr;
+game_element* game::root_ = nullptr;
 
-void tick_game_element(GameElement* element) {
-    list<GameElement*> children = element->get_children();
-    list<GameElement*>::iterator i;
+void tick_game_element(game_element* element) {
+    list<game_element*> children = element->get_children();
+    list<game_element*>::iterator i;
     for (i = children.begin(); i != children.end(); ++i) {
         tick_game_element(*i);
     }
     element->tick();
 }
 
-void Game::do_tick_loop() {
-    if (Game::_root) tick_game_element(Game::_root);
+void game::do_tick_loop() {
+    if (game::root_) tick_game_element(game::root_);
 }
 
-void Game::set_root(GameElement* new_root) {
-    Game::_root = new_root;
+void game::set_root(game_element* new_root) {
+    game::root_ = new_root;
 }
 
-GameElement* Game::get_root() {
-    return Game::_root;
+game_element* game::get_root() {
+    return game::root_;
 }

@@ -3,19 +3,19 @@
 
 using namespace std;
 
-class GameElement {
+class game_element {
 public:
-    GameElement();
-    ~GameElement();
+    game_element();
+    ~game_element();
 
-    GameElement* get_parent();
-    list<GameElement*> get_children();
-    void add_child(GameElement* element);
-    void remove_child(GameElement* child);
+    game_element* get_parent();
+    list<game_element*> get_children();
+    void add_child(game_element* element);
+    void remove_child(game_element* child);
 
     virtual void tick();
 
 private:
-    GameElement* _parent;
-    list<GameElement*> _children;
+    game_element* parent_;
+    list<game_element*> children_;
 };

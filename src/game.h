@@ -3,12 +3,12 @@
 
 using namespace std;
 
-class Game {
+class game {
 public:
     static void do_tick_loop();
-    static void set_root(GameElement* new_root);
-    static GameElement* get_root();
+    static void set_root(game_element* new_root);
+    static game_element* get_root();
 
 private:
-    static GameElement* _root;
+    static game_element* root_;
 };

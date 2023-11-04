@@ -4,9 +4,10 @@
 #include <raylib.h>
 
 int main() {
-    InitWindow(
-        GameSettings::WINDOW_SIZE_X, GameSettings::WINDOW_SIZE_Y, "raylib");
-    SetTargetFPS(GameSettings::TARGET_FPS);
+    InitWindow(game_settings::WINDOW_SIZE_X,
+               game_settings::WINDOW_SIZE_Y,
+               game_settings::WINDOW_TITLE);
+    SetTargetFPS(game_settings::TARGET_FPS);
 
     while (!WindowShouldClose()) {
         BeginDrawing();
@@ -14,7 +15,7 @@ int main() {
         DrawText("Hello world!", 190, 200, 20, DARKGREEN);
         EndDrawing();
 
-        Game::do_tick_loop();
+        game::do_tick_loop();
     }
 
     CloseWindow();

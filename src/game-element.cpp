@@ -4,43 +4,43 @@
 
 using namespace std;
 
-GameElement::GameElement() {
-    this->_parent = nullptr;
+game_element::game_element() {
+    this->parent_ = nullptr;
 }
 
-GameElement::~GameElement() {
-    if (this->_parent) this->_parent->remove_child(this);
-    list<GameElement*>::iterator i;
-    for (i = this->_children.begin(); i != this->_children.end(); ++i) {
+game_element::~game_element() {
+    if (this->parent_) this->parent_->remove_child(this);
+    list<game_element*>::iterator i;
+    for (i = this->children_.begin(); i != this->children_.end(); ++i) {
         delete *i;
     }
 }
 
-GameElement* GameElement::get_parent() {
-    return this->_parent;
+game_element* game_element::get_parent() {
+    return this->parent_;
 }
 
-list<GameElement*> GameElement::get_children() {
-    list<GameElement*> duplicate;
-    list<GameElement*>::iterator i;
-    for (i = this->_children.begin(); i != this->_children.end(); ++i) {
+list<game_element*> game_element::get_children() {
+    list<game_element*> duplicate;
+    list<game_element*>::iterator i;
+    for (i = this->children_.begin(); i != this->children_.end(); ++i) {
         duplicate.push_back(*i);
     }
     return duplicate;
 }
 
-void GameElement::add_child(GameElement* element) {
-    if (element->_parent) element->_parent->_children.remove(element);
-    element->_parent = this;
-    this->_children.push_back(element);
+void game_element::add_child(game_element* element) {
+    if (element->parent_) element->parent_->children_.remove(element);
+    element->parent_ = this;
+    this->children_.push_back(element);
 }
 
-void GameElement::remove_child(GameElement* child) {
-    if (child->_parent == this) {
-        this->_children.remove(child);
-        child->_parent = nullptr;
+void game_element::remove_child(game_element* child) {
+    if (child->parent_ == this) {
+        this->children_.remove(child);
+        child->parent_ = nullptr;
     }
 }
 
-void GameElement::tick() {
+void game_element::tick() {
 }
