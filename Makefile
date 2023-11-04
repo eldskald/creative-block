@@ -31,7 +31,3 @@ build:
 # Format files on ./src
 format:
 	for FILE in $(call rwildcard,src,*.h *.cpp); do clang-format -i $$FILE; done
-
-# Lint files on ./src
-lint:
-	for FILE in $(call rwildcard,src,*.h *.cpp); do clang-tidy $$FILE; done

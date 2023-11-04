@@ -6,7 +6,7 @@ This project is me trying to learn C++ with [raylib](https://github.com/raysan5/
 
 ### Dependencies
 
-Install [raylib](https://github.com/raysan5/raylib) on your system's libraries. On Arch, a simple `sudo pacman -S raylib` will suffice, on other distros you should take look at [their page](https://github.com/raysan5/raylib/wiki/Working-on-GNU-Linux). You'll also using [g++](https://wiki.archlinux.org/title/GNU_Compiler_Collection) to compile.
+Install [raylib](https://github.com/raysan5/raylib) on your system's libraries. On Arch, a simple `sudo pacman -S raylib` will suffice, on other distros you should take look at [their page](https://github.com/raysan5/raylib/wiki/Working-on-GNU-Linux). I'm also using [g++](https://wiki.archlinux.org/title/GNU_Compiler_Collection) to compile.
 
 I'm also using [clang-format](https://clang.llvm.org/docs/ClangFormat.html) and [clang-tidy](https://clang.llvm.org/extra/clang-tidy/) to format and lint the code, but you won't need these to run or build.
 
