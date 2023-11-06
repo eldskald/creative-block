@@ -4,17 +4,26 @@
 
 game_element* game::root_ = nullptr;
 
-void tick_game_element(game_element* element) {
-    list<game_element*> children = element->get_children();
+void game::tick_game_element_(game_element* element) {
     list<game_element*>::iterator i;
-    for (i = children.begin(); i != children.end(); ++i) {
-        tick_game_element(*i);
+    for (i = element->children_.begin(); i != element->children_.end(); ++i) {
+        tick_game_element_(*i);
     }
-    element->tick();
+    element->tick_();
 }
 
-void game::do_tick_loop() {
-    if (game::root_) tick_game_element(game::root_);
+void game::update_game_element_pos_(game_element* element) {
+    element->update_pos_();
+    list<game_element*>::iterator i;
+    for (i = element->children_.begin(); i != element->children_.end(); ++i) {
+        update_game_element_pos_(*i);
+    }
+}
+
+void game::do_game_loop() {
+    if (!game::root_) return;
+    game::update_game_element_pos_(game::root_);
+    game::tick_game_element_(game::root_);
 }
 
 void game::set_root(game_element* new_root) {
