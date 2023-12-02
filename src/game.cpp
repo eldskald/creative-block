@@ -1,6 +1,9 @@
 #include "game.h"
 #include "game-element.h"
+#include "sprite.h"
+#include "settings.h"
 #include <list>
+#include <raylib.h>
 
 game_element* game::root_ = nullptr;
 
@@ -18,6 +21,10 @@ void game::update_game_element_pos_(game_element* element) {
     for (i = element->children_.begin(); i != element->children_.end(); ++i) {
         update_game_element_pos_(*i);
     }
+}
+
+void game::initial_setup() {
+    sprite::atlas_ = LoadTexture(game_settings::SPRITESHEET_FILE);
 }
 
 void game::do_game_loop() {
