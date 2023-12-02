@@ -18,7 +18,7 @@ all: dev
 dev:
 	mkdir -p $(TEMP_TARGET_DIR)
 	g++ $(call rwildcard,src,*.cpp) -o $(TEMP_TARGET_DIR)/$(BIN_NAME) $(LINK_FLAGS)
-	./$(DEV_TARGET_DIR)/$(DEV_BIN_NAME)
+	./$(TEMP_TARGET_DIR)/$(BIN_NAME)
 	rm -rf ./$(TEMP_TARGET_DIR)
 
 # Debug target, builds a debug version, runs with the debugger and deletes the build
