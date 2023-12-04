@@ -1,27 +1,54 @@
 #include "sprite.h"
+#include "defs.h"
 #include "settings.h"
 #include <raylib.h>
-#include <raymath.h>
+#include <vector>
+
+using namespace std;
 
 Texture2D sprite::atlas_ = {0};
 
 sprite::sprite() {
-    this->rec_ = (Rectangle){0,
-                             0,
-                             game_settings::SPRITESHEET_CELL_SIZE_X,
-                             game_settings::SPRITESHEET_CELL_SIZE_Y};
+    this->atlas_rec_ = (Rectangle){0,
+                                   0,
+                                   game_settings::SPRITESHEET_CELL_SIZE_X,
+                                   game_settings::SPRITESHEET_CELL_SIZE_Y};
+    this->curr_anim_time_ = 0.0f;
+    this->curr_anim_frame_ = 0;
 }
 
 void sprite::set_texture(int x, int y) {
-    this->rec_ = (Rectangle){game_settings::SPRITESHEET_CELL_SIZE_X * x,
-                             game_settings::SPRITESHEET_CELL_SIZE_Y * y,
-                             game_settings::SPRITESHEET_CELL_SIZE_X,
-                             game_settings::SPRITESHEET_CELL_SIZE_Y};
+    this->atlas_rec_ = (Rectangle){game_settings::SPRITESHEET_CELL_SIZE_X * x,
+                                   game_settings::SPRITESHEET_CELL_SIZE_Y * y,
+                                   game_settings::SPRITESHEET_CELL_SIZE_X,
+                                   game_settings::SPRITESHEET_CELL_SIZE_Y};
+}
+
+void sprite::set_animation(vector<defs::animation_frame> animation) {
+    this->animation_ = animation;
+    this->curr_anim_time_ = 0.0f;
+    if (animation.size() > 0) {
+        this->curr_anim_frame_ = 0;
+        this->set_texture(animation[0].x, animation[0].y);
+    }
+    this->animation_.shrink_to_fit();
 }
 
 void sprite::tick_() {
+    if (this->animation_.size() > 0) {
+        this->curr_anim_time_ += GetFrameTime();
+        if (this->curr_anim_time_ >=
+            this->animation_[this->curr_anim_frame_].duration) {
+            this->curr_anim_time_ -=
+                this->animation_[this->curr_anim_frame_].duration;
+            this->curr_anim_frame_ =
+                (this->curr_anim_frame_ + 1) % this->animation_.size();
+            this->set_texture(this->animation_[this->curr_anim_frame_].x,
+                              this->animation_[this->curr_anim_frame_].y);
+        }
+    }
     DrawTexturePro(sprite::atlas_,
-                   this->rec_,
+                   this->atlas_rec_,
                    (Rectangle){
                        this->global_pos_.x,
                        this->global_pos_.y,
@@ -34,5 +61,3 @@ void sprite::tick_() {
                    0.0f,
                    WHITE);
 }
-
-
