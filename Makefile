@@ -8,6 +8,9 @@ BUILD_TARGET_DIR := build
 TEMP_TARGET_DIR := .temp
 LINK_FLAGS := -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
+CONFIGS = $(file < project-settings.config)
+LINK_FLAGS += $(foreach LINE,$(CONFIGS),-D $(LINE))
+
 # Phony targets
 .PHONY: all dev debug build format
 

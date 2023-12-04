@@ -1,3 +1,11 @@
+
+# project
 /build
 /.temp
+
+# ripgrep
 .rgignore
+
+# clangd
+/.cache
+compile_commands.json

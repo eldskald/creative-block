@@ -1,6 +1,6 @@
 #pragma once
-#include "game-element.h"
 #include "defs.h"
+#include "game-element.h"
 #include <raylib.h>
 #include <vector>
 
