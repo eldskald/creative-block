@@ -54,3 +54,9 @@ void sprite::tick_() {
                    0.0f,
                    WHITE);
 }
+
+void sprite::enter_() {
+}
+
+void sprite::exit_() {
+}

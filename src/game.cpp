@@ -1,14 +1,13 @@
 #include "game.h"
 #include "game-element.h"
 #include "sprite.h"
-#include <list>
 #include <raylib.h>
 
 game_element* game::root_ = nullptr;
 
 void game::tick_game_element_(game_element* element) {
-    list<game_element*>::iterator i;
-    for (i = element->children_.begin(); i != element->children_.end(); ++i) {
+    for (auto i = element->children_.begin(); i != element->children_.end();
+         ++i) {
         tick_game_element_(*i);
     }
     element->tick_();
@@ -16,8 +15,8 @@ void game::tick_game_element_(game_element* element) {
 
 void game::update_game_element_pos_(game_element* element) {
     element->update_pos_();
-    list<game_element*>::iterator i;
-    for (i = element->children_.begin(); i != element->children_.end(); ++i) {
+    for (auto i = element->children_.begin(); i != element->children_.end();
+         ++i) {
         update_game_element_pos_(*i);
     }
 }
@@ -33,7 +32,11 @@ void game::do_game_loop() {
 }
 
 void game::set_root(game_element* new_root) {
+    if (game::root_) {
+        game::root_->trigger_exit_(game::root_);
+    }
     game::root_ = new_root;
+    game_element::trigger_enter_(new_root);
 }
 
 game_element* game::get_root() {

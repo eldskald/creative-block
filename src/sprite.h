@@ -25,5 +25,7 @@ private:
 
     static Texture2D atlas_;
 
+    void enter_() override;
+    void exit_() override;
     void tick_() override;
 };

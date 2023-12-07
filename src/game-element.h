@@ -23,11 +23,16 @@ public:
 protected:
     Vector2 global_pos_;
 
-    void update_pos_();
-
 private:
     game_element* parent_;
     list<game_element*> children_;
+    bool is_on_tree_;
 
+    void update_pos_();
+    static void trigger_enter_(game_element* element);
+    static void trigger_exit_(game_element* element);
+
+    virtual void enter_();
+    virtual void exit_();
     virtual void tick_();
 };
