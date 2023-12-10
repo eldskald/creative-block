@@ -1,6 +1,6 @@
-#include "defs.h"
 #include "game-element.h"
 #include "game.h"
+#include "physics-body.h"
 #include "sprite.h"
 #include <raylib.h>
 #include <vector>
@@ -14,22 +14,46 @@ int main() {
     game::initial_setup();
 
     game_element* scene = new game_element();
-    sprite* img = new sprite();
-    scene->add_child(img);
-    img->set_animation(
-        vector<defs::animation_frame>{(defs::animation_frame){1, 2, 0.5f},
-                                      (defs::animation_frame){1, 0, 0.5f},
-                                      (defs::animation_frame){0, 1, 0.5f},
-                                      (defs::animation_frame){1, 1, 0.5f}});
-    img->pos = (Vector2){200, 100};
+
+    physics_body* block_1 = new physics_body();
+    block_1->pos = (Vector2){120, 290};
+    block_1->collision_box = (Rectangle){0, 0, 64, 64};
+    block_1->static_body = true;
+    sprite* sprite_1 = new sprite();
+    sprite_1->set_texture(0, 0);
+    block_1->add_child(sprite_1);
+    scene->add_child(block_1);
+
+    physics_body* block_2 = new physics_body();
+    block_2->pos = (Vector2){150, 250};
+    block_2->collision_box = (Rectangle){0, 0, 64, 64};
+    block_2->static_body = true;
+    sprite* sprite_2 = new sprite();
+    sprite_2->set_texture(0, 0);
+    block_2->add_child(sprite_2);
+    scene->add_child(block_2);
+
+    physics_body* player = new physics_body();
+    player->pos = (Vector2){0, 0};
+    player->collision_box = (Rectangle){0, 0, 64, 64};
+    sprite* player_sprite = new sprite();
+    player_sprite->set_texture(0, 1);
+    player->add_child(player_sprite);
+    scene->add_child(player);
+    const float PLAYER_SPEED = 200.0f;
 
     game::set_root(scene);
 
     while (!WindowShouldClose()) {
         BeginDrawing();
         ClearBackground(BLACK);
-        DrawText("Hello world!", 190, 200, 20, DARKGREEN);
         EndDrawing();
+
+        Vector2 input = (Vector2){(IsKeyDown(KEY_D) ? PLAYER_SPEED : 0.0f) -
+                                      (IsKeyDown(KEY_A) ? PLAYER_SPEED : 0.0f),
+                                  (IsKeyDown(KEY_S) ? PLAYER_SPEED : 0.0f) -
+                                      (IsKeyDown(KEY_W) ? PLAYER_SPEED : 0.0f)};
+        player->vel = input;
 
         game::do_game_loop();
     }
