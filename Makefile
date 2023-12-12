@@ -43,4 +43,4 @@ build:
 
 # Format files on ./src
 format:
-	for FILE in $(call rwildcard,src,*.h *.cpp); do clang-format -i $$FILE; done
+	for FILE in $(call rwildcard,src,*.h *.cpp *.tpp); do clang-format -i $$FILE; done

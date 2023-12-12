@@ -76,10 +76,13 @@ void game_element::update_pos_() {
 }
 
 void game_element::enter_() {
+    return;
 }
 
 void game_element::exit_() {
+    return;
 }
 
 void game_element::tick_() {
+    return;
 }

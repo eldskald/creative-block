@@ -1,9 +1,10 @@
+#include "animation.h"
 #include "game-element.h"
 #include "game.h"
 #include "physics-body.h"
 #include "sprite.h"
 #include <raylib.h>
-#include <vector>
+#include <tuple>
 
 using namespace std;
 
@@ -20,7 +21,7 @@ int main() {
     block_1->collision_box = (Rectangle){0, 0, 64, 64};
     block_1->static_body = true;
     sprite* sprite_1 = new sprite();
-    sprite_1->set_texture(0, 0);
+    sprite_1->atlas_coords = (Vector2){0, 0};
     block_1->add_child(sprite_1);
     scene->add_child(block_1);
 
@@ -29,20 +30,33 @@ int main() {
     block_2->collision_box = (Rectangle){0, 0, 64, 64};
     block_2->static_body = true;
     sprite* sprite_2 = new sprite();
-    sprite_2->set_texture(0, 0);
+    sprite_2->atlas_coords = (Vector2){0, 0};
     block_2->add_child(sprite_2);
     scene->add_child(block_2);
+
+    tuple<Vector2, float> arr[4] = {
+        tuple<Vector2, float>{(Vector2){2, 0}, 1.0f},
+        tuple<Vector2, float>{(Vector2){3, 0}, 1.0f},
+        tuple<Vector2, float>{(Vector2){2, 1}, 1.0f},
+        tuple<Vector2, float>{(Vector2){3, 1}, 1.0f}};
+    sprite* animated_sprite = new sprite();
+    animated_sprite->pos = (Vector2){380, 210};
+    animation<Vector2>* anim =
+        new animation<Vector2>(&(animated_sprite->atlas_coords), true, arr, 4);
+    animated_sprite->add_child(anim);
+    scene->add_child(animated_sprite);
 
     physics_body* player = new physics_body();
     player->pos = (Vector2){0, 0};
     player->collision_box = (Rectangle){0, 0, 64, 64};
     sprite* player_sprite = new sprite();
-    player_sprite->set_texture(0, 1);
+    player_sprite->atlas_coords = (Vector2){0, 1};
     player->add_child(player_sprite);
     scene->add_child(player);
     const float PLAYER_SPEED = 200.0f;
 
     game::set_root(scene);
+    anim->play();
 
     while (!WindowShouldClose()) {
         BeginDrawing();

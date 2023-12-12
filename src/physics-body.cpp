@@ -99,6 +99,3 @@ void physics_body::enter_() {
 void physics_body::exit_() {
     physics_body::physics_bodies_.remove(this);
 }
-
-void physics_body::tick_() {
-}
