@@ -1,7 +1,7 @@
 #include "sprite.h"
 #include <raylib.h>
 
-Texture2D sprite::atlas_ = {0};
+Texture2D sprite::atlas_ = (Texture2D){0};
 
 sprite::sprite() {
     this->atlas_coords = (Vector2){0, 0};

@@ -2,6 +2,7 @@
 #include "game-element.h"
 #include "game.h"
 #include "physics-body.h"
+#include "sfx.h"
 #include "sprite.h"
 #include <raylib.h>
 #include <tuple>
@@ -11,6 +12,7 @@ using namespace std;
 int main() {
     InitWindow(WINDOW_SIZE_X, WINDOW_SIZE_Y, WINDOW_TITLE);
     SetTargetFPS(TARGET_FPS);
+    InitAudioDevice();
 
     game::initial_setup();
 
@@ -55,6 +57,9 @@ int main() {
     scene->add_child(player);
     const float PLAYER_SPEED = 200.0f;
 
+    sfx* sound = new sfx(sfx::sfx_1);
+    scene->add_child(sound);
+
     game::set_root(scene);
     anim->play();
 
@@ -62,6 +67,10 @@ int main() {
         BeginDrawing();
         ClearBackground(BLACK);
         EndDrawing();
+
+        if (IsKeyPressed(KEY_Q)) {
+            sound->play();
+        }
 
         Vector2 input = (Vector2){(IsKeyDown(KEY_D) ? PLAYER_SPEED : 0.0f) -
                                       (IsKeyDown(KEY_A) ? PLAYER_SPEED : 0.0f),
@@ -72,6 +81,7 @@ int main() {
         game::do_game_loop();
     }
 
+    CloseAudioDevice();
     CloseWindow();
 
     return 0;
