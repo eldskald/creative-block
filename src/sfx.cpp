@@ -1,10 +1,15 @@
 #include "sfx.h"
 #include <raylib.h>
 
-Sound sfx::sfx_1 = (Sound){0};
+Wave sfx::sfx_1 = (Wave){0};
+Wave sfx::sfx_2 = (Wave){0};
 
-sfx::sfx(Sound sound) {
-    this->sound_ = sound;
+sfx::sfx(Wave sound) {
+    this->sound_ = LoadSoundFromWave(sound);
+}
+
+sfx::~sfx() {
+    UnloadSound(this->sound_);
 }
 
 void sfx::play() {

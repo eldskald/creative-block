@@ -57,8 +57,11 @@ int main() {
     scene->add_child(player);
     const float PLAYER_SPEED = 200.0f;
 
-    sfx* sound = new sfx(sfx::sfx_1);
-    scene->add_child(sound);
+    sfx* sound_1 = new sfx(sfx::sfx_2);
+    scene->add_child(sound_1);
+
+    sfx* sound_2 = new sfx(sfx::sfx_2);
+    scene->add_child(sound_2);
 
     game::set_root(scene);
     anim->play();
@@ -68,8 +71,12 @@ int main() {
         ClearBackground(BLACK);
         EndDrawing();
 
-        if (IsKeyPressed(KEY_Q)) {
-            sound->play();
+        if (IsKeyPressed(KEY_ONE)) {
+            sound_1->play();
+        }
+
+        if (IsKeyPressed(KEY_TWO)) {
+            sound_2->play();
         }
 
         Vector2 input = (Vector2){(IsKeyDown(KEY_D) ? PLAYER_SPEED : 0.0f) -

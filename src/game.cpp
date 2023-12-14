@@ -24,7 +24,8 @@ void game::update_game_element_pos_(game_element* element) {
 
 void game::initial_setup() {
     sprite::atlas_ = LoadTexture(SPRITESHEET_FILE);
-    sfx::sfx_1 = LoadSound(SFX_1);
+    sfx::sfx_1 = LoadWave(SFX_1);
+    sfx::sfx_2 = LoadWave(SFX_2);
 }
 
 void game::do_game_loop() {

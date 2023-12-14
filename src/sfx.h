@@ -4,12 +4,14 @@
 
 class sfx : public game_element {
 public:
-    sfx(Sound sound);
+    sfx(Wave sound);
+    ~sfx();
 
     void play();
     void stop();
 
-    static Sound sfx_1;
+    static Wave sfx_1;
+    static Wave sfx_2;
 
 protected:
     void update_pos_() override;
