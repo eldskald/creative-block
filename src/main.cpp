@@ -14,7 +14,17 @@ int main() {
     SetTargetFPS(TARGET_FPS);
     InitAudioDevice();
 
+    float startup_time = 0.0f;
+
     game::initial_setup();
+
+    Texture2D atlas = LoadTexture(SPRITESHEET_FILE);
+    Shader test_shader = LoadShader("resources/shaders/base.vert",
+                                    "resources/shaders/sample.frag");
+    int shader_tint_loc = GetShaderLocation(test_shader, "tint");
+    float tint_value[4] = {1.0f, 0.0f, 1.0f, 1.0f};
+    SetShaderValue(
+        test_shader, shader_tint_loc, tint_value, SHADER_UNIFORM_VEC4);
 
     game_element* scene = new game_element();
 
@@ -23,7 +33,8 @@ int main() {
     block_1->collision_box = (Rectangle){0, 0, 64, 64};
     block_1->static_body = true;
     sprite* sprite_1 = new sprite();
-    sprite_1->atlas_coords = (Vector2){0, 0};
+    sprite_1->atlas_coords = (Vector2){3, 0};
+    sprite_1->shader = &test_shader;
     block_1->add_child(sprite_1);
     scene->add_child(block_1);
 
@@ -69,7 +80,7 @@ int main() {
     while (!WindowShouldClose()) {
         BeginDrawing();
         ClearBackground(BLACK);
-        EndDrawing();
+        DrawFPS(900, 0);
 
         if (IsKeyPressed(KEY_ONE)) {
             sound_1->play();
@@ -86,6 +97,7 @@ int main() {
         player->vel = input;
 
         game::do_game_loop();
+        EndDrawing();
     }
 
     CloseAudioDevice();

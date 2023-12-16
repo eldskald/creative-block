@@ -11,6 +11,9 @@ public:
     sprite();
 
     Vector2 atlas_coords;
+    Shader* shader;
+
+    static Shader* base_shader;
 
 private:
     static Texture2D atlas_;

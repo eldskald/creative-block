@@ -24,6 +24,8 @@ void game::update_game_element_pos_(game_element* element) {
 
 void game::initial_setup() {
     sprite::atlas_ = LoadTexture(SPRITESHEET_FILE);
+    *(sprite::base_shader) = LoadShader("resources/shaders/base.vert",
+                                        "resources/shaders/base.frag");
     sfx::sfx_1 = LoadWave(SFX_1);
     sfx::sfx_2 = LoadWave(SFX_2);
 }
