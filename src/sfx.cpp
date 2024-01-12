@@ -19,7 +19,3 @@ void sfx::play() {
 void sfx::stop() {
     StopSound(this->sound_);
 }
-
-void sfx::update_pos_() {
-    return;
-}

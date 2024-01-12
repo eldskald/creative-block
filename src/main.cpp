@@ -5,6 +5,7 @@
 #include "sfx.h"
 #include "sprite.h"
 #include <raylib.h>
+#include <raymath.h>
 #include <tuple>
 
 using namespace std;
@@ -33,8 +34,7 @@ int main() {
     block_1->collision_box = (Rectangle){0, 0, 64, 64};
     block_1->static_body = true;
     sprite* sprite_1 = new sprite();
-    sprite_1->atlas_coords = (Vector2){3, 0};
-    sprite_1->shader = &test_shader;
+    sprite_1->atlas_coords = (Vector2){0, 0};
     block_1->add_child(sprite_1);
     scene->add_child(block_1);
 
@@ -47,6 +47,16 @@ int main() {
     block_2->add_child(sprite_2);
     scene->add_child(block_2);
 
+    physics_body* one_way_block = new physics_body();
+    one_way_block->pos = (Vector2){280, 400};
+    one_way_block->collision_box = (Rectangle){0, 0, 64, 64};
+    one_way_block->static_body = true;
+    one_way_block->one_way = true;
+    sprite* one_way_sprite = new sprite();
+    one_way_sprite->atlas_coords = (Vector2){0, 0};
+    one_way_block->add_child(one_way_sprite);
+    scene->add_child(one_way_block);
+
     tuple<Vector2, float> arr[4] = {
         tuple<Vector2, float>{(Vector2){2, 0}, 1.0f},
         tuple<Vector2, float>{(Vector2){3, 0}, 1.0f},
@@ -54,6 +64,7 @@ int main() {
         tuple<Vector2, float>{(Vector2){3, 1}, 1.0f}};
     sprite* animated_sprite = new sprite();
     animated_sprite->pos = (Vector2){380, 210};
+    animated_sprite->shader = &test_shader;
     animation<Vector2>* anim =
         new animation<Vector2>(&(animated_sprite->atlas_coords), true, arr, 4);
     animated_sprite->add_child(anim);
@@ -67,6 +78,22 @@ int main() {
     player->add_child(player_sprite);
     scene->add_child(player);
     const float PLAYER_SPEED = 200.0f;
+
+    physics_body* player_child = new physics_body();
+    player_child->pos = (Vector2){80, 80};
+    player_child->collision_box = (Rectangle){0, 0, 65, 64};
+    sprite* player_child_sprite = new sprite();
+    player_child_sprite->atlas_coords = (Vector2){0, 1};
+    player_child->add_child(player_child_sprite);
+    player->add_child(player_child);
+
+    physics_body* player_block = new physics_body();
+    player_block->pos = (Vector2){72, -72};
+    player_block->collision_box = (Rectangle){0, 0, 64, 64};
+    sprite* player_block_sprite = new sprite();
+    player_block_sprite->atlas_coords = (Vector2){0, 0};
+    player_block->add_child(player_block_sprite);
+    player_child->add_child(player_block);
 
     sfx* sound_1 = new sfx(sfx::sfx_2);
     scene->add_child(sound_1);
@@ -90,11 +117,19 @@ int main() {
             sound_2->play();
         }
 
-        Vector2 input = (Vector2){(IsKeyDown(KEY_D) ? PLAYER_SPEED : 0.0f) -
-                                      (IsKeyDown(KEY_A) ? PLAYER_SPEED : 0.0f),
-                                  (IsKeyDown(KEY_S) ? PLAYER_SPEED : 0.0f) -
-                                      (IsKeyDown(KEY_W) ? PLAYER_SPEED : 0.0f)};
-        player->vel = input;
+        Vector2 input_1 =
+            (Vector2){(IsKeyDown(KEY_D) ? PLAYER_SPEED : 0.0f) -
+                          (IsKeyDown(KEY_A) ? PLAYER_SPEED : 0.0f),
+                      (IsKeyDown(KEY_S) ? PLAYER_SPEED : 0.0f) -
+                          (IsKeyDown(KEY_W) ? PLAYER_SPEED : 0.0f)};
+        player->vel = input_1;
+
+        Vector2 input_2 =
+            (Vector2){(IsKeyDown(KEY_L) ? PLAYER_SPEED : 0.0f) -
+                          (IsKeyDown(KEY_H) ? PLAYER_SPEED : 0.0f),
+                      (IsKeyDown(KEY_J) ? PLAYER_SPEED : 0.0f) -
+                          (IsKeyDown(KEY_K) ? PLAYER_SPEED : 0.0f)};
+        player_child->vel = input_2;
 
         game::do_game_loop();
         EndDrawing();

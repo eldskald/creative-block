@@ -11,6 +11,4 @@ public:
 
 private:
     static game_element* root_;
-    static void tick_game_element_(game_element* element);
-    static void update_game_element_pos_(game_element* element);
 };

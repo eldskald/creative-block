@@ -1,26 +1,11 @@
 #include "game.h"
 #include "game-element.h"
+#include "physics-body.h"
 #include "sfx.h"
 #include "sprite.h"
 #include <raylib.h>
 
 game_element* game::root_ = nullptr;
-
-void game::tick_game_element_(game_element* element) {
-    for (auto i = element->children_.begin(); i != element->children_.end();
-         ++i) {
-        tick_game_element_(*i);
-    }
-    element->tick_();
-}
-
-void game::update_game_element_pos_(game_element* element) {
-    element->update_pos_();
-    for (auto i = element->children_.begin(); i != element->children_.end();
-         ++i) {
-        update_game_element_pos_(*i);
-    }
-}
 
 void game::initial_setup() {
     sprite::atlas_ = LoadTexture(SPRITESHEET_FILE);
@@ -32,8 +17,9 @@ void game::initial_setup() {
 
 void game::do_game_loop() {
     if (!game::root_) return;
-    game::update_game_element_pos_(game::root_);
-    game::tick_game_element_(game::root_);
+    physics_body::update_all_bodies_prev_global_pos_();
+    physics_body::trigger_physics_tick_(game::root_);
+    game_element::trigger_tick_(game::root_);
 }
 
 void game::set_root(game_element* new_root) {

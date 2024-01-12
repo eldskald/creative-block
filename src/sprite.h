@@ -15,8 +15,9 @@ public:
 
     static Shader* base_shader;
 
+protected:
+    void tick_() override;
+
 private:
     static Texture2D atlas_;
-
-    void tick_() override;
 };

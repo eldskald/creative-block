@@ -19,11 +19,14 @@ public:
     list<game_element*> get_children();
     void add_child(game_element* element);
     void remove_child(game_element* child);
+    bool descends_from(game_element* element);
+    bool is_on_tree();
+    Vector2 get_global_pos();
 
 protected:
-    Vector2 global_pos_;
-
-    virtual void update_pos_();
+    virtual void enter_();
+    virtual void exit_();
+    virtual void tick_();
 
 private:
     game_element* parent_;
@@ -32,8 +35,5 @@ private:
 
     static void trigger_enter_(game_element* element);
     static void trigger_exit_(game_element* element);
-
-    virtual void enter_();
-    virtual void exit_();
-    virtual void tick_();
+    static void trigger_tick_(game_element* element);
 };

@@ -68,10 +68,6 @@ template <typename t> void animation<t>::pause() {
     this->playing_ = false;
 }
 
-template <typename t> void animation<t>::update_pos_() {
-    return;
-}
-
 template <typename t> void animation<t>::tick_() {
     if (!(this->playing_)) return;
     this->curr_time_ += GetFrameTime();

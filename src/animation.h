@@ -13,9 +13,6 @@ public:
     void stop();
     void pause();
 
-protected:
-    void update_pos_() override;
-
 private:
     template <typename u> struct keyframe_ {
         u value;
