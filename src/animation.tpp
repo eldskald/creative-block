@@ -71,7 +71,7 @@ template <typename t> void animation<t>::pause() {
 template <typename t> void animation<t>::tick_() {
     if (!(this->playing_)) return;
     this->curr_time_ += GetFrameTime();
-    if (this->curr_time_ >= this->curr_frame_->duration) {
+    while (this->curr_time_ >= this->curr_frame_->duration) {
         this->curr_time_ -= this->curr_frame_->duration;
         this->curr_frame_ = this->curr_frame_->next;
         if (this->curr_frame_) {
