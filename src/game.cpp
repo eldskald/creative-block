@@ -17,7 +17,6 @@ void game::initial_setup() {
 
 void game::do_game_loop() {
     if (!game::root_) return;
-    physics_body::update_all_bodies_prev_global_pos_();
     physics_body::trigger_physics_tick_(game::root_);
     game_element::trigger_tick_(game::root_);
 }

@@ -27,14 +27,13 @@ protected:
     void exit_() override;
 
 private:
-    Vector2 prev_global_pos_;
-
-    float compute_h_movement_(float delta_d);
-    float compute_v_movement_(float delta_d);
-    Vector2 get_extrusion_from_(Rectangle rect);
+    Rectangle get_collision_rect_(Vector2 offset);
+    float compute_h_movement_(float delta_d, bool ignore_children);
+    float compute_v_movement_(float delta_d, bool ignore_children);
+    float move_and_drag_children_h_(float delta_d);
+    float move_and_drag_children_v_(float delta_d);
 
     static list<physics_body*> physics_bodies_;
 
     static void trigger_physics_tick_(game_element* element);
-    static void update_all_bodies_prev_global_pos_();
 };
