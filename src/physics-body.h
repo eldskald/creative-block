@@ -27,9 +27,9 @@ protected:
     void exit_() override;
 
 private:
-    Rectangle get_collision_rect_(Vector2 offset);
-    float compute_h_movement_(float delta_d, bool ignore_children);
-    float compute_v_movement_(float delta_d, bool ignore_children);
+    Rectangle get_collision_rect_(Vector2 offset = (Vector2){0, 0});
+    float compute_h_movement_(float delta_d, bool ignore_children = false);
+    float compute_v_movement_(float delta_d, bool ignore_children = false);
     float move_and_drag_children_h_(float delta_d);
     float move_and_drag_children_v_(float delta_d);
 

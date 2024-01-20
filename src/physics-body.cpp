@@ -21,24 +21,22 @@ list<physics_body*> physics_body::get_colliders(Rectangle collision_box) {
     for (auto i = physics_body::physics_bodies_.begin();
          i != physics_body::physics_bodies_.end();
          ++i) {
-        Rectangle worldSpaceRec =
-            (Rectangle){(*i)->collision_box.x + (*i)->get_global_pos().x,
-                        (*i)->collision_box.y + (*i)->get_global_pos().y,
-                        (*i)->collision_box.width,
-                        (*i)->collision_box.height};
-        if (CheckCollisionRecs(collision_box, worldSpaceRec)) {
+        if (CheckCollisionRecs(collision_box, (*i)->get_collision_rect_())) {
             colliders.push_back(*i);
         }
     }
     return colliders;
 }
 
-Rectangle physics_body::get_collision_rect_(Vector2 offset = (Vector2){0, 0}) {
+// This function is to get the position in space of the collision shape of any
+// given body. We take the floor of everything because colliding with floats is
+// inconsistent, so we make every physics rect only move in integer increments.
+Rectangle physics_body::get_collision_rect_(Vector2 offset) {
     return (Rectangle){
-        this->get_global_pos().x + this->collision_box.x + offset.x,
-        this->get_global_pos().y + this->collision_box.y + offset.y,
-        this->collision_box.width,
-        this->collision_box.height};
+        floor(this->get_global_pos().x + this->collision_box.x + offset.x),
+        floor(this->get_global_pos().y + this->collision_box.y + offset.y),
+        floor(this->collision_box.width),
+        floor(this->collision_box.height)};
 }
 
 // Calculate where the body would stop if it tried to move delta_d in the X
@@ -46,17 +44,20 @@ Rectangle physics_body::get_collision_rect_(Vector2 offset = (Vector2){0, 0}) {
 // number in case it collides. It is done by getting the rectangle that would
 // be the trail of pixels covered by the body as it moved delta_d and finding
 // all bodies colliding with it. Bodies already colliding will be ignored.
-float physics_body::compute_h_movement_(float delta_d,
-                                        bool ignore_children = false) {
+float physics_body::compute_h_movement_(float delta_d, bool ignore_children) {
     float delta = delta_d;
     if (delta == 0.0f) return 0.0f;
 
-    // The trail.
+    // The trail. We only take the floor on the Y axis here because we want to
+    // be able to move on a float amount, but if we don't take the floor on the
+    // other axis, we might detect collisions with bodies that are touching the
+    // bottom of this one if it has some fractionary rest because the other one
+    // will lose its fraction and go up a little on the calculation.
     Rectangle target_rec =
         (Rectangle){this->get_global_pos().x + this->collision_box.x,
-                    this->get_global_pos().y + this->collision_box.y,
+                    floor(this->get_global_pos().y + this->collision_box.y),
                     abs(delta),
-                    this->collision_box.height};
+                    floor(this->collision_box.height)};
     if (delta > 0.0f)
         target_rec.x += this->collision_box.width;
     else
@@ -69,22 +70,25 @@ float physics_body::compute_h_movement_(float delta_d,
         // Ignore the body if it is among the following:
         if (*i == this) continue;
         if ((*i)->descends_from(this) && ignore_children) continue;
+        if (CheckCollisionRecs(this->get_collision_rect_(),
+                               (*i)->get_collision_rect_()))
+            continue;
         if ((*i)->one_way) continue;
 
         // Find the final delta to be returned.
         if (delta < 0.0f) {
-            float body_left = this->get_global_pos().x + this->collision_box.x;
-            float coll_right = (*i)->get_global_pos().x +
-                               (*i)->collision_box.x +
-                               (*i)->collision_box.width;
-            if (coll_right - body_left > 0.0f) continue;
+            float body_left =
+                floor(this->get_global_pos().x + this->collision_box.x);
+            float coll_right =
+                floor((*i)->get_global_pos().x + (*i)->collision_box.x +
+                      (*i)->collision_box.width);
             delta = max(coll_right - body_left, delta);
         } else {
-            float body_right = this->get_global_pos().x +
-                               this->collision_box.x +
-                               this->collision_box.width;
-            float coll_left = (*i)->get_global_pos().x + (*i)->collision_box.x;
-            if (coll_left - body_right < 0.0f) continue;
+            float body_right =
+                floor(this->get_global_pos().x + this->collision_box.x +
+                      this->collision_box.width);
+            float coll_left =
+                floor((*i)->get_global_pos().x + (*i)->collision_box.x);
             delta = min(coll_left - body_right, delta);
         }
     }
@@ -95,16 +99,19 @@ float physics_body::compute_h_movement_(float delta_d,
 // The same thing as compute_h_movement_ except for vertical movements. This
 // time we have to take one way colliders into account, we want them to
 // collide only if the body is coming from above and is not colliding already.
-float physics_body::compute_v_movement_(float delta_d,
-                                        bool ignore_children = false) {
+float physics_body::compute_v_movement_(float delta_d, bool ignore_children) {
     float delta = delta_d;
     if (delta == 0.0f) return 0.0f;
 
-    // The trail.
+    // The trail. We only take the floor on the X axis here because we want to
+    // be able to move on a float amount, but if we don't take the floor on the
+    // other axis, we might detect collisions with bodies that are touching the
+    // right side of this one if it has some fractionary rest because the other
+    // one will lose its fraction and go left a little on the calculation.
     Rectangle target_rec =
-        (Rectangle){this->get_global_pos().x + this->collision_box.x,
+        (Rectangle){floor(this->get_global_pos().x + this->collision_box.x),
                     this->get_global_pos().y + this->collision_box.y,
-                    this->collision_box.width,
+                    floor(this->collision_box.width),
                     abs(delta)};
     if (delta > 0.0f)
         target_rec.y += this->collision_box.height;
@@ -118,31 +125,25 @@ float physics_body::compute_v_movement_(float delta_d,
         // Ignore the body if it is among the following:
         if (*i == this) continue;
         if ((*i)->descends_from(this) && ignore_children) continue;
-        if ((*i)->one_way) {
-            if (delta < 0.0f) continue;
-
-            // If it already passed, ignore it.
-            float this_bottom = this->get_global_pos().y +
-                                this->collision_box.y +
-                                this->collision_box.height;
-            float body_top = (*i)->get_global_pos().y + (*i)->collision_box.y;
-            if (this_bottom > body_top) continue;
-        }
+        if (CheckCollisionRecs(this->get_collision_rect_(),
+                               (*i)->get_collision_rect_()))
+            continue;
+        if ((*i)->one_way && delta < 0.0f) continue;
 
         // Find the final delta to be returned.
         if (delta < 0.0f) {
-            float body_top = this->get_global_pos().y + this->collision_box.y;
-            float coll_bottom = (*i)->get_global_pos().y +
-                                (*i)->collision_box.y +
-                                (*i)->collision_box.height;
-            if (coll_bottom - body_top > 0.0f) continue;
+            float body_top =
+                floor(this->get_global_pos().y + this->collision_box.y);
+            float coll_bottom =
+                floor((*i)->get_global_pos().y + (*i)->collision_box.y +
+                      (*i)->collision_box.height);
             delta = max(coll_bottom - body_top, delta);
         } else {
-            float body_bottom = this->get_global_pos().y +
-                                this->collision_box.y +
-                                this->collision_box.height;
-            float coll_top = (*i)->get_global_pos().y + (*i)->collision_box.y;
-            if (coll_top - body_bottom < 0.0f) continue;
+            float body_bottom =
+                floor(this->get_global_pos().y + this->collision_box.y +
+                      this->collision_box.height);
+            float coll_top =
+                floor((*i)->get_global_pos().y + (*i)->collision_box.y);
             delta = min(coll_top - body_bottom, delta);
         }
     }
