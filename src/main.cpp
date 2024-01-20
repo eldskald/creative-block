@@ -20,8 +20,7 @@ int main() {
     game::initial_setup();
 
     Texture2D atlas = LoadTexture(SPRITESHEET_FILE);
-    Shader test_shader = LoadShader("resources/shaders/base.vert",
-                                    "resources/shaders/sample.frag");
+    Shader test_shader = LoadShader(BASE_VERT_SHADER, SHADER_FRAG_1);
     int shader_tint_loc = GetShaderLocation(test_shader, "tint");
     float tint_value[4] = {1.0f, 0.0f, 1.0f, 1.0f};
     SetShaderValue(

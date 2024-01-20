@@ -9,8 +9,7 @@ game_element* game::root_ = nullptr;
 
 void game::initial_setup() {
     sprite::atlas_ = LoadTexture(SPRITESHEET_FILE);
-    *(sprite::base_shader) = LoadShader("resources/shaders/base.vert",
-                                        "resources/shaders/base.frag");
+    *(sprite::base_shader) = LoadShader(BASE_VERT_SHADER, BASE_FRAG_SHADER);
     sfx::sfx_1 = LoadWave(SFX_1);
     sfx::sfx_2 = LoadWave(SFX_2);
 }
