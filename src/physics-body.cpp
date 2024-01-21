@@ -14,14 +14,20 @@ physics_body::physics_body() {
     this->collision_box = (Rectangle){0};
     this->static_body = false;
     this->one_way = false;
+    this->collision_layer = 0b00000000;
+    this->collision_mask = 0b00000000;
 }
 
-list<physics_body*> physics_body::get_colliders(Rectangle collision_box) {
+list<physics_body*> physics_body::get_colliders(Rectangle collision_box,
+                                                bitset<8> mask) {
     list<physics_body*> colliders;
     for (auto i = physics_body::physics_bodies_.begin();
          i != physics_body::physics_bodies_.end();
          ++i) {
-        if (CheckCollisionRecs(collision_box, (*i)->get_collision_rect_())) {
+        bitset<8> layer_mask_check = mask;
+        layer_mask_check &= (*i)->collision_layer;
+        if (CheckCollisionRecs(collision_box, (*i)->get_collision_rect_()) &&
+            layer_mask_check != 0b00000000) {
             colliders.push_back(*i);
         }
     }
@@ -31,12 +37,11 @@ list<physics_body*> physics_body::get_colliders(Rectangle collision_box) {
 // This function is to get the position in space of the collision shape of any
 // given body. We take the floor of everything because colliding with floats is
 // inconsistent, so we make every physics rect only move in integer increments.
-Rectangle physics_body::get_collision_rect_(Vector2 offset) {
-    return (Rectangle){
-        floor(this->get_global_pos().x + this->collision_box.x + offset.x),
-        floor(this->get_global_pos().y + this->collision_box.y + offset.y),
-        floor(this->collision_box.width),
-        floor(this->collision_box.height)};
+Rectangle physics_body::get_collision_rect_() {
+    return (Rectangle){floor(this->get_global_pos().x + this->collision_box.x),
+                       floor(this->get_global_pos().y + this->collision_box.y),
+                       floor(this->collision_box.width),
+                       floor(this->collision_box.height)};
 }
 
 // Calculate where the body would stop if it tried to move delta_d in the X
@@ -64,7 +69,8 @@ float physics_body::compute_h_movement_(float delta_d, bool ignore_children) {
         target_rec.x += delta;
 
     // Iterate through all bodies found on the trail.
-    list<physics_body*> colliders = physics_body::get_colliders(target_rec);
+    list<physics_body*> colliders =
+        physics_body::get_colliders(target_rec, this->collision_mask);
     for (auto i = colliders.begin(); i != colliders.end(); ++i) {
 
         // Ignore the body if it is among the following:
@@ -119,7 +125,8 @@ float physics_body::compute_v_movement_(float delta_d, bool ignore_children) {
         target_rec.y += delta;
 
     // Iterate through all bodies found on the trail.
-    list<physics_body*> colliders = physics_body::get_colliders(target_rec);
+    list<physics_body*> colliders =
+        physics_body::get_colliders(target_rec, this->collision_mask);
     for (auto i = colliders.begin(); i != colliders.end(); ++i) {
 
         // Ignore the body if it is among the following:

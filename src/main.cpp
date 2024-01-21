@@ -32,6 +32,7 @@ int main() {
     block_1->pos = (Vector2){120, 290};
     block_1->collision_box = (Rectangle){0, 0, 64, 64};
     block_1->static_body = true;
+    block_1->collision_layer = 0b00000100;
     sprite* sprite_1 = new sprite();
     sprite_1->atlas_coords = (Vector2){0, 0};
     block_1->add_child(sprite_1);
@@ -41,6 +42,7 @@ int main() {
     block_2->pos = (Vector2){150, 250};
     block_2->collision_box = (Rectangle){0, 0, 64, 64};
     block_2->static_body = true;
+    block_2->collision_layer = 0b00000100;
     sprite* sprite_2 = new sprite();
     sprite_2->atlas_coords = (Vector2){0, 0};
     block_2->add_child(sprite_2);
@@ -51,6 +53,7 @@ int main() {
     one_way_block->collision_box = (Rectangle){0, 0, 64, 64};
     one_way_block->static_body = true;
     one_way_block->one_way = true;
+    one_way_block->collision_layer = 0b00001000;
     sprite* one_way_sprite = new sprite();
     one_way_sprite->atlas_coords = (Vector2){0, 0};
     one_way_block->add_child(one_way_sprite);
@@ -72,6 +75,8 @@ int main() {
     physics_body* player = new physics_body();
     player->pos = (Vector2){0, 0};
     player->collision_box = (Rectangle){0, 0, 64, 64};
+    player->collision_layer = 0b00000001;
+    player->collision_mask = 0b00001110;
     sprite* player_sprite = new sprite();
     player_sprite->atlas_coords = (Vector2){0, 1};
     player->add_child(player_sprite);
@@ -80,7 +85,9 @@ int main() {
 
     physics_body* player_child = new physics_body();
     player_child->pos = (Vector2){80, 80};
-    player_child->collision_box = (Rectangle){0, 0, 65, 64};
+    player_child->collision_box = (Rectangle){0, 0, 64, 64};
+    player_child->collision_layer = 0b00000010;
+    player_child->collision_mask = 0b00001101;
     sprite* player_child_sprite = new sprite();
     player_child_sprite->atlas_coords = (Vector2){0, 1};
     player_child->add_child(player_child_sprite);
@@ -89,6 +96,8 @@ int main() {
     physics_body* player_block = new physics_body();
     player_block->pos = (Vector2){72, -72};
     player_block->collision_box = (Rectangle){0, 0, 64, 64};
+    player_block->collision_layer = 0b00000010;
+    player_block->collision_mask = 0b00000101;
     sprite* player_block_sprite = new sprite();
     player_block_sprite->atlas_coords = (Vector2){0, 0};
     player_block->add_child(player_block_sprite);

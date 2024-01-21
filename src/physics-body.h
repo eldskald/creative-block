@@ -1,5 +1,6 @@
 #pragma once
 #include "game-element.h"
+#include <bitset>
 #include <list>
 #include <raylib.h>
 
@@ -15,8 +16,11 @@ public:
     Rectangle collision_box;
     bool static_body;
     bool one_way;
+    bitset<8> collision_layer;
+    bitset<8> collision_mask;
 
-    static list<physics_body*> get_colliders(Rectangle collision_box);
+    static list<physics_body*> get_colliders(Rectangle collision_box,
+                                             bitset<8> mask);
 
     physics_body();
 
@@ -27,7 +31,7 @@ protected:
     void exit_() override;
 
 private:
-    Rectangle get_collision_rect_(Vector2 offset = (Vector2){0, 0});
+    Rectangle get_collision_rect_();
     float compute_h_movement_(float delta_d, bool ignore_children = false);
     float compute_v_movement_(float delta_d, bool ignore_children = false);
     float move_and_drag_children_h_(float delta_d);
