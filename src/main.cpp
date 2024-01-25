@@ -31,7 +31,7 @@ int main() {
     physics_body* block_1 = new physics_body();
     block_1->pos = (Vector2){120, 290};
     block_1->collision_box = (Rectangle){0, 0, 64, 64};
-    block_1->static_body = true;
+    block_1->type = physics_body::fixed;
     block_1->collision_layer = 0b00000100;
     sprite* sprite_1 = new sprite();
     sprite_1->atlas_coords = (Vector2){0, 0};
@@ -41,7 +41,7 @@ int main() {
     physics_body* block_2 = new physics_body();
     block_2->pos = (Vector2){150, 250};
     block_2->collision_box = (Rectangle){0, 0, 64, 64};
-    block_2->static_body = true;
+    block_2->type = physics_body::fixed;
     block_2->collision_layer = 0b00000100;
     sprite* sprite_2 = new sprite();
     sprite_2->atlas_coords = (Vector2){0, 0};
@@ -51,13 +51,23 @@ int main() {
     physics_body* one_way_block = new physics_body();
     one_way_block->pos = (Vector2){280, 400};
     one_way_block->collision_box = (Rectangle){0, 0, 64, 64};
-    one_way_block->static_body = true;
+    one_way_block->type = physics_body::fixed;
     one_way_block->one_way = true;
     one_way_block->collision_layer = 0b00001000;
     sprite* one_way_sprite = new sprite();
     one_way_sprite->atlas_coords = (Vector2){0, 0};
     one_way_block->add_child(one_way_sprite);
     scene->add_child(one_way_block);
+
+    physics_body* area = new physics_body();
+    area->pos = (Vector2){800, 300};
+    area->collision_box = (Rectangle){0, 0, 64, 64};
+    area->type = physics_body::area;
+    area->collision_mask = 0b00000001;
+    sprite* area_sprite = new sprite();
+    area_sprite->atlas_coords = (Vector2){0, 0};
+    area->add_child(area_sprite);
+    scene->add_child(area);
 
     tuple<Vector2, float> arr[4] = {
         tuple<Vector2, float>{(Vector2){2, 0}, 1.0f},

@@ -7,22 +7,33 @@
 
 using namespace std;
 
-list<physics_body*> physics_body::physics_bodies_;
+list<physics_body*> physics_body::bodies_;
+list<physics_body*> physics_body::areas_;
 
 physics_body::physics_body() {
     this->vel = Vector2Zero();
     this->collision_box = (Rectangle){0};
-    this->static_body = false;
+    this->type = kinematic;
     this->one_way = false;
     this->collision_layer = 0b00000000;
     this->collision_mask = 0b00000000;
 }
 
+list<physics_body*> physics_body::get_detected_bodies() {
+    list<physics_body*> clone;
+    for (auto i = this->detected_bodies_.begin();
+         i != this->detected_bodies_.end();
+         ++i) {
+        clone.push_back(*i);
+    }
+    return clone;
+}
+
 list<physics_body*> physics_body::get_colliders(Rectangle collision_box,
                                                 bitset<8> mask) {
     list<physics_body*> colliders;
-    for (auto i = physics_body::physics_bodies_.begin();
-         i != physics_body::physics_bodies_.end();
+    for (auto i = physics_body::bodies_.begin();
+         i != physics_body::bodies_.end();
          ++i) {
         bitset<8> layer_mask_check = mask;
         layer_mask_check &= (*i)->collision_layer;
@@ -305,7 +316,7 @@ float physics_body::move_and_drag_children_v_(float delta_d) {
 }
 
 void physics_body::physics_tick_() {
-    if (this->static_body) return;
+    if (this->type != kinematic) return;
 
     float delta_x = this->vel.x * GetFrameTime();
     float delta_y = this->vel.y * GetFrameTime();
@@ -328,9 +339,105 @@ void physics_body::trigger_physics_tick_(game_element* element) {
 }
 
 void physics_body::enter_() {
-    physics_body::physics_bodies_.push_back(this);
+    switch (this->type) {
+    case kinematic:
+        physics_body::bodies_.push_back(this);
+        break;
+    case fixed:
+        physics_body::bodies_.push_back(this);
+        break;
+    case area:
+        physics_body::areas_.push_back(this);
+        break;
+    }
 }
 
 void physics_body::exit_() {
-    physics_body::physics_bodies_.remove(this);
+    switch (this->type) {
+    case kinematic:
+        physics_body::bodies_.remove(this);
+        break;
+    case fixed:
+        physics_body::bodies_.remove(this);
+        break;
+    case area:
+        physics_body::areas_.remove(this);
+        break;
+    }
+}
+
+list<physics_body*> physics_body::find_entering_bodies_() {
+    list<physics_body*> found_bodies;
+
+    list<physics_body*> colliders = physics_body::get_colliders(
+        this->get_collision_rect_(), this->collision_mask);
+    for (auto i = colliders.begin(); i != colliders.end(); ++i) {
+        bool found = true;
+        for (auto j = this->detected_bodies_.begin();
+             j != this->detected_bodies_.end();
+             ++j) {
+            if (*j == *i) {
+                found = false;
+                break;
+            }
+        }
+        if (found) found_bodies.push_back(*i);
+    }
+
+    for (auto i = found_bodies.begin(); i != found_bodies.end(); ++i) {
+        this->detected_bodies_.push_back(*i);
+    }
+
+    return found_bodies;
+}
+
+list<physics_body*> physics_body::find_exiting_bodies_() {
+    list<physics_body*> found_bodies;
+    list<list<physics_body*>::iterator> iterators;
+
+    list<physics_body*> colliders = physics_body::get_colliders(
+        this->get_collision_rect_(), this->collision_mask);
+    for (auto i = this->detected_bodies_.begin();
+         i != this->detected_bodies_.end();
+         ++i) {
+        bool found = true;
+        for (auto j = colliders.begin(); j != colliders.end(); ++j) {
+            if (*j == *j) {
+                found = false;
+                break;
+            }
+        }
+        if (found) {
+            found_bodies.push_back(*i);
+            iterators.push_back(i);
+        }
+    }
+
+    for (auto i = iterators.begin(); i != iterators.end(); ++i) {
+        this->detected_bodies_.erase(*i);
+    }
+
+    return found_bodies;
+}
+
+void physics_body::update_areas_() {
+    for (auto i = physics_body::areas_.begin(); i != physics_body::areas_.end();
+         ++i) {
+        list<physics_body*> entering_bodies = (*i)->find_entering_bodies_();
+        list<physics_body*> exiting_bodies = (*i)->find_exiting_bodies_();
+
+        for (auto j = entering_bodies.begin(); j != entering_bodies.end();
+             ++j) {
+            (*i)->body_entered_(*j);
+        }
+        for (auto j = exiting_bodies.begin(); j != exiting_bodies.end(); ++j) {
+            (*i)->body_exited_(*j);
+        }
+    }
+}
+
+void physics_body::body_entered_(physics_body* body) {
+}
+
+void physics_body::body_exited_(physics_body* body) {
 }
