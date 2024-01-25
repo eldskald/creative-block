@@ -6,9 +6,25 @@ This project is me trying to learn C++ with [raylib](https://github.com/raysan5/
 
 ### Dependencies
 
-Install [raylib](https://github.com/raysan5/raylib) on your system's libraries. On Arch, a simple `sudo pacman -S raylib` will suffice, on other distros you should take look at [their page](https://github.com/raysan5/raylib/wiki/Working-on-GNU-Linux). I'm also using [g++](https://wiki.archlinux.org/title/GNU_Compiler_Collection) to compile, so you'll need it to build. There is also a debug command on the [Makefile](Makefile) using [gdb](https://www.sourceware.org/gdb/), you don't need this to build but you do if you want to debug.
+This project is using the GNU Toolchain for C/C++ development, in particular, the [GNU Compiler Collection](https://www.gnu.org/software/gcc) and [make](https://www.gnu.org/software/make) are used to compile, and optionally, [gdb](https://www.sourceware.org/gdb/) to debug. You also need [git](https://git-scm.com/), of course.
 
-I'm also using [clang-format](https://clang.llvm.org/docs/ClangFormat.html) to format the code, but you won't need it to run or build.
+You'll also need basic libraries used by [raylib](https://github.com/raysan5/raylib) to do graphics and audio. More info on their [wiki](https://github.com/raysan5/raylib/wiki/Working-on-GNU-Linux).
+
+It's also using [clang-format](https://clang.llvm.org/docs/ClangFormat.html) to format the code.
+
+### Getting started
+
+After cloning the repository, run the following to install dependendies:
+
+```console
+make install
+```
+
+This will install [raylib](https://github.com/raysan5/raylib) on this project so you can compile it. To erase dependencies and builds in case you want to redo everything, run:
+
+```console
+make clean
+```
 
 ### Running and building
 

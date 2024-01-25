@@ -1,7 +1,9 @@
 
 # project
 /build
-/.temp
+/lib
+/include
+/.tmp
 
 # ripgrep
 .rgignore
