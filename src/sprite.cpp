@@ -7,6 +7,7 @@ Shader* sprite::base_shader = new Shader();
 sprite::sprite() {
     this->atlas_coords = (Vector2){0, 0};
     this->shader = sprite::base_shader;
+    this->tint = WHITE;
 }
 
 void sprite::tick_() {
@@ -22,6 +23,6 @@ void sprite::tick_() {
                                SPRITESHEET_CELL_SIZE_Y * PIXEL_SIZE_Y},
                    (Vector2){0, 0},
                    0.0f,
-                   WHITE);
+                   this->tint);
     EndShaderMode();
 }

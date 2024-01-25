@@ -11,6 +11,7 @@ public:
     sprite();
 
     Vector2 atlas_coords;
+    Color tint;
     Shader* shader;
 
     static Shader* base_shader;

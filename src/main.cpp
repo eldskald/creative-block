@@ -66,6 +66,7 @@ int main() {
     area->collision_mask = 0b00000001;
     sprite* area_sprite = new sprite();
     area_sprite->atlas_coords = (Vector2){0, 0};
+    area_sprite->tint = RED;
     area->add_child(area_sprite);
     scene->add_child(area);
 

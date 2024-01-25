@@ -2,6 +2,7 @@
 
 // Input vertex attributes (from vertex shader)
 in vec2 uv;
+in vec4 color;
 
 // Input uniform values
 uniform sampler2D texture0;
@@ -12,5 +13,5 @@ out vec4 output;
 
 void main()
 {
-    output = texture(texture0, uv) * colDiffuse;
+    output = texture(texture0, uv) * color * colDiffuse;
 }
