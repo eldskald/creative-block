@@ -8,25 +8,25 @@ using namespace std;
 
 class game;
 
+const int COLLISION_LAYERS = 8;
+
 class physics_body : public game_element {
     friend class game;
 
 public:
     enum body_type { kinematic, fixed, area };
 
-    Vector2 vel;
-    Rectangle collision_box;
-    body_type type;
-    bool one_way;
-    bitset<8> collision_layer;
-    bitset<8> collision_mask;
+    Vector2 vel{(Vector2){0}};
+    Rectangle collision_box{(Rectangle){0}};
+    body_type type{kinematic};
+    bool one_way{false};
+    bitset<COLLISION_LAYERS> collision_layer{0b00000000};
+    bitset<COLLISION_LAYERS> collision_mask{0b00000000};
 
     list<physics_body*> get_detected_bodies();
 
     static list<physics_body*> get_colliders(Rectangle collision_box,
-                                             bitset<8> mask);
-
-    physics_body();
+                                             bitset<COLLISION_LAYERS> mask);
 
 protected:
     void physics_tick_();

@@ -4,12 +4,6 @@
 Texture2D sprite::atlas_ = (Texture2D){0};
 Shader* sprite::base_shader = new Shader();
 
-sprite::sprite() {
-    this->atlas_coords = (Vector2){0, 0};
-    this->shader = sprite::base_shader;
-    this->tint = WHITE;
-}
-
 void sprite::tick_() {
     BeginShaderMode(*(this->shader));
     DrawTexturePro(sprite::atlas_,

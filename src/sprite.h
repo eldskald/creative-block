@@ -8,11 +8,9 @@ class sprite : public game_element {
     friend class game;
 
 public:
-    sprite();
-
-    Vector2 atlas_coords;
-    Color tint;
-    Shader* shader;
+    Vector2 atlas_coords{(Vector2){0}};
+    Color tint{WHITE};
+    Shader* shader{sprite::base_shader};
 
     static Shader* base_shader;
 

@@ -7,6 +7,7 @@
 #include <raylib.h>
 #include <raymath.h>
 #include <tuple>
+#include <vector>
 
 using namespace std;
 
@@ -15,10 +16,9 @@ int main() {
     SetTargetFPS(TARGET_FPS);
     InitAudioDevice();
 
-    float startup_time = 0.0f;
-
     game::initial_setup();
 
+    // NOLINTBEGIN
     Texture2D atlas = LoadTexture(SPRITESHEET_FILE);
     Shader test_shader = LoadShader(BASE_VERT_SHADER, SHADER_FRAG_1);
     int shader_tint_loc = GetShaderLocation(test_shader, "tint");
@@ -70,16 +70,16 @@ int main() {
     area->add_child(area_sprite);
     scene->add_child(area);
 
-    tuple<Vector2, float> arr[4] = {
-        tuple<Vector2, float>{(Vector2){2, 0}, 1.0f},
-        tuple<Vector2, float>{(Vector2){3, 0}, 1.0f},
-        tuple<Vector2, float>{(Vector2){2, 1}, 1.0f},
-        tuple<Vector2, float>{(Vector2){3, 1}, 1.0f}};
+    vector<tuple<Vector2, float>> frames =
+        vector({tuple<Vector2, float>{(Vector2){2, 0}, 1.0f},
+                tuple<Vector2, float>{(Vector2){3, 0}, 1.0f},
+                tuple<Vector2, float>{(Vector2){2, 1}, 1.0f},
+                tuple<Vector2, float>{(Vector2){3, 1}, 1.0f}});
     sprite* animated_sprite = new sprite();
     animated_sprite->pos = (Vector2){380, 210};
     animated_sprite->shader = &test_shader;
     animation<Vector2>* anim =
-        new animation<Vector2>(&(animated_sprite->atlas_coords), true, arr, 4);
+        new animation<Vector2>(&(animated_sprite->atlas_coords), true, frames);
     animated_sprite->add_child(anim);
     scene->add_child(animated_sprite);
 
@@ -122,11 +122,12 @@ int main() {
 
     game::set_root(scene);
     anim->play();
+    // NOLINTEND
 
     while (!WindowShouldClose()) {
         BeginDrawing();
         ClearBackground(BLACK);
-        DrawFPS(900, 0);
+        DrawFPS(900, 0); // NOLINT
 
         if (IsKeyPressed(KEY_ONE)) {
             sound_1->play();

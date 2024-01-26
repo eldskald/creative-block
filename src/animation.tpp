@@ -2,6 +2,7 @@
 #include "animation.h"
 #include <raylib.h>
 #include <tuple>
+#include <vector>
 
 // Animations are a cycle of keyframe_ structs, each representing an animation
 // keyframe that animates a variable given to the constructor by reference.
@@ -15,14 +16,11 @@
 // keyframe_'s duration expires, we change the animated value to the new one.
 
 template <typename t>
-animation<t>::animation(t* value,
-                        bool looped,
-                        tuple<t, float> frames[],
-                        int size) {
+animation<t>::animation(t* value, bool looped, vector<tuple<t, float>> frames) {
     animation::keyframe_<t>* first_frame = nullptr;
     animation::keyframe_<t>* prev_frame = nullptr;
-    for (int i = 0; i < size; ++i) {
-        animation::keyframe_<t>* frame = new animation::keyframe_<t>;
+    for (int i = 0; i < frames.size(); ++i) {
+        auto* frame = new animation::keyframe_<t>;
         frame->value = get<t>(frames[i]);
         frame->duration = get<float>(frames[i]);
         if (i == 0) {
@@ -31,7 +29,7 @@ animation<t>::animation(t* value,
         }
         prev_frame->next = frame;
         prev_frame = frame;
-        if (i == size - 1) {
+        if (i == frames.size() - 1) {
             frame->next = looped ? first_frame : nullptr;
         }
     }

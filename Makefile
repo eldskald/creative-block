@@ -10,17 +10,14 @@ TEMP_DIR := .tmp
 LIBS_DIR := lib
 INCLUDE_DIR := include
 
-# Dependencies
-RAYLIB_REPO := https://github.com/raysan5/raylib.git
-RAYLIB_TAG := 5.0
-
+# Compiler flags
 CONFIGS = $(file < project-settings.config)
 COMPILE_FLAGS += -I./include $(foreach LINE,$(CONFIGS),-D $(LINE))
 LINK_FLAGS := -L./lib -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 DEV_FLAGS := -D DEV=1
 
 # Phony targets
-.PHONY: all clean dev debug build format
+.PHONY: all clean install dev debug build format lint
 
 # Default target, build and run for development
 all: build
@@ -32,7 +29,7 @@ clean:
 # Install target, downloads, compiles and install dependencies
 install:
 	mkdir -p $(TEMP_DIR) $(INCLUDE_DIR) $(LIBS_DIR)
-	cd $(TEMP_DIR) && git clone --depth 1 --branch $(RAYLIB_TAG) $(RAYLIB_REPO)
+	cd $(TEMP_DIR) && git clone --depth 1 --branch 5.0 https://github.com/raysan5/raylib.git
 	cd $(TEMP_DIR)/raylib/src && make PLATFORM=PLATFORM_DESKTOP
 	mv $(TEMP_DIR)/raylib/src/libraylib.a ./$(LIBS_DIR)
 	mv $(TEMP_DIR)/raylib/src/raylib.h ./$(INCLUDE_DIR)
@@ -60,3 +57,7 @@ build:
 # Format files on ./src
 format:
 	for FILE in $(call rwildcard,src,*.h *.cpp *.tpp); do clang-format -i $$FILE; done
+
+# Lint files on ./src
+lint:
+	for FILE in $(call rwildcard,src,*.h *.cpp *.tpp); do clang-tidy $$FILE; done

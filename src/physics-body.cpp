@@ -10,36 +10,23 @@ using namespace std;
 list<physics_body*> physics_body::bodies_;
 list<physics_body*> physics_body::areas_;
 
-physics_body::physics_body() {
-    this->vel = Vector2Zero();
-    this->collision_box = (Rectangle){0};
-    this->type = kinematic;
-    this->one_way = false;
-    this->collision_layer = 0b00000000;
-    this->collision_mask = 0b00000000;
-}
-
 list<physics_body*> physics_body::get_detected_bodies() {
     list<physics_body*> clone;
-    for (auto i = this->detected_bodies_.begin();
-         i != this->detected_bodies_.end();
-         ++i) {
-        clone.push_back(*i);
+    for (auto& body : this->detected_bodies_) {
+        clone.push_back(body);
     }
     return clone;
 }
 
 list<physics_body*> physics_body::get_colliders(Rectangle collision_box,
-                                                bitset<8> mask) {
+                                                bitset<COLLISION_LAYERS> mask) {
     list<physics_body*> colliders;
-    for (auto i = physics_body::bodies_.begin();
-         i != physics_body::bodies_.end();
-         ++i) {
-        bitset<8> layer_mask_check = mask;
-        layer_mask_check &= (*i)->collision_layer;
-        if (CheckCollisionRecs(collision_box, (*i)->get_collision_rect_()) &&
+    for (auto& body : physics_body::bodies_) {
+        bitset<COLLISION_LAYERS> layer_mask_check = mask;
+        layer_mask_check &= body->collision_layer;
+        if (CheckCollisionRecs(collision_box, body->get_collision_rect_()) &&
             layer_mask_check != 0b00000000) {
-            colliders.push_back(*i);
+            colliders.push_back(body);
         }
     }
     return colliders;
@@ -82,30 +69,30 @@ float physics_body::compute_h_movement_(float delta_d, bool ignore_children) {
     // Iterate through all bodies found on the trail.
     list<physics_body*> colliders =
         physics_body::get_colliders(target_rec, this->collision_mask);
-    for (auto i = colliders.begin(); i != colliders.end(); ++i) {
+    for (auto& collider : colliders) {
 
         // Ignore the body if it is among the following:
-        if (*i == this) continue;
-        if ((*i)->descends_from(this) && ignore_children) continue;
+        if (collider == this) continue;
+        if (collider->descends_from(this) && ignore_children) continue;
         if (CheckCollisionRecs(this->get_collision_rect_(),
-                               (*i)->get_collision_rect_()))
+                               collider->get_collision_rect_()))
             continue;
-        if ((*i)->one_way) continue;
+        if (collider->one_way) continue;
 
         // Find the final delta to be returned.
         if (delta < 0.0f) {
             float body_left =
                 floor(this->get_global_pos().x + this->collision_box.x);
             float coll_right =
-                floor((*i)->get_global_pos().x + (*i)->collision_box.x +
-                      (*i)->collision_box.width);
+                floor(collider->get_global_pos().x + collider->collision_box.x +
+                      collider->collision_box.width);
             delta = max(coll_right - body_left, delta);
         } else {
             float body_right =
                 floor(this->get_global_pos().x + this->collision_box.x +
                       this->collision_box.width);
             float coll_left =
-                floor((*i)->get_global_pos().x + (*i)->collision_box.x);
+                floor(collider->get_global_pos().x + collider->collision_box.x);
             delta = min(coll_left - body_right, delta);
         }
     }
@@ -138,30 +125,30 @@ float physics_body::compute_v_movement_(float delta_d, bool ignore_children) {
     // Iterate through all bodies found on the trail.
     list<physics_body*> colliders =
         physics_body::get_colliders(target_rec, this->collision_mask);
-    for (auto i = colliders.begin(); i != colliders.end(); ++i) {
+    for (auto& collider : colliders) {
 
         // Ignore the body if it is among the following:
-        if (*i == this) continue;
-        if ((*i)->descends_from(this) && ignore_children) continue;
+        if (collider == this) continue;
+        if (collider->descends_from(this) && ignore_children) continue;
         if (CheckCollisionRecs(this->get_collision_rect_(),
-                               (*i)->get_collision_rect_()))
+                               collider->get_collision_rect_()))
             continue;
-        if ((*i)->one_way && delta < 0.0f) continue;
+        if (collider->one_way && delta < 0.0f) continue;
 
         // Find the final delta to be returned.
         if (delta < 0.0f) {
             float body_top =
                 floor(this->get_global_pos().y + this->collision_box.y);
             float coll_bottom =
-                floor((*i)->get_global_pos().y + (*i)->collision_box.y +
-                      (*i)->collision_box.height);
+                floor(collider->get_global_pos().y + collider->collision_box.y +
+                      collider->collision_box.height);
             delta = max(coll_bottom - body_top, delta);
         } else {
             float body_bottom =
                 floor(this->get_global_pos().y + this->collision_box.y +
                       this->collision_box.height);
             float coll_top =
-                floor((*i)->get_global_pos().y + (*i)->collision_box.y);
+                floor(collider->get_global_pos().y + collider->collision_box.y);
             delta = min(coll_top - body_bottom, delta);
         }
     }
@@ -180,8 +167,8 @@ float physics_body::move_and_drag_children_h_(float delta_d) {
     // by a gap equal to the delta.
     list<physics_body*> ordered_children;
     list<game_element*> children = this->get_children();
-    for (auto i = children.begin(); i != children.end(); ++i) {
-        physics_body* child = dynamic_cast<physics_body*>(*i);
+    for (auto& i : children) {
+        auto* child = dynamic_cast<physics_body*>(i);
         if (child) {
             if (ordered_children.empty())
                 ordered_children.push_back(child);
@@ -223,8 +210,8 @@ float physics_body::move_and_drag_children_h_(float delta_d) {
 
     // Call this function on all this body's children, now that they are
     // ordered.
-    for (auto i = ordered_children.begin(); i != ordered_children.end(); ++i) {
-        (*i)->move_and_drag_children_h_(delta);
+    for (auto& i : ordered_children) {
+        i->move_and_drag_children_h_(delta);
     }
 
     // After we moved all its children, we calculate the movement again, this
@@ -235,8 +222,8 @@ float physics_body::move_and_drag_children_h_(float delta_d) {
     // Remember we already moved all the children, but changing this body's
     // position will also change the children's global position, so we have to
     // correct it.
-    for (auto i = ordered_children.begin(); i != ordered_children.end(); ++i) {
-        (*i)->pos.x -= delta;
+    for (auto& i : ordered_children) {
+        i->pos.x -= delta;
     }
 
     return delta;
@@ -253,8 +240,8 @@ float physics_body::move_and_drag_children_v_(float delta_d) {
     // by a gap equal to the delta.
     list<physics_body*> ordered_children;
     list<game_element*> children = this->get_children();
-    for (auto i = children.begin(); i != children.end(); ++i) {
-        physics_body* child = dynamic_cast<physics_body*>(*i);
+    for (auto& i : children) {
+        auto* child = dynamic_cast<physics_body*>(i);
         if (child) {
             if (ordered_children.empty())
                 ordered_children.push_back(child);
@@ -296,8 +283,8 @@ float physics_body::move_and_drag_children_v_(float delta_d) {
 
     // Call this function on all this body's children, now that they are
     // ordered.
-    for (auto i = ordered_children.begin(); i != ordered_children.end(); ++i) {
-        (*i)->move_and_drag_children_v_(delta);
+    for (auto& i : ordered_children) {
+        i->move_and_drag_children_v_(delta);
     }
 
     // After we moved all its children, we calculate the movement again, this
@@ -308,8 +295,8 @@ float physics_body::move_and_drag_children_v_(float delta_d) {
     // Remember we already moved all the children, but changing this body's
     // position will also change the children's global position, so we have to
     // correct it.
-    for (auto i = ordered_children.begin(); i != ordered_children.end(); ++i) {
-        (*i)->pos.y -= delta;
+    for (auto& i : ordered_children) {
+        i->pos.y -= delta;
     }
 
     return delta;
@@ -322,18 +309,18 @@ void physics_body::physics_tick_() {
     float delta_y = this->vel.y * GetFrameTime();
     delta_x = this->move_and_drag_children_h_(delta_x);
     delta_y = this->move_and_drag_children_v_(delta_y);
-    this->vel.x = delta_x * GetFPS();
-    this->vel.y = delta_y * GetFPS();
+    this->vel.x = delta_x * float(GetFPS());
+    this->vel.y = delta_y * float(GetFPS());
 }
 
 // This is for the game class to call on the root scene once and trigger
 // all physics ticks in order of parent first.
 void physics_body::trigger_physics_tick_(game_element* element) {
-    physics_body* body = dynamic_cast<physics_body*>(element);
+    auto body = dynamic_cast<physics_body*>(element);
     if (body) body->physics_tick_();
     list<game_element*> children = element->get_children();
-    for (auto i = children.begin(); i != children.end(); ++i) {
-        physics_body* child = dynamic_cast<physics_body*>(*i);
+    for (auto& i : children) {
+        auto child = dynamic_cast<physics_body*>(i);
         if (child) physics_body::trigger_physics_tick_(child);
     }
 }
@@ -371,21 +358,19 @@ list<physics_body*> physics_body::find_entering_bodies_() {
 
     list<physics_body*> colliders = physics_body::get_colliders(
         this->get_collision_rect_(), this->collision_mask);
-    for (auto i = colliders.begin(); i != colliders.end(); ++i) {
+    for (auto& collider : colliders) {
         bool found = true;
-        for (auto j = this->detected_bodies_.begin();
-             j != this->detected_bodies_.end();
-             ++j) {
-            if (*j == *i) {
+        for (auto& body : this->detected_bodies_) {
+            if (body == collider) {
                 found = false;
                 break;
             }
         }
-        if (found) found_bodies.push_back(*i);
+        if (found) found_bodies.push_back(collider);
     }
 
-    for (auto i = found_bodies.begin(); i != found_bodies.end(); ++i) {
-        this->detected_bodies_.push_back(*i);
+    for (auto& body : found_bodies) {
+        this->detected_bodies_.push_back(body);
     }
 
     return found_bodies;
@@ -401,8 +386,8 @@ list<physics_body*> physics_body::find_exiting_bodies_() {
          i != this->detected_bodies_.end();
          ++i) {
         bool found = true;
-        for (auto j = colliders.begin(); j != colliders.end(); ++j) {
-            if (*j == *j) {
+        for (auto& collider : colliders) {
+            if (collider == *i) {
                 found = false;
                 break;
             }
@@ -413,25 +398,23 @@ list<physics_body*> physics_body::find_exiting_bodies_() {
         }
     }
 
-    for (auto i = iterators.begin(); i != iterators.end(); ++i) {
-        this->detected_bodies_.erase(*i);
+    for (auto& iterator : iterators) {
+        this->detected_bodies_.erase(iterator);
     }
 
     return found_bodies;
 }
 
 void physics_body::update_areas_() {
-    for (auto i = physics_body::areas_.begin(); i != physics_body::areas_.end();
-         ++i) {
-        list<physics_body*> entering_bodies = (*i)->find_entering_bodies_();
-        list<physics_body*> exiting_bodies = (*i)->find_exiting_bodies_();
+    for (auto& area : physics_body::areas_) {
+        list<physics_body*> entering_bodies = area->find_entering_bodies_();
+        list<physics_body*> exiting_bodies = area->find_exiting_bodies_();
 
-        for (auto j = entering_bodies.begin(); j != entering_bodies.end();
-             ++j) {
-            (*i)->body_entered_(*j);
+        for (auto& body : entering_bodies) {
+            area->body_entered_(body);
         }
-        for (auto j = exiting_bodies.begin(); j != exiting_bodies.end(); ++j) {
-            (*i)->body_exited_(*j);
+        for (auto& body : exiting_bodies) {
+            area->body_exited_(body);
         }
     }
 }

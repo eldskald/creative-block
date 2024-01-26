@@ -5,7 +5,11 @@
 class sfx : public game_element {
 public:
     sfx(Wave sound);
-    ~sfx();
+    sfx(const sfx&) = default;
+    sfx(sfx&&) = delete;
+    sfx& operator=(const sfx&) = default;
+    sfx& operator=(sfx&&) = delete;
+    ~sfx() override;
 
     void play();
     void stop();
@@ -14,5 +18,5 @@ public:
     static Wave sfx_2;
 
 private:
-    Sound sound_;
+    Sound sound_{(Sound){nullptr}};
 };

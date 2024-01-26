@@ -10,10 +10,14 @@ class game_element {
     friend class game;
 
 public:
-    Vector2 pos;
+    Vector2 pos{(Vector2){0}};
 
-    game_element();
-    ~game_element();
+    game_element() = default;
+    game_element(const game_element&) = default;
+    game_element(game_element&&) = delete;
+    game_element& operator=(const game_element&) = default;
+    game_element& operator=(game_element&&) = delete;
+    virtual ~game_element();
 
     game_element* get_parent();
     list<game_element*> get_children();
@@ -29,9 +33,9 @@ protected:
     virtual void tick_();
 
 private:
-    game_element* parent_;
+    game_element* parent_{nullptr};
     list<game_element*> children_;
-    bool is_on_tree_;
+    bool is_on_tree_{false};
 
     static void trigger_enter_(game_element* element);
     static void trigger_exit_(game_element* element);

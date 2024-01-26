@@ -10,7 +10,7 @@ This project is using the GNU Toolchain for C/C++ development, in particular, th
 
 You'll also need basic libraries used by [raylib](https://github.com/raysan5/raylib) to do graphics and audio. More info on their [wiki](https://github.com/raysan5/raylib/wiki/Working-on-GNU-Linux).
 
-It's also using [clang-format](https://clang.llvm.org/docs/ClangFormat.html) to format the code.
+It's also using [clang-format](https://clang.llvm.org/docs/ClangFormat.html) to format the code, as well as [clang-tidy](https://clang.llvm.org/extra/clang-tidy/) to lint.
 
 ### Getting started
 
@@ -53,10 +53,11 @@ make debug
 
 It compiles a development build with debug info, runs [gdb](https://www.sourceware.org/gdb/) on it and after you're done, it deletes it.
 
-To format the whole project, run the following:
+To format and lint the whole project, run the following:
 
 ```console
 make format
+make lint
 ```
 
 Read the [Makefile](Makefile) for more details.

@@ -4,16 +4,10 @@
 
 using namespace std;
 
-game_element::game_element() {
-    this->parent_ = nullptr;
-    this->pos = Vector2Zero();
-    this->is_on_tree_ = false;
-}
-
 game_element::~game_element() {
     if (this->parent_) this->parent_->remove_child(this);
-    for (auto i = this->children_.begin(); i != this->children_.end(); ++i) {
-        delete *i;
+    for (auto& child : this->children_) {
+        delete child;
     }
 }
 
@@ -23,8 +17,8 @@ game_element* game_element::get_parent() {
 
 list<game_element*> game_element::get_children() {
     list<game_element*> duplicate;
-    for (auto i = this->children_.begin(); i != this->children_.end(); ++i) {
-        duplicate.push_back(*i);
+    for (auto& child : this->children_) {
+        duplicate.push_back(child);
     }
     return duplicate;
 }
@@ -84,25 +78,22 @@ void game_element::tick_() {
 void game_element::trigger_enter_(game_element* element) {
     element->is_on_tree_ = true;
     element->enter_();
-    for (auto i = element->children_.begin(); i != element->children_.end();
-         ++i) {
-        game_element::trigger_enter_(*i);
+    for (auto& child : element->children_) {
+        game_element::trigger_enter_(child);
     }
 }
 
 void game_element::trigger_exit_(game_element* element) {
     element->is_on_tree_ = false;
     element->exit_();
-    for (auto i = element->children_.begin(); i != element->children_.end();
-         ++i) {
-        game_element::trigger_exit_(*i);
+    for (auto& child : element->children_) {
+        game_element::trigger_exit_(child);
     }
 }
 
 void game_element::trigger_tick_(game_element* element) {
-    for (auto i = element->children_.begin(); i != element->children_.end();
-         ++i) {
-        game_element::trigger_tick_(*i);
+    for (auto& child : element->children_) {
+        game_element::trigger_tick_(child);
     }
     element->tick_();
 }
