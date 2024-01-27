@@ -26,7 +26,8 @@ public:
     list<physics_body*> get_detected_bodies();
 
     static list<physics_body*> get_colliders(Rectangle collision_box,
-                                             bitset<COLLISION_LAYERS> mask);
+                                             bitset<COLLISION_LAYERS> mask,
+                                             bitset<COLLISION_LAYERS> layer);
 
 protected:
     void physics_tick_();

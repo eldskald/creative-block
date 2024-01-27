@@ -1,5 +1,6 @@
 #include "physics-body.h"
 #include "game-element.h"
+#include <bitset>
 #include <cmath>
 #include <list>
 #include <raylib.h>
@@ -18,14 +19,18 @@ list<physics_body*> physics_body::get_detected_bodies() {
     return clone;
 }
 
-list<physics_body*> physics_body::get_colliders(Rectangle collision_box,
-                                                bitset<COLLISION_LAYERS> mask) {
+list<physics_body*>
+physics_body::get_colliders(Rectangle collision_box,
+                            bitset<COLLISION_LAYERS> mask,
+                            bitset<COLLISION_LAYERS> layer) {
     list<physics_body*> colliders;
     for (auto& body : physics_body::bodies_) {
-        bitset<COLLISION_LAYERS> layer_mask_check = mask;
-        layer_mask_check &= body->collision_layer;
+        bitset<COLLISION_LAYERS> mask_check = mask;
+        mask_check &= body->collision_layer;
+        bitset<COLLISION_LAYERS> layer_check = layer;
+        layer_check &= body->collision_mask;
         if (CheckCollisionRecs(collision_box, body->get_collision_rect_()) &&
-            layer_mask_check != 0b00000000) {
+            (mask_check != 0b00000000 || layer_check != 0b00000000)) {
             colliders.push_back(body);
         }
     }
@@ -67,8 +72,8 @@ float physics_body::compute_h_movement_(float delta_d, bool ignore_children) {
         target_rec.x += delta;
 
     // Iterate through all bodies found on the trail.
-    list<physics_body*> colliders =
-        physics_body::get_colliders(target_rec, this->collision_mask);
+    list<physics_body*> colliders = physics_body::get_colliders(
+        target_rec, this->collision_mask, this->collision_layer);
     for (auto& collider : colliders) {
 
         // Ignore the body if it is among the following:
@@ -123,8 +128,8 @@ float physics_body::compute_v_movement_(float delta_d, bool ignore_children) {
         target_rec.y += delta;
 
     // Iterate through all bodies found on the trail.
-    list<physics_body*> colliders =
-        physics_body::get_colliders(target_rec, this->collision_mask);
+    list<physics_body*> colliders = physics_body::get_colliders(
+        target_rec, this->collision_mask, this->collision_layer);
     for (auto& collider : colliders) {
 
         // Ignore the body if it is among the following:
@@ -356,8 +361,10 @@ void physics_body::exit_() {
 list<physics_body*> physics_body::find_entering_bodies_() {
     list<physics_body*> found_bodies;
 
-    list<physics_body*> colliders = physics_body::get_colliders(
-        this->get_collision_rect_(), this->collision_mask);
+    list<physics_body*> colliders =
+        physics_body::get_colliders(this->get_collision_rect_(),
+                                    this->collision_mask,
+                                    this->collision_layer);
     for (auto& collider : colliders) {
         bool found = true;
         for (auto& body : this->detected_bodies_) {
@@ -380,8 +387,10 @@ list<physics_body*> physics_body::find_exiting_bodies_() {
     list<physics_body*> found_bodies;
     list<list<physics_body*>::iterator> iterators;
 
-    list<physics_body*> colliders = physics_body::get_colliders(
-        this->get_collision_rect_(), this->collision_mask);
+    list<physics_body*> colliders =
+        physics_body::get_colliders(this->get_collision_rect_(),
+                                    this->collision_mask,
+                                    this->collision_layer);
     for (auto i = this->detected_bodies_.begin();
          i != this->detected_bodies_.end();
          ++i) {
