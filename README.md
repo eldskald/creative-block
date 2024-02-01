@@ -14,7 +14,7 @@ It's also using [clang-format](https://clang.llvm.org/docs/ClangFormat.html) to 
 
 ### Getting started
 
-After cloning the repository, run the following to install dependendies:
+After cloning the repository, run the following to install dependencies:
 
 ```console
 make install

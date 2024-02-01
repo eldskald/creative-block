@@ -1,4 +1,5 @@
 #include "animation.h"
+#include "data-loader.h"
 #include "game-element.h"
 #include "game.h"
 #include "physics-body.h"
@@ -108,7 +109,7 @@ int main() {
     player_block->pos = (Vector2){72, -72};
     player_block->collision_box = (Rectangle){0, 0, 64, 64};
     player_block->collision_layer = 0b00000010;
-    player_block->collision_mask = 0b00000101;
+    player_block->collision_mask = 0b00000111;
     sprite* player_block_sprite = new sprite();
     player_block_sprite->atlas_coords = (Vector2){0, 0};
     player_block->add_child(player_block_sprite);
@@ -123,6 +124,11 @@ int main() {
     game::set_root(scene);
     anim->play();
     // NOLINTEND
+
+    list<game_element*> elements = data_loader::load("teste.txt");
+    for (auto& element : elements) {
+        scene->add_child(element);
+    }
 
     while (!WindowShouldClose()) {
         BeginDrawing();
