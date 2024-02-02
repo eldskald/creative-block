@@ -5,6 +5,7 @@ rwildcard=$(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst 
 # File/directory names
 BIN_NAME := app
 DEV_BIN_NAME := dev-app
+EDITOR_NAME := level-editor
 BUILD_DIR := build
 TEMP_DIR := .tmp
 LIBS_DIR := lib
@@ -17,7 +18,7 @@ LINK_FLAGS := -L./lib -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 DEV_FLAGS := -D DEV=1
 
 # Phony targets
-.PHONY: all clean install dev debug build format lint
+.PHONY: all clean install dev debug build editor format lint
 
 # Default target, build and run for development
 all: build
@@ -53,6 +54,10 @@ debug:
 build:
 	mkdir -p $(BUILD_DIR)
 	g++ $(call rwildcard,src,*.cpp) -o $(BUILD_DIR)/$(BIN_NAME) $(COMPILE_FLAGS) $(LINK_FLAGS)
+
+# Editor target, compiles the level editor and places it at the project root
+editor:
+	g++ $(call rwildcard,editor,*.cpp) -o $(EDITOR_NAME) $(COMPILE_FLAGS) $(LINK_FLAGS)
 
 # Format files on ./src
 format:

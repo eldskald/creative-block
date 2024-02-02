@@ -2,9 +2,8 @@
 
 This project is me trying to learn C++ with [raylib](https://github.com/raysan5/raylib).
 
-## Getting Started
 
-### Dependencies
+## Dependencies
 
 This project is using the GNU Toolchain for C/C++ development, in particular, the [GNU Compiler Collection](https://www.gnu.org/software/gcc) and [make](https://www.gnu.org/software/make) are used to compile, and optionally, [gdb](https://www.sourceware.org/gdb/) to debug. You also need [git](https://git-scm.com/), of course.
 
@@ -12,7 +11,7 @@ You'll also need basic libraries used by [raylib](https://github.com/raysan5/ray
 
 It's also using [clang-format](https://clang.llvm.org/docs/ClangFormat.html) to format the code, as well as [clang-tidy](https://clang.llvm.org/extra/clang-tidy/) to lint.
 
-### Getting started
+## Getting started
 
 After cloning the repository, run the following to install dependencies:
 
@@ -26,7 +25,15 @@ This will install [raylib](https://github.com/raysan5/raylib) on this project so
 make clean
 ```
 
-### Running and building
+To build the level editor and edit levels, run the following:
+
+```console
+make editor
+```
+
+It will compile the binary `level-editor` at the project root, just run and start making levels. You can also drag and drop a level file at the editor and it will load it. Just press save to save it.
+
+## Running and building
 
 To make a Linux build, run one of these two commands:
 
