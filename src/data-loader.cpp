@@ -1,6 +1,7 @@
 #include "data-loader.h"
 #include "game-element.h"
 #include "physics-body.h"
+#include "shader.h"
 #include "sprite.h"
 #include <cctype>
 #include <exception>
@@ -167,6 +168,12 @@ physics_body::body_type string_to_body_type(string str) {
     throw invalid_argument("value not a body type");
 }
 
+Shader* string_to_shader(string str) {
+    if (str == "base") return shader::get_base();
+    if (str == "sample") return shader::get_sample();
+    throw invalid_argument("value not a shader");
+}
+
 void parse_game_element_property_line(game_element* element, string line) {
     if (line.find('=') == line.npos)
         throw invalid_argument("property line has no '=' sign");
@@ -216,6 +223,8 @@ void parse_sprite_property_line(sprite* sprite, string line) {
         sprite->atlas_coords = string_to_vector(prop_value);
     } else if (prop_name == "tint") {
         sprite->tint = string_to_color(prop_value);
+    } else if (prop_name == "shader") {
+        sprite->shader = string_to_shader(prop_value);
     } else
         throw invalid_argument("invalid property name");
 }

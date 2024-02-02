@@ -1,12 +1,17 @@
 [physics_body]
-pos = (200,120)
+pos = (800,120)
 type = fixed
 one_way = false
 collision_box = (0,0,64,64)
 collision_layer = 00000100
 
 [sprite]
-pos = (200,120)
+pos = (800,120)
 atlas_coords = (2,1)
 tint = (255,128,196,255)
+
+[sprite]
+pos = (300,300)
+atlas_coords = (3,1)
+shader = sample
 
