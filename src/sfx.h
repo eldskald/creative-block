@@ -17,6 +17,8 @@ public:
     static Wave sfx_1;
     static Wave sfx_2;
 
+    static void initialize();
+
 private:
     Sound sound_{(Sound){nullptr}};
 };

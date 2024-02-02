@@ -1,18 +1,17 @@
 #pragma once
 #include "game-element.h"
+#include "shader.h"
 #include <raylib.h>
 
-class game;
-
 class sprite : public game_element {
-    friend class game;
-
 public:
     Vector2 atlas_coords{(Vector2){0}};
     Color tint{WHITE};
-    Shader* shader{sprite::base_shader};
+    Shader* shader{shader::get_base()};
 
     static Shader* base_shader;
+
+    static void initialize();
 
 protected:
     void tick_() override;

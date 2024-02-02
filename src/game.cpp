@@ -2,16 +2,16 @@
 #include "game-element.h"
 #include "physics-body.h"
 #include "sfx.h"
+#include "shader.h"
 #include "sprite.h"
 #include <raylib.h>
 
 game_element* game::root_ = nullptr;
 
 void game::initial_setup() {
-    sprite::atlas_ = LoadTexture(SPRITESHEET_FILE);
-    *(sprite::base_shader) = LoadShader(BASE_VERT_SHADER, BASE_FRAG_SHADER);
-    sfx::sfx_1 = LoadWave(SFX_1);
-    sfx::sfx_2 = LoadWave(SFX_2);
+    sprite::initialize();
+    sfx::initialize();
+    shader::initialize();
 }
 
 void game::do_game_loop() {

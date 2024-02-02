@@ -4,6 +4,7 @@
 #include "game.h"
 #include "physics-body.h"
 #include "sfx.h"
+#include "shader.h"
 #include "sprite.h"
 #include <raylib.h>
 #include <raymath.h>
@@ -20,13 +21,6 @@ int main() {
     game::initial_setup();
 
     // NOLINTBEGIN
-    Texture2D atlas = LoadTexture(SPRITESHEET_FILE);
-    Shader test_shader = LoadShader(BASE_VERT_SHADER, SHADER_FRAG_1);
-    int shader_tint_loc = GetShaderLocation(test_shader, "tint");
-    float tint_value[4] = {1.0f, 0.0f, 1.0f, 1.0f};
-    SetShaderValue(
-        test_shader, shader_tint_loc, tint_value, SHADER_UNIFORM_VEC4);
-
     game_element* scene = new game_element();
 
     physics_body* block_1 = new physics_body();
@@ -78,7 +72,7 @@ int main() {
                 tuple<Vector2, float>{(Vector2){3, 1}, 1.0f}});
     sprite* animated_sprite = new sprite();
     animated_sprite->pos = (Vector2){380, 210};
-    animated_sprite->shader = &test_shader;
+    animated_sprite->shader = shader::get_sample();
     animation<Vector2>* anim =
         new animation<Vector2>(&(animated_sprite->atlas_coords), true, frames);
     animated_sprite->add_child(anim);

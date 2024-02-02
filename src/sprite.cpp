@@ -2,7 +2,10 @@
 #include <raylib.h>
 
 Texture2D sprite::atlas_ = (Texture2D){0};
-Shader* sprite::base_shader = new Shader();
+
+void sprite::initialize() {
+    sprite::atlas_ = LoadTexture(SPRITESHEET_FILE);
+}
 
 void sprite::tick_() {
     BeginShaderMode(*(this->shader));
