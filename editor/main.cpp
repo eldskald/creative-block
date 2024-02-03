@@ -1,22 +1,15 @@
+#include "defs.h"
 #include "editor.h"
 #include <raylib.h>
 
 int main() {
-    InitWindow(EDITOR_WINDOW_SIZE_X, EDITOR_WINDOW_SIZE_Y, EDITOR_WINDOW_TITLE);
+    InitWindow(EDITOR_WINDOW_SIZE_X, EDITOR_WINDOW_SIZE_Y, "Level Editor");
     SetTargetFPS(EDITOR_FPS);
 
+    editor::initialize();
     while (!WindowShouldClose()) {
         BeginDrawing();
-        ClearBackground(BLACK);
-
-        // Account for the border around the tilemap
-        DrawRectangleLinesEx((Rectangle){TILEMAP_ORIGIN_X - 1,
-                                         TILEMAP_ORIGIN_Y - 1,
-                                         TILEMAP_SIZE_X + 2,
-                                         TILEMAP_SIZE_Y + 2},
-                             1,
-                             BLUE);
-
+        editor::tick();
         EndDrawing();
     }
 
