@@ -1,19 +1,27 @@
 #include "editor.h"
 #include "defs.h"
+#include "spritesheet.h"
 #include "tilemap.h"
+#include "tileset.h"
 #include <raylib.h>
+#include <vector>
 
-tilemap* editor::tilemap_ = new tilemap();
+using namespace std;
+
+tilemap* editor::tilemap_ = nullptr;
+tileset* editor::tileset_ = nullptr;
 
 void editor::initialize() {
     SetExitKey(KEY_NULL);
-    defs::initialize();
+    spritesheet::initialize();
+    tileset::initialize();
+    editor::tilemap_ = new tilemap();
 }
 
 void editor::tick() {
     ClearBackground(EDITOR_BG_COLOR);
 
-    // Account for the border around the tilemap
+    // Draw the blue rectangle around the tilemap.
     DrawRectangleLinesEx((Rectangle){TILEMAP_ORIGIN_X - 1,
                                      TILEMAP_ORIGIN_Y - 1,
                                      TILEMAP_PIXEL_SIZE_X + 2,
@@ -22,4 +30,5 @@ void editor::tick() {
                          BLUE);
 
     editor::tilemap_->tick();
+    editor::tileset_->tick();
 }

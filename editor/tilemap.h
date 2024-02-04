@@ -6,6 +6,8 @@ using namespace std;
 
 class tilemap {
 public:
+    tilemap();
+
     void set_tile(int x, int y, int tile_id);
     void tick();
 

@@ -1,10 +1,20 @@
 #include "tilemap.h"
 #include "defs.h"
+#include "spritesheet.h"
+#include "tileset.h"
 #include <array>
 #include <raylib.h>
 #include <stdexcept>
 
 using namespace std;
+
+tilemap::tilemap() { // NOLINT
+    for (int i = 0; i < TILEMAP_SIZE_X; i++) {
+        for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
+            this->cells_.at(i).at(j) = -1;
+        }
+    }
+}
 
 void tilemap::set_tile(int x, int y, int tile_id) {
     this->cells_.at(x).at(y) = tile_id;
@@ -12,38 +22,33 @@ void tilemap::set_tile(int x, int y, int tile_id) {
 
 void tilemap::highlight_hovered_cell_(int x, int y) {
     if (x == -1 && y == -1) return;
-    DrawRectangleLinesEx(
-        (Rectangle){(float)(x * CELL_SIZE_X + TILEMAP_ORIGIN_X),
-                    (float)(y * CELL_SIZE_Y + TILEMAP_ORIGIN_Y),
-                    CELL_SIZE_X,
-                    CELL_SIZE_Y},
-        1,
-        BLUE);
+    DrawRectangle(x * CELL_SIZE_X + TILEMAP_ORIGIN_X,
+                  y * CELL_SIZE_Y + TILEMAP_ORIGIN_Y,
+                  CELL_SIZE_X,
+                  CELL_SIZE_Y,
+                  CELL_HIGHLIGHT_COLOR);
 }
 
 void tilemap::render_cell_(int x, int y) {
-    switch (this->cells_.at(x).at(y)) {
-    case 1:
-        DrawTexturePro(defs::get_spritesheet(),
-                       (Rectangle){SPRITESHEET_CELL_SIZE_X * 0,
-                                   SPRITESHEET_CELL_SIZE_Y * 0,
-                                   SPRITESHEET_CELL_SIZE_X,
-                                   SPRITESHEET_CELL_SIZE_Y},
-                       (Rectangle){(float)(x * CELL_SIZE_X + TILEMAP_ORIGIN_X),
-                                   (float)(y * CELL_SIZE_Y + TILEMAP_ORIGIN_Y),
-                                   CELL_SIZE_X,
-                                   CELL_SIZE_Y},
-                       (Vector2){0, 0},
-                       0.0f,
-                       WHITE);
-        break;
-    }
+    int id = this->cells_.at(x).at(y);
+    if (id == -1) return;
+
+    Vector2 coords = tileset::get_tile_sprite_coords(id);
+    spritesheet::render_sprite_at(
+        coords,
+        (Vector2){(float)(x * CELL_SIZE_X + TILEMAP_ORIGIN_X),
+                  (float)(y * CELL_SIZE_Y + TILEMAP_ORIGIN_Y)});
 }
 
 void tilemap::click_tile(int x, int y) {
     if (x == -1 && y == -1) return;
-    if (!IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) return;
-    this->set_tile(x, y, (this->cells_.at(x).at(y) + 1) % 2);
+    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+        this->set_tile(x, y, tileset::selected_tile);
+    } else if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
+        this->set_tile(x, y, -1);
+    } else if (IsMouseButtonPressed(MOUSE_BUTTON_MIDDLE)) {
+        tileset::selected_tile = this->cells_.at(x).at(y);
+    }
 }
 
 void tilemap::tick() {
