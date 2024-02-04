@@ -19,7 +19,7 @@ void editor::initialize() {
 }
 
 void editor::tick() {
-    ClearBackground(EDITOR_BG_COLOR);
+    ClearBackground(BG_COLOR);
 
     // Draw the blue rectangle around the tilemap.
     DrawRectangleLinesEx((Rectangle){TILEMAP_ORIGIN_X - 1,
@@ -27,7 +27,7 @@ void editor::tick() {
                                      TILEMAP_PIXEL_SIZE_X + 2,
                                      TILEMAP_PIXEL_SIZE_Y + 2},
                          1,
-                         BLUE);
+                         FG_COLOR);
 
     editor::tilemap_->tick();
     editor::tileset_->tick();
