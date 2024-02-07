@@ -21,6 +21,9 @@ void editor::initialize() {
 void editor::tick() {
     ClearBackground(BG_COLOR);
 
+    // Reset mouse cursor.
+    SetMouseCursor(MOUSE_CURSOR_ARROW);
+
     // Draw the blue rectangle around the tilemap.
     DrawRectangleLinesEx((Rectangle){TILEMAP_ORIGIN_X - 1,
                                      TILEMAP_ORIGIN_Y - 1,

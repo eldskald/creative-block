@@ -3,6 +3,9 @@
 #include <raylib.h>
 #include <string>
 
+void button::empty_on_click_() {
+}
+
 bool button::is_being_hovered_() {
     bool x_check = (GetMouseX() >= (int)this->rect.x) &&
                    (GetMouseX() <= (int)this->rect.x + (int)this->rect.width);
@@ -17,7 +20,6 @@ void button::render_() {
         col = IsMouseButtonDown(MOUSE_BUTTON_LEFT) ? BTN_PRESSED_COLOR
                                                    : BTN_HOVERED_COLOR;
     }
-
     if (this->is_being_hovered_() && IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
         DrawRectangleLinesEx((Rectangle){this->rect.x + 2,
                                          this->rect.y + 2,
@@ -34,7 +36,6 @@ void button::render_() {
                      (int)text_size.y / 2,
                  FONT_SIZE - 2,
                  col);
-
     } else {
         DrawRectangleLinesEx(this->rect, 1, col);
         Vector2 text_size =
@@ -48,13 +49,24 @@ void button::render_() {
                  col);
     }
 
+    // Set cursor when being hovered
     if (this->is_being_hovered_()) {
         SetMouseCursor(MOUSE_CURSOR_POINTING_HAND);
-    } else {
-        SetMouseCursor(MOUSE_CURSOR_ARROW);
     };
+}
+
+void button::detect_clicks_() {
+    if (this->is_being_hovered_() && IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+        this->being_clicked_ = true;
+    } else if (this->being_clicked_ && IsMouseButtonUp(MOUSE_BUTTON_LEFT)) {
+        this->being_clicked_ = false;
+        this->on_click();
+    } else {
+        this->being_clicked_ = false;
+    }
 }
 
 void button::tick() {
     this->render_();
+    this->detect_clicks_();
 }
