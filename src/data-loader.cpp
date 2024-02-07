@@ -255,9 +255,9 @@ game_element* get_element_from_block(element_block block) {
 }
 
 list<game_element*> data_loader::load(const char* file) {
-    vector<string> lines =
-        split_into_lines_with_no_whitespace(LoadFileText(file));
+    char* text = LoadFileText(file);
 
+    vector<string> lines = split_into_lines_with_no_whitespace(text);
     list<element_block> blocks;
     list<game_element*> elements;
     try {
@@ -273,5 +273,6 @@ list<game_element*> data_loader::load(const char* file) {
         CloseWindow();
     }
 
+    UnloadFileText(text);
     return elements;
 }
