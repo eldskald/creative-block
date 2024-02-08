@@ -4,9 +4,11 @@
 #include "tileset.h"
 #include <array>
 #include <raylib.h>
-#include <stdexcept>
+#include <string>
 
 using namespace std;
+
+const int CONVERT_TO_DATA_CONST = 50;
 
 tilemap::tilemap() { // NOLINT
     for (int i = 0; i < TILEMAP_SIZE_X; i++) {
@@ -18,6 +20,26 @@ tilemap::tilemap() { // NOLINT
 
 void tilemap::set_tile(int x, int y, int tile_id) {
     this->cells_.at(x).at(y) = tile_id;
+}
+
+string tilemap::convert_to_data() {
+    string data = "";
+    data.reserve(TILEMAP_SIZE_X * TILEMAP_SIZE_Y);
+    for (int i = 0; i < TILEMAP_SIZE_X; i++) {
+        for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
+            data += (char)(this->cells_.at(i).at(j) + CONVERT_TO_DATA_CONST);
+        }
+    }
+    return data;
+}
+
+void tilemap::load_from_data(string data) {
+    for (int i = 0; i < TILEMAP_SIZE_X; i++) {
+        for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
+            this->cells_.at(i).at(j) =
+                (int)(data.at(TILEMAP_SIZE_Y * i + j) - CONVERT_TO_DATA_CONST);
+        }
+    }
 }
 
 void tilemap::highlight_hovered_cell_(int x, int y) {

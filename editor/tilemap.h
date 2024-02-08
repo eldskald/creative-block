@@ -1,6 +1,7 @@
 #pragma once
 #include "defs.h"
 #include <array>
+#include <string>
 
 using namespace std;
 
@@ -9,6 +10,8 @@ public:
     tilemap();
 
     void set_tile(int x, int y, int tile_id);
+    string convert_to_data();
+    void load_from_data(string data);
     void tick();
 
 private:

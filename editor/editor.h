@@ -11,4 +11,7 @@ public:
 private:
     static tilemap* tilemap_;
     static tileset* tileset_;
+
+    static void save_tilemap_data();
+    static void load_tilemap_data();
 };

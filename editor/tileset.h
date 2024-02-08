@@ -9,7 +9,6 @@ class tileset {
 public:
     static int selected_tile;
 
-    static void set_tiles(vector<tile> tiles);
     static Vector2 get_tile_sprite_coords(int id);
 
     static void initialize();
