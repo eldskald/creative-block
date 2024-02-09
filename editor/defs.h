@@ -21,12 +21,17 @@ const int TILESET_ORIGIN_Y = TILEMAP_ORIGIN_Y + TILEMAP_PIXEL_SIZE_Y + 8;
 const int TILESET_ROWS = 2;
 
 const int FONT_SIZE = 20;
+const int TEXT_SPACING = 2;
+const int INPUT_MARGIN = 4;
+const int INPUT_UNDERLINE_DIST = 2;
+const float INPUT_BLINK_TIME = 0.5;
 
-const Color FG_COLOR = (Color){65, 166, 181, 255};
-const Color BG_COLOR = (Color){26, 27, 38, 255};
+const Color FG_COLOR = (Color){192, 202, 245, 255};      // #c0caf5
+const Color BG_COLOR = (Color){26, 27, 38, 255};         // #1a1b26
+const Color PRIMARY_COLOR = (Color){65, 166, 181, 255};  // #41a6b5
+const Color HOVERED_COLOR = (Color){115, 218, 202, 255}; // #73daca
+const Color FOCUSED_COLOR = (Color){187, 154, 247, 255}; // #bb9af7
 const Color CELL_HIGHLIGHT_COLOR = (Color){255, 255, 255, 32};
-const Color BTN_HOVERED_COLOR = (Color){115, 218, 202, 255};
-const Color BTN_PRESSED_COLOR = (Color){192, 202, 245, 255};
 
 enum tile_type { background, block };
 

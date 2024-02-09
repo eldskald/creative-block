@@ -2,6 +2,7 @@
 #include "button.h"
 #include "defs.h"
 #include "spritesheet.h"
+#include "text-input.h"
 #include "tilemap.h"
 #include "tileset.h"
 #include <raylib.h>
@@ -14,6 +15,7 @@ tileset* editor::tileset_ = nullptr;
 
 button* save_btn = nullptr;
 button* load_btn = nullptr;
+text_input* filepath_input = nullptr;
 
 void editor::save_tilemap_data() {
     string data = editor::tilemap_->convert_to_data();
@@ -43,6 +45,11 @@ void editor::initialize() {
     load_btn->rect =
         (Rectangle){132, EDITOR_WINDOW_SIZE_Y - 40, 100, 32}; // NOLINT
     load_btn->on_click = editor::load_tilemap_data;
+
+    filepath_input = new text_input();
+    filepath_input->label = "file path";
+    filepath_input->rect =
+        (Rectangle){248, EDITOR_WINDOW_SIZE_Y - 40, 400, 32}; // NOLINT
 }
 
 void editor::tick() {
@@ -57,10 +64,11 @@ void editor::tick() {
                                      TILEMAP_PIXEL_SIZE_X + 2,
                                      TILEMAP_PIXEL_SIZE_Y + 2},
                          1,
-                         FG_COLOR);
+                         PRIMARY_COLOR);
 
     editor::tilemap_->tick();
     editor::tileset_->tick();
     save_btn->tick();
     load_btn->tick();
+    filepath_input->tick();
 }
