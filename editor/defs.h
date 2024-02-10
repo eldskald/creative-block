@@ -22,8 +22,11 @@ const int TILESET_ROWS = 2;
 
 const int FONT_SIZE = 20;
 const int TEXT_SPACING = 2;
+const int INPUT_MAX_LENGTH = 20;
 const int INPUT_MARGIN = 4;
 const int INPUT_UNDERLINE_DIST = 2;
+const float INPUT_HOLD_KEY_START = 0.5;
+const float INPUT_HOLD_KEY_PERIOD = 0.05;
 const float INPUT_BLINK_TIME = 0.5;
 
 const Color FG_COLOR = (Color){192, 202, 245, 255};      // #c0caf5
