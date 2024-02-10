@@ -1,5 +1,6 @@
 #include "text-input.h"
 #include "defs.h"
+#include <iostream>
 #include <raylib.h>
 #include <string>
 
@@ -21,8 +22,7 @@ void text_input::detect_clicks_() {
 void text_input::update_input_() {
     int input = GetCharPressed();
     if (input) {
-        int size = 0;
-        this->input_ += CodepointToUTF8(input, &size);
+        this->input_.push_back(input);
     } else if (IsKeyPressed(KEY_BACKSPACE) && !(this->input_.empty())) {
         this->input_.pop_back();
     }
@@ -62,14 +62,16 @@ void text_input::render_() {
     DrawLineEx(start_pos, end_pos, 2, col);
 
     // Render input
-    Vector2 input_size = MeasureTextEx(
-        GetFontDefault(), this->input_.c_str(), FONT_SIZE, TEXT_SPACING);
-    DrawText((this->input_).c_str(),
+    char* input_text = LoadUTF8(this->input_.data(), (int)this->input_.size());
+    Vector2 input_size =
+        MeasureTextEx(GetFontDefault(), input_text, FONT_SIZE, TEXT_SPACING);
+    DrawText(input_text,
              (int)this->rect.x + (int)label_size.x + INPUT_MARGIN * 3,
              (int)this->rect.y + (int)this->rect.height / 2 -
                  (int)input_size.y / 2,
              FONT_SIZE,
              input_col);
+    UnloadUTF8(input_text);
 
     // Render cursor
     if (this->focused_) {

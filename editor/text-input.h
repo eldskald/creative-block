@@ -1,6 +1,7 @@
 #pragma once
 #include <raylib.h>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -14,7 +15,7 @@ public:
 
 private:
     bool focused_{false};
-    string input_{""};
+    vector<int> input_{};
     float cursor_blink_time_{0.0};
 
     void render_();
