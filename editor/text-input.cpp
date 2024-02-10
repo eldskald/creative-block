@@ -19,6 +19,23 @@ void text_input::detect_clicks_() {
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         this->cursor_blink_time_ = INPUT_BLINK_TIME;
         this->focused_ = this->is_being_hovered_();
+
+        // Position the cursor on the mouse
+        string label_render = this->label + ':';
+        Vector2 label_size = MeasureTextEx(
+            GetFontDefault(), label_render.data(), FONT_SIZE, TEXT_SPACING);
+        if (GetMouseX() >=
+            (int)this->rect.x + INPUT_MARGIN + (int)label_size.x) {
+            this->cursor_pos_ = 0;
+            for (int i = (int)this->input_lengths_.size() - 1; i >= 0; i--) {
+                if (GetMouseX() >= (int)this->rect.x + INPUT_MARGIN +
+                                       (int)label_size.x +
+                                       (int)this->input_lengths_.at(i)) {
+                    this->cursor_pos_ = i;
+                    break;
+                }
+            }
+        }
     }
 }
 
@@ -144,8 +161,8 @@ void text_input::render_() {
     // Render label
     string label_render = this->label + ':';
     Vector2 label_size = MeasureTextEx(
-        GetFontDefault(), label_render.c_str(), FONT_SIZE, TEXT_SPACING);
-    DrawText(label_render.c_str(),
+        GetFontDefault(), label_render.data(), FONT_SIZE, TEXT_SPACING);
+    DrawText(label_render.data(),
              (int)this->rect.x + INPUT_MARGIN,
              (int)this->rect.y + (int)this->rect.height / 2 -
                  (int)label_size.y / 2,
@@ -195,6 +212,10 @@ void text_input::render_() {
     // Set mouse cursor when being hovered
     if (this->is_being_hovered_()) {
         SetMouseCursor(MOUSE_CURSOR_POINTING_HAND);
+        if (GetMouseX() >=
+            (int)this->rect.x + INPUT_MARGIN + (int)label_size.x) {
+            SetMouseCursor(MOUSE_CURSOR_IBEAM);
+        }
     };
 }
 
