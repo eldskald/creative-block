@@ -1,5 +1,6 @@
 #include "text-input.h"
 #include "defs.h"
+#include <iostream>
 #include <raylib.h>
 #include <string>
 
@@ -123,26 +124,32 @@ void text_input::get_user_input_() {
 }
 
 void text_input::update_inputs_() {
+
+    // Get text from codepoints
     char* str = LoadUTF8(this->input_codepoints_.data(),
                          (int)this->input_codepoints_.size());
     this->input_text_ = str;
     UnloadUTF8(str);
 
-    // Add all substring lengths of the text input so we can position the
-    // cursor between each character when its moved.
-    this->input_lengths_.resize(this->input_text_.size() + 1);
-    for (int i = 0; i < this->input_text_.size(); i++) {
-        Vector2 size = MeasureTextEx(GetFontDefault(),
-                                     this->input_text_.substr(0, i).data(),
-                                     FONT_SIZE,
-                                     TEXT_SPACING);
-        this->input_lengths_.at(i) = size.x;
-    }
+    // Get cursor lengths
+    this->input_lengths_ = {0.0};
+    for (int i = 1; i <= this->input_codepoints_.size(); i++) {
 
-    // Last length, that's the full text input string.
-    Vector2 size = MeasureTextEx(
-        GetFontDefault(), this->input_text_.data(), FONT_SIZE, TEXT_SPACING);
-    this->input_lengths_.at(this->input_text_.size()) = size.x;
+        // We need to load each substring from codepoints because a single
+        // codepoint doesn't necessarily translates into a single char, so
+        // measuring input_text_ per char doesn't always works.
+        vector<int> codepoints = {};
+        for (int j = 0; j < i; j++) {
+            codepoints.push_back(this->input_codepoints_.at(j));
+        }
+
+        // Now we load the text, measure and unload it.
+        char* substr = LoadUTF8(codepoints.data(), (int)codepoints.size());
+        Vector2 substr_size =
+            MeasureTextEx(GetFontDefault(), substr, FONT_SIZE, TEXT_SPACING);
+        UnloadUTF8(substr);
+        this->input_lengths_.push_back(substr_size.x);
+    }
 }
 
 void text_input::render_() {

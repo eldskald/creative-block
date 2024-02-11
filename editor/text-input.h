@@ -17,7 +17,7 @@ private:
     bool focused_{false};
     vector<int> input_codepoints_{};
     string input_text_{""};
-    vector<float> input_lengths_ = {0.0};
+    vector<float> input_lengths_{0.0};
     int cursor_pos_{0};
     float cursor_blink_time_{0.0};
     float hold_key_start_{0.0};
