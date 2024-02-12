@@ -1,5 +1,6 @@
 #include "editor.h"
 #include "button.h"
+#include "data-exporter.h"
 #include "defs.h"
 #include "spritesheet.h"
 #include "text-input.h"
@@ -15,6 +16,7 @@ tileset* editor::tileset_ = nullptr;
 
 button* save_btn = nullptr;
 button* load_btn = nullptr;
+button* export_btn = nullptr;
 text_input* filepath_input = nullptr;
 
 void editor::save_tilemap_data() {
@@ -26,6 +28,11 @@ void editor::load_tilemap_data() {
     char* data = LoadFileText("testmap.lvproj");
     editor::tilemap_->load_from_data(data);
     UnloadFileText(data);
+}
+
+void editor::export_tilemap_data() {
+    string data = data_exporter::get_export_text(editor::tilemap_->get_cells());
+    SaveFileText("testlevel.dat", data.data());
 }
 
 void editor::initialize() {
@@ -45,6 +52,12 @@ void editor::initialize() {
     load_btn->rect =
         (Rectangle){132, EDITOR_WINDOW_SIZE_Y - 40, 100, 32}; // NOLINT
     load_btn->on_click = editor::load_tilemap_data;
+
+    export_btn = new button();
+    export_btn->label = "export";
+    export_btn->rect =
+        (Rectangle){900, EDITOR_WINDOW_SIZE_Y - 40, 100, 32}; // NOLINT
+    export_btn->on_click = editor::export_tilemap_data;
 
     filepath_input = new text_input();
     filepath_input->label = "file path";
@@ -70,5 +83,6 @@ void editor::tick() {
     editor::tileset_->tick();
     save_btn->tick();
     load_btn->tick();
+    export_btn->tick();
     filepath_input->tick();
 }

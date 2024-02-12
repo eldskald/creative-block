@@ -14,4 +14,5 @@ private:
 
     static void save_tilemap_data();
     static void load_tilemap_data();
+    static void export_tilemap_data();
 };

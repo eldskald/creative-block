@@ -11,6 +11,10 @@ using namespace std;
 int tileset::selected_tile = -1;
 vector<tile> tileset::tiles_;
 
+tile tileset::get_tile_data(int id) {
+    return tileset::tiles_.at(id);
+}
+
 Vector2 tileset::get_tile_sprite_coords(int id) {
     return tileset::tiles_.at(id).spritesheet_coords;
 }
@@ -39,14 +43,14 @@ void tileset::render_tile_(int id) {
 }
 
 void tileset::initialize() {
-    tileset::tiles_ = vector<tile>{(tile){(Vector2){0, 0}, background},
-                                   (tile){(Vector2){1, 0}, background},
-                                   (tile){(Vector2){2, 0}, background},
-                                   (tile){(Vector2){3, 0}, background},
-                                   (tile){(Vector2){0, 1}, background},
-                                   (tile){(Vector2){1, 1}, background},
-                                   (tile){(Vector2){2, 1}, background},
-                                   (tile){(Vector2){3, 1}, background}};
+    tileset::tiles_ = vector<tile>{(tile){(Vector2){0, 0}, block},
+                                   (tile){(Vector2){1, 0}, block},
+                                   (tile){(Vector2){2, 0}, block},
+                                   (tile){(Vector2){3, 0}, block},
+                                   (tile){(Vector2){0, 1}, block},
+                                   (tile){(Vector2){1, 1}, block},
+                                   (tile){(Vector2){2, 1}, block},
+                                   (tile){(Vector2){3, 1}, block}};
 }
 
 void tileset::tick() {

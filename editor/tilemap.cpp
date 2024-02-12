@@ -22,6 +22,16 @@ void tilemap::set_tile(int x, int y, int tile_id) {
     this->cells_.at(x).at(y) = tile_id;
 }
 
+map tilemap::get_cells() {
+    map clone;
+    for (int i = 0; i < TILEMAP_SIZE_X; i++) {
+        for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
+            clone.at(i).at(j) = this->cells_.at(i).at(j);
+        }
+    }
+    return clone;
+}
+
 string tilemap::convert_to_data() {
     string data = "";
     data.reserve(TILEMAP_SIZE_X * TILEMAP_SIZE_Y);
