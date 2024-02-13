@@ -12,8 +12,9 @@ LIBS_DIR := lib
 INCLUDE_DIR := include
 
 # Compiler flags
-CONFIGS = $(file < project-settings.config)
-COMPILE_FLAGS += -I./include $(foreach LINE,$(CONFIGS),-D $(LINE))
+SETTINGS = $(file < settings.cfg)
+IMPORTS = $(file < imports.cfg)
+COMPILE_FLAGS += -I./include $(foreach LINE,$(SETTINGS),-D $(LINE)) $(foreach LINE,$(IMPORTS),-D $(LINE))
 LINK_FLAGS := -L./lib -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 DEV_FLAGS := -D DEV=1
 

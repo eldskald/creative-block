@@ -87,7 +87,6 @@ int main() {
     player_sprite->atlas_coords = (Vector2){0, 1};
     player->add_child(player_sprite);
     scene->add_child(player);
-    const float PLAYER_SPEED = 200.0f;
 
     physics_body* player_child = new physics_body();
     player_child->pos = (Vector2){80, 80};
