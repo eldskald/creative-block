@@ -119,11 +119,6 @@ int main() {
     anim->play();
     // NOLINTEND
 
-    list<game_element*> elements = data_loader::load("teste.txt");
-    for (auto& element : elements) {
-        scene->add_child(element);
-    }
-
     while (!WindowShouldClose()) {
         BeginDrawing();
         ClearBackground(BLACK);

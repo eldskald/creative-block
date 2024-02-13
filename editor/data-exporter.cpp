@@ -96,14 +96,42 @@ string data_exporter::get_block_from_map_(Vector2 start, map* cells) {
     return str;
 }
 
-string data_exporter::get_export_text(map cells) {
+string data_exporter::get_physics_bodies_text_(map* cells) {
     string text = "";
-    Vector2* start = data_exporter::find_next_block_start_(&cells);
+    Vector2* start = data_exporter::find_next_block_start_(cells);
     while (start) {
-        text += data_exporter::get_block_from_map_(*start, &cells);
+        text += data_exporter::get_block_from_map_(*start, cells);
         text += '\n';
         delete start;
-        start = data_exporter::find_next_block_start_(&cells);
+        start = data_exporter::find_next_block_start_(cells);
     }
     return text;
+}
+
+string data_exporter::get_sprites_text_(map* cells) {
+    string text = "";
+    for (int i = 0; i < TILEMAP_SIZE_X; i++) {
+        for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
+            if (cells->at(i).at(j) == -1) {
+                continue;
+            } else {
+                Vector2 coords =
+                    tileset::get_tile_sprite_coords(cells->at(i).at(j));
+                text += "[sprite]\n";
+                text += "pos = (" + to_string(i * CELL_SIZE_X) + "," +
+                        to_string(j * CELL_SIZE_Y) + ")\n";
+                text += "atlas_coords = (" + to_string((int)coords.x) + "," +
+                        to_string((int)coords.y) + ")\n";
+                text += "\n";
+            }
+        }
+    }
+    return text;
+}
+
+string data_exporter::get_export_text(map cells) {
+    string data = "";
+    data += data_exporter::get_sprites_text_(&cells);
+    data += data_exporter::get_physics_bodies_text_(&cells);
+    return data;
 }
