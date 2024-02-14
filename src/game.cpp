@@ -1,5 +1,6 @@
 #include "game.h"
 #include "game-element.h"
+#include "inputs.h"
 #include "physics-body.h"
 #include "sfx.h"
 #include "shader.h"
@@ -16,6 +17,7 @@ void game::initial_setup() {
 
 void game::do_game_loop() {
     if (!game::root_) return;
+    inputs::tick_();
     physics_body::trigger_physics_tick_(game::root_);
     physics_body::update_areas_();
     game_element::trigger_tick_(game::root_);
