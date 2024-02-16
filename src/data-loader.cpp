@@ -10,7 +10,10 @@
 #include <raylib.h>
 #include <stdexcept>
 #include <string>
+#include <unordered_map>
 #include <vector>
+
+unordered_map<string, game_element*> data_loader::id_map_ = {};
 
 string data_loader::remove_whitespace(string text) {
     for (int i = 0; i < text.size(); ++i) {
@@ -171,6 +174,12 @@ Shader* data_loader::string_to_shader(string str) {
     throw invalid_argument("value not a shader");
 }
 
+void data_loader::add_parent(game_element* element, string id) {
+    if (data_loader::id_map_.count(id) == 0)
+        throw invalid_argument("invalid parent id");
+    data_loader::id_map_[id]->add_child(element);
+}
+
 void data_loader::parse_game_element_property_line(game_element* element,
                                                    string line) {
     if (line.find('=') == line.npos)
@@ -179,7 +188,11 @@ void data_loader::parse_game_element_property_line(game_element* element,
     string prop_name = line.substr(0, line.find('='));
     string prop_value =
         line.substr(line.find('=') + 1, line.size() - line.find('=') - 1);
-    if (prop_name == "pos") {
+    if (prop_name == "id") {
+        data_loader::id_map_[prop_value] = element;
+    } else if (prop_name == "parent") {
+        data_loader::add_parent(element, prop_value);
+    } else if (prop_name == "pos") {
         element->pos = data_loader::string_to_vector(prop_value);
     } else
         throw invalid_argument("invalid property name");
@@ -193,7 +206,11 @@ void data_loader::parse_physics_body_property_line(physics_body* body,
     string prop_name = line.substr(0, line.find('='));
     string prop_value =
         line.substr(line.find('=') + 1, line.size() - line.find('=') - 1);
-    if (prop_name == "pos") {
+    if (prop_name == "id") {
+        data_loader::id_map_[prop_value] = body;
+    } else if (prop_name == "parent") {
+        data_loader::add_parent(body, prop_value);
+    } else if (prop_name == "pos") {
         body->pos = data_loader::string_to_vector(prop_value);
     } else if (prop_name == "type") {
         body->type = data_loader::string_to_body_type(prop_value);
@@ -216,7 +233,11 @@ void data_loader::parse_sprite_property_line(sprite* sprite, string line) {
     string prop_name = line.substr(0, line.find('='));
     string prop_value =
         line.substr(line.find('=') + 1, line.size() - line.find('=') - 1);
-    if (prop_name == "pos") {
+    if (prop_name == "id") {
+        data_loader::id_map_[prop_value] = sprite;
+    } else if (prop_name == "parent") {
+        data_loader::add_parent(sprite, prop_value);
+    } else if (prop_name == "pos") {
         sprite->pos = data_loader::string_to_vector(prop_value);
     } else if (prop_name == "atlas_coords") {
         sprite->atlas_coords = data_loader::string_to_vector(prop_value);

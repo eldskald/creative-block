@@ -4,6 +4,7 @@
 #include "sprite.h"
 #include <list>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 class data_loader {
@@ -15,6 +16,8 @@ private:
         string type;
         vector<string> properties;
     };
+
+    static unordered_map<string, game_element*> id_map_;
 
     static string remove_whitespace(string text);
     static vector<string> split_into_lines_with_no_whitespace(string text);
@@ -29,6 +32,8 @@ private:
     static bool string_to_bool(string str);
     static physics_body::body_type string_to_body_type(string str);
     static Shader* string_to_shader(string str);
+
+    static void add_parent(game_element* element, string id);
 
     static void parse_game_element_property_line(game_element* element,
                                                  string line);
