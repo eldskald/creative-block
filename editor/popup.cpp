@@ -20,6 +20,10 @@ void popup::close_current_popup() {
     popup::next_popup_ = nullptr;
 }
 
+bool popup::is_popup_opened() {
+    return popup::opened_popup_ != nullptr;
+}
+
 void popup::tick() {
     if (popup::opened_popup_) {
         popup::opened_popup_->update_btns_();

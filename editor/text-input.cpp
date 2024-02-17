@@ -1,5 +1,6 @@
 #include "text-input.h"
 #include "defs.h"
+#include "editor.h"
 #include <iostream>
 #include <raylib.h>
 #include <string>
@@ -156,7 +157,7 @@ void text_input::render_() {
     Color col = PRIMARY_COLOR;
     Color input_col = FG_COLOR;
     input_col.a = FG_COLOR.a / 2;
-    if (this->is_being_hovered_()) {
+    if (this->is_being_hovered_() && !editor::mouse_disabled) {
         col = HOVERED_COLOR;
         input_col.a = FG_COLOR.a * 3 / 4;
     }
@@ -217,7 +218,7 @@ void text_input::render_() {
     }
 
     // Set mouse cursor when being hovered
-    if (this->is_being_hovered_()) {
+    if (this->is_being_hovered_() && !editor::mouse_disabled) {
         SetMouseCursor(MOUSE_CURSOR_POINTING_HAND);
         if (GetMouseX() >=
             (int)this->rect.x + INPUT_MARGIN + (int)label_size.x) {
@@ -227,7 +228,11 @@ void text_input::render_() {
 }
 
 void text_input::tick() {
+    this->render_();
+    if (editor::mouse_disabled) {
+        this->focused_ = false;
+        return;
+    }
     this->detect_clicks_();
     if (this->focused_) this->get_user_input_();
-    this->render_();
 }

@@ -5,6 +5,8 @@
 
 class editor {
 public:
+    static bool mouse_disabled;
+
     static void initialize();
     static void tick();
 

@@ -16,6 +16,7 @@ public:
 
     static void tick();
     static void close_current_popup();
+    static bool is_popup_opened();
 
 private:
     button confirm_btn_{button()};

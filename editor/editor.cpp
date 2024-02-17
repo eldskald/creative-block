@@ -13,6 +13,7 @@
 
 using namespace std;
 
+bool editor::mouse_disabled = false;
 tilemap* editor::tilemap_ = nullptr;
 tileset* editor::tileset_ = nullptr;
 
@@ -101,16 +102,19 @@ void editor::initialize() {
 void editor::tick() {
     ClearBackground(BG_COLOR);
 
-    // Reset mouse cursor.
+    // Reset mouse cursor
     SetMouseCursor(MOUSE_CURSOR_ARROW);
 
-    // Draw the blue rectangle around the tilemap.
+    // Draw the blue rectangle around the tilemap
     DrawRectangleLinesEx((Rectangle){TILEMAP_ORIGIN_X - 1,
                                      TILEMAP_ORIGIN_Y - 1,
                                      TILEMAP_PIXEL_SIZE_X + 2,
                                      TILEMAP_PIXEL_SIZE_Y + 2},
                          1,
                          PRIMARY_COLOR);
+
+    // Popups disable the UI
+    editor::mouse_disabled = popup::is_popup_opened();
 
     editor::tilemap_->tick();
     editor::tileset_->tick();
@@ -119,5 +123,13 @@ void editor::tick() {
     export_btn->tick();
     file_input->tick();
     open_test_popup_btn->tick();
-    popup::tick();
+
+    // Popups ignore mouse disabled feature because they themselves disable it
+    if (editor::mouse_disabled) {
+        editor::mouse_disabled = false;
+        popup::tick();
+        editor::mouse_disabled = true;
+    } else {
+        popup::tick();
+    }
 }

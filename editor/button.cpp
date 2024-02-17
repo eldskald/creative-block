@@ -1,5 +1,6 @@
 #include "button.h"
 #include "defs.h"
+#include "editor.h"
 #include <raylib.h>
 #include <string>
 
@@ -27,11 +28,12 @@ void button::detect_clicks_() {
 
 void button::render_() {
     Color col = PRIMARY_COLOR;
-    if (this->is_being_hovered_()) {
+    if (this->is_being_hovered_() && !editor::mouse_disabled) {
         col = IsMouseButtonDown(MOUSE_BUTTON_LEFT) ? FOCUSED_COLOR
                                                    : HOVERED_COLOR;
     }
-    if (this->is_being_hovered_() && IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+    if (this->is_being_hovered_() && IsMouseButtonDown(MOUSE_BUTTON_LEFT) &&
+        !editor::mouse_disabled) {
         DrawRectangleLinesEx((Rectangle){this->rect.x + 2,
                                          this->rect.y + 2,
                                          this->rect.width - 4,
@@ -61,12 +63,13 @@ void button::render_() {
     }
 
     // Set mouse cursor when being hovered
-    if (this->is_being_hovered_()) {
+    if (this->is_being_hovered_() && !editor::mouse_disabled) {
         SetMouseCursor(MOUSE_CURSOR_POINTING_HAND);
     };
 }
 
 void button::tick() {
     this->render_();
+    if (editor::mouse_disabled) return;
     this->detect_clicks_();
 }

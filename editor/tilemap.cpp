@@ -1,5 +1,6 @@
 #include "tilemap.h"
 #include "defs.h"
+#include "editor.h"
 #include "spritesheet.h"
 #include "tileset.h"
 #include <array>
@@ -84,8 +85,6 @@ void tilemap::click_tile(int x, int y) {
 }
 
 void tilemap::tick() {
-    int mouse_x = GetMouseX();
-    int mouse_y = GetMouseY();
 
     // Render tiles
     for (int i = 0; i < TILEMAP_SIZE_X; i++) {
@@ -94,8 +93,12 @@ void tilemap::tick() {
         }
     }
 
+    if (editor::mouse_disabled) return;
+
     // Make mouse equal to its cell coords or (-1, -1) if it's outside
     // the range of the tilemap
+    int mouse_x = GetMouseX();
+    int mouse_y = GetMouseY();
     if (mouse_x < TILEMAP_ORIGIN_X ||
         mouse_x > TILEMAP_ORIGIN_X + TILEMAP_PIXEL_SIZE_X ||
         mouse_y < TILEMAP_ORIGIN_Y ||

@@ -1,5 +1,6 @@
 #include "tileset.h"
 #include "defs.h"
+#include "editor.h"
 #include "spritesheet.h"
 #include <raylib.h>
 #include <raymath.h>
@@ -60,11 +61,9 @@ void tileset::tick() {
         tileset::render_tile_(i);
     }
 
-    // Highlight hovered tile
-    int hovered_id = tileset::get_mouse_tile_id_(
-        (Vector2){(float)GetMouseX(), (float)GetMouseY()});
-    if (hovered_id != -1) {
-        Vector2 tile_origin = tileset::get_tile_pos_(hovered_id);
+    // Highlight selected tile
+    if (tileset::selected_tile != -1) {
+        Vector2 tile_origin = tileset::get_tile_pos_(tileset::selected_tile);
         DrawRectangle((int)tile_origin.x,
                       (int)tile_origin.y,
                       CELL_SIZE_X,
@@ -72,9 +71,13 @@ void tileset::tick() {
                       CELL_HIGHLIGHT_COLOR);
     }
 
-    // Highlight selected tile
-    if (tileset::selected_tile != -1) {
-        Vector2 tile_origin = tileset::get_tile_pos_(tileset::selected_tile);
+    if (editor::mouse_disabled) return;
+
+    // Highlight hovered tile
+    int hovered_id = tileset::get_mouse_tile_id_(
+        (Vector2){(float)GetMouseX(), (float)GetMouseY()});
+    if (hovered_id != -1) {
+        Vector2 tile_origin = tileset::get_tile_pos_(hovered_id);
         DrawRectangle((int)tile_origin.x,
                       (int)tile_origin.y,
                       CELL_SIZE_X,
