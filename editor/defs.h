@@ -29,12 +29,20 @@ const float INPUT_HOLD_KEY_START = 0.5;
 const float INPUT_HOLD_KEY_PERIOD = 0.05;
 const float INPUT_BLINK_TIME = 0.5;
 
+const int POPUP_WIDTH = 300;
+const int POPUP_HEIGHT = 132;
+const int POPUP_PADDING = 16;
+const int POPUP_LINE_SPACING = 6;
+const float POPUP_BUTTON_WIDTH = 100.0;
+const float POPUP_BUTTON_HEIGHT = 32.0;
+
 const Color FG_COLOR = (Color){192, 202, 245, 255};      // #c0caf5
 const Color BG_COLOR = (Color){26, 27, 38, 255};         // #1a1b26
 const Color PRIMARY_COLOR = (Color){65, 166, 181, 255};  // #41a6b5
 const Color HOVERED_COLOR = (Color){115, 218, 202, 255}; // #73daca
 const Color FOCUSED_COLOR = (Color){187, 154, 247, 255}; // #bb9af7
 const Color CELL_HIGHLIGHT_COLOR = (Color){255, 255, 255, 32};
+const Color POPUP_BACKGROUND_SCREEN = (Color){0, 0, 0, 128};
 
 enum tile_type { background, block };
 

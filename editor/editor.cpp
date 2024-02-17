@@ -2,10 +2,12 @@
 #include "button.h"
 #include "data-exporter.h"
 #include "defs.h"
+#include "popup.h"
 #include "spritesheet.h"
 #include "text-input.h"
 #include "tilemap.h"
 #include "tileset.h"
+#include <iostream>
 #include <raylib.h>
 #include <vector>
 
@@ -18,6 +20,17 @@ button* save_btn = nullptr;
 button* load_btn = nullptr;
 button* export_btn = nullptr;
 text_input* file_input = nullptr;
+popup* test_popup = nullptr;
+button* open_test_popup_btn = nullptr;
+
+void open_test_popup() {
+    test_popup->open();
+}
+
+void confirm_test_popup() {
+    cout << "funcionou weeee" << endl;
+    popup::close_current_popup();
+}
 
 void editor::save_tilemap_data() {
     if (file_input->get_input().empty()) return;
@@ -71,6 +84,18 @@ void editor::initialize() {
     file_input->label = "level name";
     file_input->rect =
         (Rectangle){364, EDITOR_WINDOW_SIZE_Y - 40, 400, 32}; // NOLINT
+
+    open_test_popup_btn = new button();
+    open_test_popup_btn->label = "popup";
+    open_test_popup_btn->rect =
+        (Rectangle){800, EDITOR_WINDOW_SIZE_Y - 40, 100, 32}; // NOLINT
+    open_test_popup_btn->on_click = open_test_popup;
+
+    test_popup = new popup();
+    test_popup->line_1 = "reeeeeeeeeee!!";
+    test_popup->line_2 = "teste som oi teste";
+    test_popup->confirm_button = true;
+    test_popup->on_confirm = confirm_test_popup;
 }
 
 void editor::tick() {
@@ -93,4 +118,6 @@ void editor::tick() {
     load_btn->tick();
     export_btn->tick();
     file_input->tick();
+    open_test_popup_btn->tick();
+    popup::tick();
 }
