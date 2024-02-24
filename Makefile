@@ -48,7 +48,7 @@ dev:
 debug:
 	mkdir -p $(TEMP_DIR)
 	g++ -O0 -g $(call rwildcard,src,*.cpp) -o $(TEMP_DIR)/$(DEV_BIN_NAME) $(COMPILE_FLAGS) $(DEV_FLAGS) $(LINK_FLAGS)
-	gdb $(TEMP_DIR)/$(DEV_BIN_NAME)
+	gdb -tui $(TEMP_DIR)/$(DEV_BIN_NAME)
 	rm -rf ./$(TEMP_DIR)
 
 # Build target, builds the binary at the build target folder
