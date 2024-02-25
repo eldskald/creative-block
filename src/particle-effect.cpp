@@ -10,6 +10,7 @@
 using namespace std;
 
 const float THREE_DIGITS_PRECISION = 1000.0f;
+const float BOUNCE_SPEED_LIMIT = 100.0f;
 
 Vector2 particle_effect::get_one_starting_position_() {
     float x = (float)(rand() % (int)this->spawn_area.width) +
@@ -101,6 +102,9 @@ void particle_effect::particle_::tick_() {
         if (!this->get_bodies_touching_top().empty() ||
             !this->get_bodies_touching_bottom().empty()) {
             this->vel.y = -(this->elasticity_factor * this->prev_vel.y);
+            if (this->vel.y < 0.0f && this->vel.y > -BOUNCE_SPEED_LIMIT) {
+                this->vel = Vector2Zero();
+            }
         }
         if (!this->get_bodies_touching_left().empty() ||
             !this->get_bodies_touching_right().empty()) {
