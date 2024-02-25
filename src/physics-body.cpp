@@ -11,12 +11,58 @@ using namespace std;
 list<physics_body*> physics_body::bodies_;
 list<physics_body*> physics_body::areas_;
 
+list<physics_body*> physics_body::get_bodies_touching_top() {
+    Rectangle rect = (Rectangle){
+        floor(this->get_global_pos().x + this->collision_box.x),
+        floor(this->get_global_pos().y + this->collision_box.y - 1.0f),
+        floor(this->collision_box.width),
+        1.0f};
+    return physics_body::get_colliders(
+        rect, this->collision_mask, this->collision_layer);
+}
+
+list<physics_body*> physics_body::get_bodies_touching_left() {
+    Rectangle rect = (Rectangle){
+        floor(this->get_global_pos().x + this->collision_box.x - 1.0f),
+        floor(this->get_global_pos().y + this->collision_box.y),
+        1.0f,
+        floor(this->collision_box.height)};
+    return physics_body::get_colliders(
+        rect, this->collision_mask, this->collision_layer);
+}
+
+list<physics_body*> physics_body::get_bodies_touching_bottom() {
+    Rectangle rect =
+        (Rectangle){floor(this->get_global_pos().x + this->collision_box.x),
+                    floor(this->get_global_pos().y + this->collision_box.y +
+                          this->collision_box.height),
+                    floor(this->collision_box.width),
+                    1.0f};
+    return physics_body::get_colliders(
+        rect, this->collision_mask, this->collision_layer);
+}
+
+list<physics_body*> physics_body::get_bodies_touching_right() {
+    Rectangle rect =
+        (Rectangle){floor(this->get_global_pos().x + this->collision_box.x +
+                          this->collision_box.width),
+                    floor(this->get_global_pos().y + this->collision_box.y),
+                    1.0f,
+                    floor(this->collision_box.height)};
+    return physics_body::get_colliders(
+        rect, this->collision_mask, this->collision_layer);
+}
+
 list<physics_body*> physics_body::get_detected_bodies() {
     list<physics_body*> clone;
-    for (auto& body : this->detected_bodies_) {
+    for (auto body : this->detected_bodies_) {
         clone.push_back(body);
     }
     return clone;
+}
+
+bool physics_body::collision_detected() {
+    return this->collision_detected_;
 }
 
 list<physics_body*>
@@ -24,7 +70,7 @@ physics_body::get_colliders(Rectangle collision_box,
                             bitset<COLLISION_LAYERS> mask,
                             bitset<COLLISION_LAYERS> layer) {
     list<physics_body*> colliders;
-    for (auto& body : physics_body::bodies_) {
+    for (auto body : physics_body::bodies_) {
         bitset<COLLISION_LAYERS> mask_check = mask;
         mask_check &= body->collision_layer;
         bitset<COLLISION_LAYERS> layer_check = layer;
@@ -74,7 +120,7 @@ float physics_body::compute_h_movement_(float delta_d, bool ignore_children) {
     // Iterate through all bodies found on the trail.
     list<physics_body*> colliders = physics_body::get_colliders(
         target_rec, this->collision_mask, this->collision_layer);
-    for (auto& collider : colliders) {
+    for (auto collider : colliders) {
 
         // Ignore the body if it is among the following:
         if (collider == this) continue;
@@ -130,7 +176,7 @@ float physics_body::compute_v_movement_(float delta_d, bool ignore_children) {
     // Iterate through all bodies found on the trail.
     list<physics_body*> colliders = physics_body::get_colliders(
         target_rec, this->collision_mask, this->collision_layer);
-    for (auto& collider : colliders) {
+    for (auto collider : colliders) {
 
         // Ignore the body if it is among the following:
         if (collider == this) continue;
@@ -172,7 +218,7 @@ float physics_body::move_and_drag_children_h_(float delta_d) {
     // by a gap equal to the delta.
     list<physics_body*> ordered_children;
     list<game_element*> children = this->get_children();
-    for (auto& i : children) {
+    for (auto i : children) {
         auto* child = dynamic_cast<physics_body*>(i);
         if (child) {
             if (ordered_children.empty())
@@ -215,7 +261,7 @@ float physics_body::move_and_drag_children_h_(float delta_d) {
 
     // Call this function on all this body's children, now that they are
     // ordered.
-    for (auto& i : ordered_children) {
+    for (auto i : ordered_children) {
         i->move_and_drag_children_h_(delta);
     }
 
@@ -227,7 +273,7 @@ float physics_body::move_and_drag_children_h_(float delta_d) {
     // Remember we already moved all the children, but changing this body's
     // position will also change the children's global position, so we have to
     // correct it.
-    for (auto& i : ordered_children) {
+    for (auto i : ordered_children) {
         i->pos.x -= delta;
     }
 
@@ -245,7 +291,7 @@ float physics_body::move_and_drag_children_v_(float delta_d) {
     // by a gap equal to the delta.
     list<physics_body*> ordered_children;
     list<game_element*> children = this->get_children();
-    for (auto& i : children) {
+    for (auto i : children) {
         auto* child = dynamic_cast<physics_body*>(i);
         if (child) {
             if (ordered_children.empty())
@@ -288,7 +334,7 @@ float physics_body::move_and_drag_children_v_(float delta_d) {
 
     // Call this function on all this body's children, now that they are
     // ordered.
-    for (auto& i : ordered_children) {
+    for (auto i : ordered_children) {
         i->move_and_drag_children_v_(delta);
     }
 
@@ -300,7 +346,7 @@ float physics_body::move_and_drag_children_v_(float delta_d) {
     // Remember we already moved all the children, but changing this body's
     // position will also change the children's global position, so we have to
     // correct it.
-    for (auto& i : ordered_children) {
+    for (auto i : ordered_children) {
         i->pos.y -= delta;
     }
 
@@ -310,12 +356,17 @@ float physics_body::move_and_drag_children_v_(float delta_d) {
 void physics_body::physics_tick_() {
     if (this->type != kinematic) return;
 
+    this->collision_detected_ = false;
     float delta_x = this->vel.x * GetFrameTime();
     float delta_y = this->vel.y * GetFrameTime();
-    delta_x = this->move_and_drag_children_h_(delta_x);
-    delta_y = this->move_and_drag_children_v_(delta_y);
-    this->vel.x = delta_x * float(GetFPS());
-    this->vel.y = delta_y * float(GetFPS());
+    if (!FloatEquals(delta_x, this->move_and_drag_children_h_(delta_x))) {
+        this->vel.x = 0.0f;
+        this->collision_detected_ = true;
+    }
+    if (!FloatEquals(delta_y, this->move_and_drag_children_v_(delta_y))) {
+        this->vel.y = 0.0f;
+        this->collision_detected_ = true;
+    }
 }
 
 // This is for the game class to call on the root scene once and trigger
@@ -324,7 +375,7 @@ void physics_body::trigger_physics_tick_(game_element* element) {
     auto body = dynamic_cast<physics_body*>(element);
     if (body) body->physics_tick_();
     list<game_element*> children = element->get_children();
-    for (auto& i : children) {
+    for (auto i : children) {
         auto child = dynamic_cast<physics_body*>(i);
         if (child) physics_body::trigger_physics_tick_(child);
     }
@@ -365,9 +416,9 @@ list<physics_body*> physics_body::find_entering_bodies_() {
         physics_body::get_colliders(this->get_collision_rect_(),
                                     this->collision_mask,
                                     this->collision_layer);
-    for (auto& collider : colliders) {
+    for (auto collider : colliders) {
         bool found = true;
-        for (auto& body : this->detected_bodies_) {
+        for (auto body : this->detected_bodies_) {
             if (body == collider) {
                 found = false;
                 break;
@@ -376,7 +427,7 @@ list<physics_body*> physics_body::find_entering_bodies_() {
         if (found) found_bodies.push_back(collider);
     }
 
-    for (auto& body : found_bodies) {
+    for (auto body : found_bodies) {
         this->detected_bodies_.push_back(body);
     }
 
@@ -395,7 +446,7 @@ list<physics_body*> physics_body::find_exiting_bodies_() {
          i != this->detected_bodies_.end();
          ++i) {
         bool found = true;
-        for (auto& collider : colliders) {
+        for (auto collider : colliders) {
             if (collider == *i) {
                 found = false;
                 break;
@@ -407,7 +458,7 @@ list<physics_body*> physics_body::find_exiting_bodies_() {
         }
     }
 
-    for (auto& iterator : iterators) {
+    for (auto iterator : iterators) {
         this->detected_bodies_.erase(iterator);
     }
 
@@ -415,14 +466,14 @@ list<physics_body*> physics_body::find_exiting_bodies_() {
 }
 
 void physics_body::update_areas_() {
-    for (auto& area : physics_body::areas_) {
+    for (auto area : physics_body::areas_) {
         list<physics_body*> entering_bodies = area->find_entering_bodies_();
         list<physics_body*> exiting_bodies = area->find_exiting_bodies_();
 
-        for (auto& body : entering_bodies) {
+        for (auto body : entering_bodies) {
             area->body_entered_(body);
         }
-        for (auto& body : exiting_bodies) {
+        for (auto body : exiting_bodies) {
             area->body_exited_(body);
         }
     }

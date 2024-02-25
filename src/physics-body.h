@@ -23,7 +23,12 @@ public:
     bitset<COLLISION_LAYERS> collision_layer{0b00000000};
     bitset<COLLISION_LAYERS> collision_mask{0b00000000};
 
+    list<physics_body*> get_bodies_touching_top();
+    list<physics_body*> get_bodies_touching_left();
+    list<physics_body*> get_bodies_touching_bottom();
+    list<physics_body*> get_bodies_touching_right();
     list<physics_body*> get_detected_bodies();
+    bool collision_detected();
 
     static list<physics_body*> get_colliders(Rectangle collision_box,
                                              bitset<COLLISION_LAYERS> mask,
@@ -40,6 +45,7 @@ protected:
 
 private:
     list<physics_body*> detected_bodies_;
+    bool collision_detected_{false};
 
     Rectangle get_collision_rect_();
     float compute_h_movement_(float delta_d, bool ignore_children = false);
