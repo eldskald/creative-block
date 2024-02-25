@@ -4,12 +4,7 @@
 
 using namespace std;
 
-game_element::~game_element() {
-    if (this->parent_) this->parent_->remove_child(this);
-    for (auto& child : this->children_) {
-        delete child;
-    }
-}
+list<game_element*> game_element::marked_for_deletion_ = {};
 
 game_element* game_element::get_parent() {
     return this->parent_;
@@ -17,7 +12,7 @@ game_element* game_element::get_parent() {
 
 list<game_element*> game_element::get_children() {
     list<game_element*> duplicate;
-    for (auto& child : this->children_) {
+    for (auto child : this->children_) {
         duplicate.push_back(child);
     }
     return duplicate;
@@ -34,9 +29,9 @@ void game_element::add_child(game_element* element) {
 
 void game_element::remove_child(game_element* child) {
     if (child->parent_ == this) {
+        if (child->is_on_tree_) game_element::trigger_exit_(child);
         this->children_.remove(child);
         child->parent_ = nullptr;
-        game_element::trigger_exit_(child);
     }
 }
 
@@ -51,6 +46,10 @@ bool game_element::descends_from(game_element* element) {
 
 bool game_element::is_on_tree() {
     return this->is_on_tree_;
+}
+
+void game_element::mark_for_deletion() {
+    game_element::rec_mark_for_deletion_(this);
 }
 
 Vector2 game_element::get_global_pos() {
@@ -78,22 +77,43 @@ void game_element::tick_() {
 void game_element::trigger_enter_(game_element* element) {
     element->is_on_tree_ = true;
     element->enter_();
-    for (auto& child : element->children_) {
+    for (auto child : element->children_) {
         game_element::trigger_enter_(child);
     }
 }
 
 void game_element::trigger_exit_(game_element* element) {
-    element->is_on_tree_ = false;
-    element->exit_();
-    for (auto& child : element->children_) {
+    for (auto child : element->children_) {
         game_element::trigger_exit_(child);
     }
+    element->exit_();
+    element->is_on_tree_ = false;
 }
 
 void game_element::trigger_tick_(game_element* element) {
-    for (auto& child : element->children_) {
+    for (auto child : element->children_) {
         game_element::trigger_tick_(child);
     }
     element->tick_();
+}
+
+void game_element::rec_mark_for_deletion_(game_element* element) {
+    if (element->is_marked_for_deletion_) return;
+    game_element::marked_for_deletion_.push_back(element);
+    element->is_marked_for_deletion_ = true;
+    for (auto child : element->children_) {
+        game_element::rec_mark_for_deletion_(child);
+    }
+}
+
+void game_element::delete_marked_() {
+    if (game_element::marked_for_deletion_.empty()) return;
+    for (auto element : game_element::marked_for_deletion_) {
+        if (element->is_on_tree_) element->exit_();
+        if (!element->parent_->is_marked_for_deletion_) {
+            element->parent_->children_.remove(element);
+        }
+        delete element;
+    }
+    game_element::marked_for_deletion_.clear();
 }

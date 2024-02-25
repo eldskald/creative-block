@@ -21,6 +21,7 @@ void game::do_game_loop() {
     physics_body::trigger_physics_tick_(game::root_);
     physics_body::update_areas_();
     game_element::trigger_tick_(game::root_);
+    game_element::delete_marked_();
 }
 
 void game::set_root(game_element* new_root) {
