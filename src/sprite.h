@@ -9,8 +9,6 @@ public:
     Color tint{WHITE};
     Shader* shader{shader::get_base()};
 
-    static Shader* base_shader;
-
     static void initialize();
 
 protected:
