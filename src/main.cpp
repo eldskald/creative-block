@@ -1,5 +1,4 @@
 #include "animation.h"
-#include "data-loader.h"
 #include "game-element.h"
 #include "game.h"
 #include "particle-effect.h"
@@ -17,8 +16,10 @@ using namespace std;
 int main() {
     SetTraceLogLevel(LOG_NONE);
     InitWindow(WINDOW_SIZE_X, WINDOW_SIZE_Y, WINDOW_TITLE);
-    SetTargetFPS(TARGET_FPS);
     InitAudioDevice();
+    SetTargetFPS(TARGET_FPS);
+    SetWindowMinSize(WINDOW_SIZE_X, WINDOW_SIZE_Y);
+    SetWindowState(FLAG_WINDOW_RESIZABLE);
 
     game::initial_setup();
 
@@ -117,8 +118,9 @@ int main() {
     anim->play();
     // NOLINTEND
 
+    RenderTexture2D main_tex = LoadRenderTexture(WINDOW_SIZE_X, WINDOW_SIZE_Y);
     while (!WindowShouldClose()) {
-        BeginDrawing();
+        BeginTextureMode(main_tex);
         ClearBackground(BLACK);
         DrawFPS(900, 0); // NOLINT
 
@@ -142,6 +144,38 @@ int main() {
         player->vel = input_1;
 
         game::do_game_loop();
+        EndTextureMode();
+
+        auto window_size_x = (float)GetScreenWidth();
+        auto window_size_y = (float)GetScreenHeight();
+        float aspect_ratio = (float)WINDOW_SIZE_X / (float)WINDOW_SIZE_Y;
+        BeginDrawing();
+        ClearBackground(BLACK);
+        if (window_size_x / window_size_y >= aspect_ratio) {
+            float main_tex_x = window_size_y * aspect_ratio;
+            DrawTexturePro(
+                main_tex.texture,
+                (Rectangle){0.0f, WINDOW_SIZE_Y, WINDOW_SIZE_X, -WINDOW_SIZE_Y},
+                (Rectangle){(window_size_x - main_tex_x) / 2,
+                            0.0f,
+                            main_tex_x,
+                            window_size_y},
+                (Vector2){0.0f, 0.0f},
+                0.0f,
+                WHITE);
+        } else {
+            float main_tex_y = window_size_x / aspect_ratio;
+            DrawTexturePro(
+                main_tex.texture,
+                (Rectangle){0.0f, WINDOW_SIZE_Y, WINDOW_SIZE_X, -WINDOW_SIZE_Y},
+                (Rectangle){0.0f,
+                            (window_size_y - main_tex_y) / 2,
+                            window_size_x,
+                            main_tex_y},
+                (Vector2){0.0f, 0.0f},
+                0.0f,
+                WHITE);
+        }
         EndDrawing();
     }
 
