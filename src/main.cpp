@@ -14,12 +14,18 @@
 using namespace std;
 
 int main() {
+
+#if !defined(DEV)
     SetTraceLogLevel(LOG_NONE);
+#endif
+
     InitWindow(WINDOW_SIZE_X, WINDOW_SIZE_Y, WINDOW_TITLE);
     InitAudioDevice();
     SetTargetFPS(TARGET_FPS);
-    SetWindowMinSize(WINDOW_SIZE_X, WINDOW_SIZE_Y);
     SetWindowState(FLAG_WINDOW_RESIZABLE);
+    SetWindowMinSize(WINDOW_SIZE_X, WINDOW_SIZE_Y);
+    // To force a size change and update window titlebar buttons
+    SetWindowSize(WINDOW_SIZE_X, WINDOW_SIZE_Y);
 
     game::initial_setup();
 
