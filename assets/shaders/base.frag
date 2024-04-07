@@ -9,9 +9,9 @@ uniform sampler2D texture0;
 uniform vec4 colDiffuse;
 
 // Output fragment color
-out vec4 output;
+out vec4 col;
 
 void main()
 {
-    output = texture(texture0, uv) * color * colDiffuse;
+    col = texture(texture0, uv) * color * colDiffuse;
 }

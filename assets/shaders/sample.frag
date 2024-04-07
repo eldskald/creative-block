@@ -7,8 +7,8 @@ uniform vec4 colDiffuse;
 
 uniform vec4 tint;
 
-out vec4 output;
+out vec4 col;
 
 void main() {
-    output = texture(texture0, uv) * colDiffuse * tint * fract(uv.x * 10.0);
+    col = texture(texture0, uv) * colDiffuse * tint * fract(uv.x * 10.0);
 }
