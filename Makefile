@@ -14,15 +14,19 @@ INCLUDE_DIR := include
 # Compiler flags
 SETTINGS = $(file < settings.cfg)
 IMPORTS = $(file < imports.cfg)
-COMPILE_FLAGS += -I./include $(foreach LINE,$(SETTINGS),-D $(LINE)) $(foreach LINE,$(IMPORTS),-D $(LINE))
-LINK_FLAGS := -L./lib -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+COMPILE_FLAGS += -Wall -I./$(INCLUDE_DIR) $(foreach LINE,$(SETTINGS),-D $(LINE)) $(foreach LINE,$(IMPORTS),-D $(LINE))
+LINK_FLAGS := -L./$(LIBS_DIR) -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+LINUX_COMPILE_FLAGS += -Wall -I./$(TEMP_DIR)/$(INCLUDE_DIR) $(foreach LINE,$(SETTINGS),-D $(LINE)) $(foreach LINE,$(IMPORTS),-D $(LINE))
+LINUX_LINK_FLAGS := -L./$(TEMP_DIR)/$(LIBS_DIR) -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+WIN_COMPILE_FLAGS += -Wall -I./$(TEMP_DIR)/$(INCLUDE_DIR) $(foreach LINE,$(SETTINGS),-D $(LINE)) $(foreach LINE,$(IMPORTS),-D $(LINE))
+WIN_LINK_FLAGS := -L./$(TEMP_DIR)/$(LIBS_DIR) -lraylib -lopengl32 -lgdi32 -lwinmm -lpthread -static -static-libgcc -static-libstdc++
 DEV_FLAGS := -D DEV=1
 
 # Phony targets
-.PHONY: all clean install dev debug build editor format lint
+.PHONY: all clean install dev debug build-linux build-windows editor format lint
 
-# Default target, build and run for development
-all: build
+# Default target, cleans and build for all platforms
+all: clean build-linux build-windows
 
 # Clean target, deletes build, temporary, include and lib folders
 clean:
@@ -51,10 +55,29 @@ debug:
 	gdb -tui $(TEMP_DIR)/$(DEV_BIN_NAME)
 	rm -rf ./$(TEMP_DIR)
 
-# Build target, builds the binary at the build target folder
-build:
-	mkdir -p $(BUILD_DIR)
-	g++ $(call rwildcard,src,*.cpp) -o $(BUILD_DIR)/$(BIN_NAME) $(COMPILE_FLAGS) $(LINK_FLAGS)
+# Build for the Linux platform, puts the binary at the build target folder
+build-linux:
+	mkdir -p $(TEMP_DIR) $(BUILD_DIR)
+	cd $(TEMP_DIR) && mkdir -p $(INCLUDE_DIR) $(LIBS_DIR)
+	cd $(TEMP_DIR) && git clone --depth 1 --branch 5.0 https://github.com/raysan5/raylib.git
+	cd $(TEMP_DIR)/raylib/src && make PLATFORM=PLATFORM_DESKTOP
+	mv $(TEMP_DIR)/raylib/src/libraylib.a $(TEMP_DIR)/$(LIBS_DIR)
+	mv $(TEMP_DIR)/raylib/src/raylib.h $(TEMP_DIR)/$(INCLUDE_DIR)
+	mv $(TEMP_DIR)/raylib/src/raymath.h $(TEMP_DIR)/$(INCLUDE_DIR)
+	g++ $(call rwildcard,src,*.cpp) -o $(BUILD_DIR)/$(BIN_NAME).x64_86 $(LINUX_COMPILE_FLAGS) $(LINUX_LINK_FLAGS)
+	rm -rf ./$(TEMP_DIR)
+
+# Build for the Windows platform, puts the binary at the build target folder
+build-windows:
+	mkdir -p $(TEMP_DIR) $(BUILD_DIR)
+	cd $(TEMP_DIR) && mkdir -p $(INCLUDE_DIR) $(LIBS_DIR)
+	cd $(TEMP_DIR) && git clone --depth 1 --branch 5.0 https://github.com/raysan5/raylib.git
+	cd $(TEMP_DIR)/raylib/src && make PLATFORM=PLATFORM_DESKTOP OS=Windows_NT CC=x86_64-w64-mingw32-gcc AR=x86_64-w64-mingw32-ar
+	mv $(TEMP_DIR)/raylib/src/libraylib.a $(TEMP_DIR)/$(LIBS_DIR)
+	mv $(TEMP_DIR)/raylib/src/raylib.h $(TEMP_DIR)/$(INCLUDE_DIR)
+	mv $(TEMP_DIR)/raylib/src/raymath.h $(TEMP_DIR)/$(INCLUDE_DIR)
+	x86_64-w64-mingw32-g++ $(call rwildcard,src,*.cpp) -o $(BUILD_DIR)/$(BIN_NAME) $(WIN_COMPILE_FLAGS) $(WIN_LINK_FLAGS)
+	rm -rf ./$(TEMP_DIR)
 
 # Editor target, compiles the level editor and places it at the project root
 editor:
