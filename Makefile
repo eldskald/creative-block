@@ -20,13 +20,21 @@ LINUX_COMPILE_FLAGS += -Wall -I./$(TEMP_DIR)/$(INCLUDE_DIR) $(foreach LINE,$(SET
 LINUX_LINK_FLAGS := -L./$(TEMP_DIR)/$(LIBS_DIR) -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 WIN_COMPILE_FLAGS += -Wall -I./$(TEMP_DIR)/$(INCLUDE_DIR) $(foreach LINE,$(SETTINGS),-D $(LINE)) $(foreach LINE,$(IMPORTS),-D $(LINE))
 WIN_LINK_FLAGS := -L./$(TEMP_DIR)/$(LIBS_DIR) -lraylib -lopengl32 -lgdi32 -lwinmm -lpthread -static -static-libgcc -static-libstdc++
+WEB_COMPILE_FLAGS := -Wall -I./$(TEMP_DIR)/$(INCLUDE_DIR) $(foreach LINE,$(SETTINGS),-D $(LINE)) $(foreach LINE,$(IMPORTS),-D $(LINE)) -D WEB=1
+WEB_LINK_FLAGS := -L./$(TEMP_DIR)/$(LIBS_DIR) -lraylib -s USE_GLFW=3 -s ASYNCIFY
 DEV_FLAGS := -D DEV=1
 
+# Paths to compile raylib to web
+EMSDK_PATH ?= ~/emsdk
+EMSCRIPTEN_PATH ?= $(EMSDK_PATH)/upstream/emscripten
+CLANG_PATH = $(EMSDK_PATH)/upstream/bin
+PYTHON_PATH = $(PATH)
+
 # Phony targets
-.PHONY: all clean install dev debug build-linux build-windows editor format lint
+.PHONY: all clean install dev debug build-linux build-windows build-web editor format lint
 
 # Default target, cleans and build for all platforms
-all: clean build-linux build-windows
+all: clean build-linux build-windows build-web
 
 # Clean target, deletes build, temporary, include and lib folders
 clean:
@@ -76,7 +84,19 @@ build-windows:
 	mv $(TEMP_DIR)/raylib/src/libraylib.a $(TEMP_DIR)/$(LIBS_DIR)
 	mv $(TEMP_DIR)/raylib/src/raylib.h $(TEMP_DIR)/$(INCLUDE_DIR)
 	mv $(TEMP_DIR)/raylib/src/raymath.h $(TEMP_DIR)/$(INCLUDE_DIR)
-	x86_64-w64-mingw32-g++ $(call rwildcard,src,*.cpp) -o $(BUILD_DIR)/$(BIN_NAME) $(WIN_COMPILE_FLAGS) $(WIN_LINK_FLAGS)
+	x86_64-w64-mingw32-g++ $(call rwildcard,src,*.cpp) -o $(BUILD_DIR)/$(BIN_NAME).exe $(WIN_COMPILE_FLAGS) $(WIN_LINK_FLAGS)
+	rm -rf ./$(TEMP_DIR)
+
+# Build for Web
+build-web:
+	mkdir -p $(TEMP_DIR) $(BUILD_DIR)
+	cd $(TEMP_DIR) && mkdir -p $(INCLUDE_DIR) $(LIBS_DIR)
+	cd $(TEMP_DIR) && git clone --depth 1 --branch 5.0 https://github.com/raysan5/raylib.git
+	cd $(TEMP_DIR)/raylib/src && make PLATFORM=PLATFORM_WEB -B
+	mv $(TEMP_DIR)/raylib/src/libraylib.a $(TEMP_DIR)/$(LIBS_DIR)
+	mv $(TEMP_DIR)/raylib/src/raylib.h $(TEMP_DIR)/$(INCLUDE_DIR)
+	mv $(TEMP_DIR)/raylib/src/raymath.h $(TEMP_DIR)/$(INCLUDE_DIR)
+	emcc $(call rwildcard,src,*.cpp) -o $(BUILD_DIR)/$(BIN_NAME).html $(WEB_COMPILE_FLAGS) $(WEB_LINK_FLAGS)
 	rm -rf ./$(TEMP_DIR)
 
 # Editor target, compiles the level editor and places it at the project root
