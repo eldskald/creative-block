@@ -2,7 +2,6 @@
 
 This project is me trying to learn C++ with [raylib](https://github.com/raysan5/raylib).
 
-
 ## Dependencies
 
 This project is using the GNU Toolchain for C/C++ development, in particular, the [GNU Compiler Collection](https://www.gnu.org/software/gcc) and [make](https://www.gnu.org/software/make) are used to compile, and optionally, [gdb](https://www.sourceware.org/gdb/) to debug. You also need [git](https://git-scm.com/), of course.
@@ -13,7 +12,9 @@ It's also using [clang-format](https://clang.llvm.org/docs/ClangFormat.html) to 
 
 ## Getting started
 
-After cloning the repository, run the following to install dependencies:
+After cloning the repository, setup your `.env` file by copying the [.env.example](.env.example) and renaming it to `.env`, and then setting the values. The default values are for working on Linux. If you are working on Windows, using WSL is the easiest way to go but you can probably make do with [w64devkit](https://github.com/skeeto/w64devkit/) too.
+
+Then, run the following to install dependencies:
 
 ```console
 make install
