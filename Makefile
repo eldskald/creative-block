@@ -6,10 +6,8 @@ rwildcard=$(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst 
 DEV_PLATFORM = Linux
 CC = g++
 GDB = gdb
-ifneq (,$(wildcard ./.env))
-    include .env
-    export
-endif
+-include .env
+export
 
 # File/directory names
 BIN_NAME := app
@@ -23,26 +21,29 @@ INCLUDE_DIR := include
 # Compiler flags
 SETTINGS = $(file < settings.cfg)
 IMPORTS = $(file < imports.cfg)
-DEV_COMPILE_FLAGS += -Wall -I./$(INCLUDE_DIR) $(foreach LINE,$(SETTINGS),-D $(LINE)) $(foreach LINE,$(IMPORTS),-D $(LINE))
-DEV_LINK_FLAGS := -L./$(LIBS_DIR) -lraylib
-LINUX_COMPILE_FLAGS += -Wall -I./$(TEMP_DIR)/$(INCLUDE_DIR) $(foreach LINE,$(SETTINGS),-D $(LINE)) $(foreach LINE,$(IMPORTS),-D $(LINE))
-LINUX_LINK_FLAGS := -L./$(TEMP_DIR)/$(LIBS_DIR) -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
-WIN_COMPILE_FLAGS += -Wall -I./$(TEMP_DIR)/$(INCLUDE_DIR) $(foreach LINE,$(SETTINGS),-D $(LINE)) $(foreach LINE,$(IMPORTS),-D $(LINE))
-WIN_LINK_FLAGS := -L./$(TEMP_DIR)/$(LIBS_DIR) -lraylib -lopengl32 -lgdi32 -lwinmm -lpthread -static -static-libgcc -static-libstdc++
-WEB_COMPILE_FLAGS := -Wall -I./$(TEMP_DIR)/$(INCLUDE_DIR) $(foreach LINE,$(SETTINGS),-D $(LINE)) $(foreach LINE,$(IMPORTS),-D $(LINE)) -D WEB=1
-WEB_LINK_FLAGS := -L./$(TEMP_DIR)/$(LIBS_DIR) -lraylib -s USE_GLFW=3 -s ASYNCIFY
-DEV_FLAGS := -D DEV=1
-ifeq (DEV_PLATFORM,Linux)
+INSTALL_VARS = PLATFORM=PLATFORM_DESKTOP
+DEV_COMPILE_FLAGS = -Wall -I./$(INCLUDE_DIR) $(foreach LINE,$(SETTINGS),-D $(LINE)) $(foreach LINE,$(IMPORTS),-D $(LINE))
+DEV_LINK_FLAGS = -L./$(LIBS_DIR) -lraylib
+LINUX_COMPILE_FLAGS = -Wall -I./$(TEMP_DIR)/$(INCLUDE_DIR) $(foreach LINE,$(SETTINGS),-D $(LINE)) $(foreach LINE,$(IMPORTS),-D $(LINE))
+LINUX_LINK_FLAGS = -L./$(TEMP_DIR)/$(LIBS_DIR) -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+WIN_COMPILE_FLAGS = -Wall -I./$(TEMP_DIR)/$(INCLUDE_DIR) $(foreach LINE,$(SETTINGS),-D $(LINE)) $(foreach LINE,$(IMPORTS),-D $(LINE))
+WIN_LINK_FLAGS = -L./$(TEMP_DIR)/$(LIBS_DIR) -lraylib -lgdi32 -lwinmm -lpthread -static -static-libgcc -static-libstdc++
+WEB_COMPILE_FLAGS = -Wall -I./$(TEMP_DIR)/$(INCLUDE_DIR) $(foreach LINE,$(SETTINGS),-D $(LINE)) $(foreach LINE,$(IMPORTS),-D $(LINE)) -D WEB=1
+WEB_LINK_FLAGS = -L./$(TEMP_DIR)/$(LIBS_DIR) -lraylib -s USE_GLFW=3 -s ASYNCIFY
+DEV_FLAGS = -D DEV=1
+ifeq ($(DEV_PLATFORM), Linux)
 	DEV_LINK_FLAGS += -lGL -lm -lpthread -ldl -lrt -lX11
-	DEV_BIN_NAME += .x86_64
-else ifeq (DEV_PLATFORM,Windows)
-	DEV_LINK_FLAGS += -lopengl32 -lgdi32 -lwinmm -lpthread -static -static-libgcc -static-libstdc++
-	DEV_BIN_NAME += .exe
+	DEV_BIN_NAME := $(DEV_BIN_NAME).x86_64
+endif
+ifeq ($(DEV_PLATFORM), Windows)
+	DEV_LINK_FLAGS += -lgdi32 -lwinmm -lpthread -static -static-libgcc -static-libstdc++
+	DEV_BIN_NAME := $(DEV_BIN_NAME).exe
+	INSTALL_VARS += OS=Windows_NT CC=x86_64-w64-mingw32-gcc AR=x86_64-w64-mingw32-ar
 endif
 
 # Paths to compile raylib to web
-EMSDK_PATH ?= ~/emsdk
-EMSCRIPTEN_PATH ?= $(EMSDK_PATH)/upstream/emscripten
+EMSDK_PATH = ~/emsdk
+EMSCRIPTEN_PATH = $(EMSDK_PATH)/upstream/emscripten
 CLANG_PATH = $(EMSDK_PATH)/upstream/bin
 PYTHON_PATH = $(PATH)
 
@@ -60,7 +61,7 @@ clean:
 install:
 	mkdir -p $(TEMP_DIR) $(INCLUDE_DIR) $(LIBS_DIR)
 	cd $(TEMP_DIR) && git clone --depth 1 --branch 5.0 https://github.com/raysan5/raylib.git
-	cd $(TEMP_DIR)/raylib/src && make PLATFORM=PLATFORM_DESKTOP
+	cd $(TEMP_DIR)/raylib/src && make $(INSTALL_VARS)
 	mv $(TEMP_DIR)/raylib/src/libraylib.a ./$(LIBS_DIR)
 	mv $(TEMP_DIR)/raylib/src/raylib.h ./$(INCLUDE_DIR)
 	mv $(TEMP_DIR)/raylib/src/raymath.h ./$(INCLUDE_DIR)
@@ -126,3 +127,6 @@ format:
 # Lint files on ./src
 lint:
 	for FILE in $(call rwildcard,src,*.h *.cpp *.tpp); do clang-tidy $$FILE; done
+
+test:
+	echo $(DEV_BIN_NAME)
