@@ -2,6 +2,15 @@
 # https://blog.jgc.org/2011/07/gnu-make-recursive-wildcard-function.html
 rwildcard=$(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
 
+# Load .env default values and then .env itself
+DEV_PLATFORM = Linux
+CC = g++
+GDB = gdb
+ifneq (,$(wildcard ./.env))
+    include .env
+    export
+endif
+
 # File/directory names
 BIN_NAME := app
 DEV_BIN_NAME := dev-app
@@ -14,8 +23,8 @@ INCLUDE_DIR := include
 # Compiler flags
 SETTINGS = $(file < settings.cfg)
 IMPORTS = $(file < imports.cfg)
-COMPILE_FLAGS += -Wall -I./$(INCLUDE_DIR) $(foreach LINE,$(SETTINGS),-D $(LINE)) $(foreach LINE,$(IMPORTS),-D $(LINE))
-LINK_FLAGS := -L./$(LIBS_DIR) -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+DEV_COMPILE_FLAGS += -Wall -I./$(INCLUDE_DIR) $(foreach LINE,$(SETTINGS),-D $(LINE)) $(foreach LINE,$(IMPORTS),-D $(LINE))
+DEV_LINK_FLAGS := -L./$(LIBS_DIR) -lraylib
 LINUX_COMPILE_FLAGS += -Wall -I./$(TEMP_DIR)/$(INCLUDE_DIR) $(foreach LINE,$(SETTINGS),-D $(LINE)) $(foreach LINE,$(IMPORTS),-D $(LINE))
 LINUX_LINK_FLAGS := -L./$(TEMP_DIR)/$(LIBS_DIR) -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 WIN_COMPILE_FLAGS += -Wall -I./$(TEMP_DIR)/$(INCLUDE_DIR) $(foreach LINE,$(SETTINGS),-D $(LINE)) $(foreach LINE,$(IMPORTS),-D $(LINE))
@@ -23,6 +32,13 @@ WIN_LINK_FLAGS := -L./$(TEMP_DIR)/$(LIBS_DIR) -lraylib -lopengl32 -lgdi32 -lwinm
 WEB_COMPILE_FLAGS := -Wall -I./$(TEMP_DIR)/$(INCLUDE_DIR) $(foreach LINE,$(SETTINGS),-D $(LINE)) $(foreach LINE,$(IMPORTS),-D $(LINE)) -D WEB=1
 WEB_LINK_FLAGS := -L./$(TEMP_DIR)/$(LIBS_DIR) -lraylib -s USE_GLFW=3 -s ASYNCIFY
 DEV_FLAGS := -D DEV=1
+ifeq (DEV_PLATFORM,Linux)
+	DEV_LINK_FLAGS += -lGL -lm -lpthread -ldl -lrt -lX11
+	DEV_BIN_NAME += .x86_64
+else ifeq (DEV_PLATFORM,Windows)
+	DEV_LINK_FLAGS += -lopengl32 -lgdi32 -lwinmm -lpthread -static -static-libgcc -static-libstdc++
+	DEV_BIN_NAME += .exe
+endif
 
 # Paths to compile raylib to web
 EMSDK_PATH ?= ~/emsdk
@@ -53,14 +69,14 @@ install:
 # Dev target, builds, runs and deletes the build, for development
 dev:
 	mkdir -p $(BUILD_DIR)
-	g++ $(call rwildcard,src,*.cpp) -o $(BUILD_DIR)/$(DEV_BIN_NAME) $(COMPILE_FLAGS) $(DEV_FLAGS) $(LINK_FLAGS)
+	$(CC) $(call rwildcard,src,*.cpp) -o $(BUILD_DIR)/$(DEV_BIN_NAME) $(DEV_COMPILE_FLAGS) $(DEV_FLAGS) $(DEV_LINK_FLAGS)
 	./$(BUILD_DIR)/$(DEV_BIN_NAME)
 
 # Debug target, builds a debug version, runs with the debugger and deletes the build
 debug:
 	mkdir -p $(TEMP_DIR)
-	g++ -O0 -g $(call rwildcard,src,*.cpp) -o $(TEMP_DIR)/$(DEV_BIN_NAME) $(COMPILE_FLAGS) $(DEV_FLAGS) $(LINK_FLAGS)
-	gdb -tui $(TEMP_DIR)/$(DEV_BIN_NAME)
+	$(CC) -O0 -g $(call rwildcard,src,*.cpp) -o $(TEMP_DIR)/$(DEV_BIN_NAME) $(DEV_COMPILE_FLAGS) $(DEV_FLAGS) $(DEV_LINK_FLAGS)
+	$(GDB) -tui $(TEMP_DIR)/$(DEV_BIN_NAME)
 	rm -rf ./$(TEMP_DIR)
 
 # Build for the Linux platform, puts the binary at the build target folder
@@ -101,7 +117,7 @@ build-web:
 
 # Editor target, compiles the level editor and places it at the project root
 editor:
-	g++ $(call rwildcard,editor,*.cpp) -o $(EDITOR_NAME) $(COMPILE_FLAGS) $(LINK_FLAGS)
+	$(CC) $(call rwildcard,editor,*.cpp) -o $(EDITOR_NAME) $(DEV_COMPILE_FLAGS) $(DEV_LINK_FLAGS)
 
 # Format files on ./src
 format:

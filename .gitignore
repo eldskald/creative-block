@@ -5,6 +5,7 @@
 /include
 /.tmp
 level-editor
+.env
 
 # ripgrep
 .rgignore
