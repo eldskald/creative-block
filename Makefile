@@ -7,6 +7,7 @@ DEV_PLATFORM ?= Linux
 CC ?= g++
 GDB ?= gdb
 EMSDK_PATH ?= $(HOME)/emsdk
+BUILD_WEB_HEAP_SIZE ?= 134217728
 -include .env
 export
 
@@ -19,6 +20,7 @@ PATH := $(shell printenv PATH):$(EMSDK_PATH):$(EMSCRIPTEN_PATH):$(CLANG_PATH):$(
 
 # File/directory names
 APP_NAME ?= app
+BUILD_WEB_SHELL ?= shell.html
 EDITOR_NAME ?= level-editor
 TEMP_DIR := .tmp
 INCLUDE_DIR := include
@@ -57,8 +59,8 @@ LINUX_COMPILE_FLAGS = -Wall -I./$(INCLUDE_DIR) $(DEFINES)
 LINUX_LINK_FLAGS = -L./$(LINUX_LIBS) -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 WIN_COMPILE_FLAGS = -Wall -I./$(INCLUDE_DIR) $(DEFINES)
 WIN_LINK_FLAGS = -L./$(WIN_LIBS) -lraylib -lgdi32 -lwinmm -lpthread -static -static-libgcc -static-libstdc++
-WEB_COMPILE_FLAGS = -Os -Wall -I./$(INCLUDE_DIR) -I$(EMSCRIPTEN_PATH)/cache/sysroot/include $(DEFINES) --preload-file assets -DWEB
-WEB_LINK_FLAGS = -L./$(WEB_LIBS) -lraylib -s USE_GLFW=3 -s
+WEB_COMPILE_FLAGS = -Os -Wall -I./$(INCLUDE_DIR) -I$(EMSCRIPTEN_PATH)/cache/sysroot/include $(DEFINES) --preload-file assets --shell-file $(BUILD_WEB_SHELL) -DWEB
+WEB_LINK_FLAGS = -L./$(WEB_LIBS) -lraylib -s USE_GLFW=3 -s TOTAL_MEMORY=$(BUILD_WEB_HEAP_SIZE) -s FORCE_FILESYSTEM=1
 
 # Phony targets
 .PHONY: all clean install dev debug build-linux build-windows build-web editor format lint
@@ -93,8 +95,10 @@ install:
 
 # Dev target, builds, runs and deletes the build, for development
 dev:
-	$(CC) $(call rwildcard,src,*.cpp) -o $(APP_NAME)$(EXT) $(DEV_COMPILE_FLAGS) $(DEV_LINK_FLAGS)
-	./$(APP_NAME)$(EXT)
+	-mkdir -p $(TEMP_DIR)
+	-$(CC) $(call rwildcard,src,*.cpp) -o $(TEMP_DIR)/$(APP_NAME)$(EXT) $(DEV_COMPILE_FLAGS) $(DEV_LINK_FLAGS)
+	-./$(TEMP_DIR)/$(APP_NAME)$(EXT)
+	rm -rf ./$(TEMP_DIR)
 
 # Debug target, builds a debug version, runs with the debugger and deletes the build
 debug:

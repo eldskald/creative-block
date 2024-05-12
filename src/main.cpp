@@ -17,14 +17,20 @@
 
 using namespace std;
 
+#ifndef WEB
 RenderTexture2D main_tex = (RenderTexture2D){0};
+#endif
 sfx* sound_1 = nullptr;
 sfx* sound_2 = nullptr;
 particle_effect* emitter = nullptr;
 physics_body* player = nullptr;
 
 void game_loop() {
+#ifdef WEB
+    BeginDrawing();
+#else
     BeginTextureMode(main_tex);
+#endif
     ClearBackground(BLACK);
     DrawFPS(900, 0); // NOLINT
 
@@ -47,6 +53,9 @@ void game_loop() {
     player->vel = input_1;
 
     game::do_game_loop();
+#ifdef WEB
+    EndDrawing();
+#else
     EndTextureMode();
 
     auto window_size_x = (float)GetScreenWidth();
@@ -80,6 +89,7 @@ void game_loop() {
             WHITE);
     }
     EndDrawing();
+#endif
 }
 
 int main() {
@@ -188,11 +198,11 @@ int main() {
     anim->play();
     // NOLINTEND
 
-    main_tex = LoadRenderTexture(WINDOW_SIZE_X, WINDOW_SIZE_Y);
-
 #ifdef WEB
     emscripten_set_main_loop(game_loop, TARGET_FPS, 1);
 #else
+    main_tex = LoadRenderTexture(WINDOW_SIZE_X, WINDOW_SIZE_Y);
+
     SetTargetFPS(TARGET_FPS);
     SetWindowState(FLAG_WINDOW_RESIZABLE);
     SetWindowMinSize(WINDOW_SIZE_X, WINDOW_SIZE_Y);
