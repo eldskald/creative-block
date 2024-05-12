@@ -11,7 +11,7 @@
 #include <tuple>
 #include <vector>
 
-#if defined(PLATFORM_WEB)
+#ifdef WEB
 #include <emscripten/emscripten.h>
 #endif
 
@@ -84,7 +84,7 @@ void game_loop() {
 
 int main() {
 
-    // #if !defined(DEV)
+    // #ifndef DEV
     //     SetTraceLogLevel(LOG_NONE);
     // #endif
 
@@ -190,7 +190,7 @@ int main() {
 
     main_tex = LoadRenderTexture(WINDOW_SIZE_X, WINDOW_SIZE_Y);
 
-#if defined(PLATFORM_WEB)
+#ifdef WEB
     emscripten_set_main_loop(game_loop, TARGET_FPS, 1);
 #else
     SetTargetFPS(TARGET_FPS);
