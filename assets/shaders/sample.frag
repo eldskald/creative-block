@@ -1,14 +1,14 @@
-#version 330
+#version 100
 
-in vec2 uv;
+precision mediump float;
+
+varying vec2 uv;
 
 uniform sampler2D texture0;
 uniform vec4 colDiffuse;
 
 uniform vec4 tint;
 
-out vec4 col;
-
 void main() {
-    col = texture(texture0, uv) * colDiffuse * tint * fract(uv.x * 10.0);
+    gl_FragColor = texture2D(texture0, uv) * colDiffuse * tint * fract(uv.x * 8.0);
 }

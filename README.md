@@ -4,7 +4,9 @@ This project is me trying to learn C++ with [raylib](https://github.com/raysan5/
 
 ## Dependencies
 
-This project is using the GNU Toolchain for C/C++ development, in particular, the [GNU Compiler Collection](https://www.gnu.org/software/gcc), the [MinGW-w64](https://www.mingw-w64.org/) compilers and [make](https://www.gnu.org/software/make). Optionally, [gdb](https://www.sourceware.org/gdb/) to debug. You also need [git](https://git-scm.com/), of course.
+This project is using the GNU Toolchain for C/C++ development, in particular, the [GNU Compiler Collection](https://www.gnu.org/software/gcc), the [MinGW-w64](https://www.mingw-w64.org/) compilers and [make](https://www.gnu.org/software/make). If you want to make an HTML5 build, you need to install [emsdk](https://emscripten.org/docs/getting_started/downloads.html).
+
+Optionally, [gdb](https://www.sourceware.org/gdb/) to debug. You also need [git](https://git-scm.com/), of course.
 
 You'll also need basic libraries used by [raylib](https://github.com/raysan5/raylib) to do graphics and audio. More info on their [wiki](https://github.com/raysan5/raylib/wiki/Working-on-GNU-Linux).
 
@@ -42,7 +44,7 @@ To make a build, run one of these commands:
 make build-linux    # Makes a Linux build
 make build-windows  # Makes a Windows build
 make build-web      # Makes a Web (HTML5) build
-make build          # All of the above
+Makes               # All of the above
 ```
 
 It will create a `build` directory and put the binary `app` in there, just run it to play the game.

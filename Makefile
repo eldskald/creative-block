@@ -6,8 +6,14 @@ rwildcard=$(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst 
 DEV_PLATFORM = Linux
 CC = g++
 GDB = gdb
+EMSDK_PATH = $(HOME)/emsdk
 -include .env
 export
+
+# Paths to compile raylib to web
+EMSCRIPTEN_PATH = $(EMSDK_PATH)/upstream/emscripten
+CLANG_PATH = $(EMSDK_PATH)/upstream/bin
+PYTHON_PATH = $(PATH)
 
 # File/directory names
 BIN_NAME := app
@@ -22,15 +28,15 @@ INCLUDE_DIR := include
 SETTINGS = $(file < settings.cfg)
 IMPORTS = $(file < imports.cfg)
 INSTALL_VARS = PLATFORM=PLATFORM_DESKTOP
-DEV_COMPILE_FLAGS = -Wall -I./$(INCLUDE_DIR) $(foreach LINE,$(SETTINGS),-D $(LINE)) $(foreach LINE,$(IMPORTS),-D $(LINE))
+DEV_COMPILE_FLAGS = -Wall -I./$(INCLUDE_DIR) $(foreach LINE,$(SETTINGS),-D$(LINE)) $(foreach LINE,$(IMPORTS),-D$(LINE))
 DEV_LINK_FLAGS = -L./$(LIBS_DIR) -lraylib
-LINUX_COMPILE_FLAGS = -Wall -I./$(TEMP_DIR)/$(INCLUDE_DIR) $(foreach LINE,$(SETTINGS),-D $(LINE)) $(foreach LINE,$(IMPORTS),-D $(LINE))
+LINUX_COMPILE_FLAGS = -Wall -I./$(TEMP_DIR)/$(INCLUDE_DIR) $(foreach LINE,$(SETTINGS),-D$(LINE)) $(foreach LINE,$(IMPORTS),-D$(LINE))
 LINUX_LINK_FLAGS = -L./$(TEMP_DIR)/$(LIBS_DIR) -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
-WIN_COMPILE_FLAGS = -Wall -I./$(TEMP_DIR)/$(INCLUDE_DIR) $(foreach LINE,$(SETTINGS),-D $(LINE)) $(foreach LINE,$(IMPORTS),-D $(LINE))
+WIN_COMPILE_FLAGS = -Wall -I./$(TEMP_DIR)/$(INCLUDE_DIR) $(foreach LINE,$(SETTINGS),-D$(LINE)) $(foreach LINE,$(IMPORTS),-D$(LINE))
 WIN_LINK_FLAGS = -L./$(TEMP_DIR)/$(LIBS_DIR) -lraylib -lgdi32 -lwinmm -lpthread -static -static-libgcc -static-libstdc++
-WEB_COMPILE_FLAGS = -Wall -I./$(TEMP_DIR)/$(INCLUDE_DIR) $(foreach LINE,$(SETTINGS),-D $(LINE)) $(foreach LINE,$(IMPORTS),-D $(LINE)) -D WEB=1
-WEB_LINK_FLAGS = -L./$(TEMP_DIR)/$(LIBS_DIR) -lraylib -s USE_GLFW=3 -s ASYNCIFY
-DEV_FLAGS = -D DEV=1
+WEB_COMPILE_FLAGS = -Os -Wall -I./$(TEMP_DIR)/$(INCLUDE_DIR) -I$(EMSCRIPTEN_PATH)/cache/sysroot/include $(foreach LINE,$(SETTINGS),-D$(LINE)) $(foreach LINE,$(IMPORTS),-D$(LINE)) --preload-file assets -DPLATFORM_WEB
+WEB_LINK_FLAGS = -L./$(TEMP_DIR)/$(LIBS_DIR) -lraylib -s USE_GLFW=3 -s
+DEV_FLAGS = -DDEV=1
 ifeq ($(DEV_PLATFORM), Linux)
 	DEV_LINK_FLAGS += -lGL -lm -lpthread -ldl -lrt -lX11
 	DEV_BIN_NAME := $(DEV_BIN_NAME).x86_64
@@ -41,17 +47,11 @@ ifeq ($(DEV_PLATFORM), Windows)
 	INSTALL_VARS += OS=Windows_NT CC=x86_64-w64-mingw32-gcc AR=x86_64-w64-mingw32-ar
 endif
 
-# Paths to compile raylib to web
-EMSDK_PATH = ~/emsdk
-EMSCRIPTEN_PATH = $(EMSDK_PATH)/upstream/emscripten
-CLANG_PATH = $(EMSDK_PATH)/upstream/bin
-PYTHON_PATH = $(PATH)
-
 # Phony targets
 .PHONY: all clean install dev debug build-linux build-windows build-web editor format lint
 
 # Default target, cleans and build for all platforms
-all: clean build-linux build-windows build-web
+all: build-linux build-windows build-web
 
 # Clean target, deletes build, temporary, include and lib folders
 clean:
@@ -82,38 +82,43 @@ debug:
 
 # Build for the Linux platform, puts the binary at the build target folder
 build-linux:
-	mkdir -p $(TEMP_DIR) $(BUILD_DIR)
+	rm -r $(BUILD_DIR)/linux
+	mkdir -p $(TEMP_DIR) $(BUILD_DIR)/linux
 	cd $(TEMP_DIR) && mkdir -p $(INCLUDE_DIR) $(LIBS_DIR)
 	cd $(TEMP_DIR) && git clone --depth 1 --branch 5.0 https://github.com/raysan5/raylib.git
 	cd $(TEMP_DIR)/raylib/src && make PLATFORM=PLATFORM_DESKTOP
 	mv $(TEMP_DIR)/raylib/src/libraylib.a $(TEMP_DIR)/$(LIBS_DIR)
 	mv $(TEMP_DIR)/raylib/src/raylib.h $(TEMP_DIR)/$(INCLUDE_DIR)
 	mv $(TEMP_DIR)/raylib/src/raymath.h $(TEMP_DIR)/$(INCLUDE_DIR)
-	g++ $(call rwildcard,src,*.cpp) -o $(BUILD_DIR)/$(BIN_NAME).x64_86 $(LINUX_COMPILE_FLAGS) $(LINUX_LINK_FLAGS)
+	g++ $(call rwildcard,src,*.cpp) -o $(BUILD_DIR)/linux/$(BIN_NAME).x64_86 $(LINUX_COMPILE_FLAGS) $(LINUX_LINK_FLAGS)
+	cp -r assets $(BUILD_DIR)/linux/
 	rm -rf ./$(TEMP_DIR)
 
 # Build for the Windows platform, puts the binary at the build target folder
 build-windows:
-	mkdir -p $(TEMP_DIR) $(BUILD_DIR)
+	rm -r $(BUILD_DIR)/windows
+	mkdir -p $(TEMP_DIR) $(BUILD_DIR)/windows
 	cd $(TEMP_DIR) && mkdir -p $(INCLUDE_DIR) $(LIBS_DIR)
 	cd $(TEMP_DIR) && git clone --depth 1 --branch 5.0 https://github.com/raysan5/raylib.git
 	cd $(TEMP_DIR)/raylib/src && make PLATFORM=PLATFORM_DESKTOP OS=Windows_NT CC=x86_64-w64-mingw32-gcc AR=x86_64-w64-mingw32-ar
 	mv $(TEMP_DIR)/raylib/src/libraylib.a $(TEMP_DIR)/$(LIBS_DIR)
 	mv $(TEMP_DIR)/raylib/src/raylib.h $(TEMP_DIR)/$(INCLUDE_DIR)
 	mv $(TEMP_DIR)/raylib/src/raymath.h $(TEMP_DIR)/$(INCLUDE_DIR)
-	x86_64-w64-mingw32-g++ $(call rwildcard,src,*.cpp) -o $(BUILD_DIR)/$(BIN_NAME).exe $(WIN_COMPILE_FLAGS) $(WIN_LINK_FLAGS)
+	x86_64-w64-mingw32-g++ $(call rwildcard,src,*.cpp) -o $(BUILD_DIR)/windows/$(BIN_NAME).exe $(WIN_COMPILE_FLAGS) $(WIN_LINK_FLAGS)
+	cp -r assets $(BUILD_DIR)/windows/
 	rm -rf ./$(TEMP_DIR)
 
 # Build for Web
 build-web:
-	mkdir -p $(TEMP_DIR) $(BUILD_DIR)
+	rm -r $(BUILD_DIR)/web
+	mkdir -p $(TEMP_DIR) $(BUILD_DIR)/web
 	cd $(TEMP_DIR) && mkdir -p $(INCLUDE_DIR) $(LIBS_DIR)
 	cd $(TEMP_DIR) && git clone --depth 1 --branch 5.0 https://github.com/raysan5/raylib.git
 	cd $(TEMP_DIR)/raylib/src && make PLATFORM=PLATFORM_WEB -B
 	mv $(TEMP_DIR)/raylib/src/libraylib.a $(TEMP_DIR)/$(LIBS_DIR)
 	mv $(TEMP_DIR)/raylib/src/raylib.h $(TEMP_DIR)/$(INCLUDE_DIR)
 	mv $(TEMP_DIR)/raylib/src/raymath.h $(TEMP_DIR)/$(INCLUDE_DIR)
-	emcc $(call rwildcard,src,*.cpp) -o $(BUILD_DIR)/$(BIN_NAME).html $(WEB_COMPILE_FLAGS) $(WEB_LINK_FLAGS)
+	emcc $(call rwildcard,src,*.cpp) -o $(BUILD_DIR)/web/$(BIN_NAME).html $(WEB_COMPILE_FLAGS) $(WEB_LINK_FLAGS)
 	rm -rf ./$(TEMP_DIR)
 
 # Editor target, compiles the level editor and places it at the project root

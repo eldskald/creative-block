@@ -11,21 +11,85 @@
 #include <tuple>
 #include <vector>
 
+#if defined(PLATFORM_WEB)
+#include <emscripten/emscripten.h>
+#endif
+
 using namespace std;
+
+RenderTexture2D main_tex = (RenderTexture2D){0};
+sfx* sound_1 = nullptr;
+sfx* sound_2 = nullptr;
+particle_effect* emitter = nullptr;
+physics_body* player = nullptr;
+
+void game_loop() {
+    BeginTextureMode(main_tex);
+    ClearBackground(BLACK);
+    DrawFPS(900, 0); // NOLINT
+
+    if (IsKeyPressed(KEY_ONE)) {
+        sound_1->play();
+    }
+
+    if (IsKeyPressed(KEY_TWO)) {
+        sound_2->play();
+    }
+
+    if (IsKeyPressed(KEY_SPACE)) {
+        emitter->emit();
+    }
+
+    Vector2 input_1 = (Vector2){(IsKeyDown(KEY_D) ? PLAYER_SPEED : 0.0f) -
+                                    (IsKeyDown(KEY_A) ? PLAYER_SPEED : 0.0f),
+                                (IsKeyDown(KEY_S) ? PLAYER_SPEED : 0.0f) -
+                                    (IsKeyDown(KEY_W) ? PLAYER_SPEED : 0.0f)};
+    player->vel = input_1;
+
+    game::do_game_loop();
+    EndTextureMode();
+
+    auto window_size_x = (float)GetScreenWidth();
+    auto window_size_y = (float)GetScreenHeight();
+    float aspect_ratio = (float)WINDOW_SIZE_X / (float)WINDOW_SIZE_Y;
+    BeginDrawing();
+    ClearBackground(BLACK);
+    if (window_size_x / window_size_y >= aspect_ratio) {
+        float main_tex_x = window_size_y * aspect_ratio;
+        DrawTexturePro(
+            main_tex.texture,
+            (Rectangle){0.0f, WINDOW_SIZE_Y, WINDOW_SIZE_X, -WINDOW_SIZE_Y},
+            (Rectangle){(window_size_x - main_tex_x) / 2,
+                        0.0f,
+                        main_tex_x,
+                        window_size_y},
+            (Vector2){0.0f, 0.0f},
+            0.0f,
+            WHITE);
+    } else {
+        float main_tex_y = window_size_x / aspect_ratio;
+        DrawTexturePro(
+            main_tex.texture,
+            (Rectangle){0.0f, WINDOW_SIZE_Y, WINDOW_SIZE_X, -WINDOW_SIZE_Y},
+            (Rectangle){0.0f,
+                        (window_size_y - main_tex_y) / 2,
+                        window_size_x,
+                        main_tex_y},
+            (Vector2){0.0f, 0.0f},
+            0.0f,
+            WHITE);
+    }
+    EndDrawing();
+}
 
 int main() {
 
-#if !defined(DEV)
-    SetTraceLogLevel(LOG_NONE);
-#endif
+    // #if !defined(DEV)
+    //     SetTraceLogLevel(LOG_NONE);
+    // #endif
 
     InitWindow(WINDOW_SIZE_X, WINDOW_SIZE_Y, WINDOW_TITLE);
     InitAudioDevice();
-    SetTargetFPS(TARGET_FPS);
-    SetWindowState(FLAG_WINDOW_RESIZABLE);
-    SetWindowMinSize(WINDOW_SIZE_X, WINDOW_SIZE_Y);
-    // To force a size change and update window titlebar buttons
-    SetWindowSize(WINDOW_SIZE_X, WINDOW_SIZE_Y);
 
     game::initial_setup();
 
@@ -87,7 +151,7 @@ int main() {
     animated_sprite->add_child(anim);
     scene->add_child(animated_sprite);
 
-    physics_body* player = new physics_body();
+    player = new physics_body();
     player->pos = (Vector2){0, 0};
     player->collision_box = (Rectangle){0, 0, 64, 64};
     player->collision_layer = 0b00000001;
@@ -97,7 +161,7 @@ int main() {
     player->add_child(player_sprite);
     scene->add_child(player);
 
-    particle_effect* emitter = new particle_effect();
+    emitter = new particle_effect();
     emitter->particles = 8;
     emitter->lifetime = 6.0f;
     emitter->lifetime_variation = 0.5f;
@@ -114,76 +178,30 @@ int main() {
     emitter->elasticity_factor = 0.5f;
     player->add_child(emitter);
 
-    sfx* sound_1 = new sfx(sfx::sfx_2);
+    sound_1 = new sfx(sfx::sfx_2);
     scene->add_child(sound_1);
 
-    sfx* sound_2 = new sfx(sfx::sfx_2);
+    sound_2 = new sfx(sfx::sfx_2);
     scene->add_child(sound_2);
 
     game::set_root(scene);
     anim->play();
     // NOLINTEND
 
-    RenderTexture2D main_tex = LoadRenderTexture(WINDOW_SIZE_X, WINDOW_SIZE_Y);
+    main_tex = LoadRenderTexture(WINDOW_SIZE_X, WINDOW_SIZE_Y);
+
+#if defined(PLATFORM_WEB)
+    emscripten_set_main_loop(game_loop, TARGET_FPS, 1);
+#else
+    SetTargetFPS(TARGET_FPS);
+    SetWindowState(FLAG_WINDOW_RESIZABLE);
+    SetWindowMinSize(WINDOW_SIZE_X, WINDOW_SIZE_Y);
+    // To force a size change and update window titlebar buttons
+    SetWindowSize(WINDOW_SIZE_X, WINDOW_SIZE_Y);
     while (!WindowShouldClose()) {
-        BeginTextureMode(main_tex);
-        ClearBackground(BLACK);
-        DrawFPS(900, 0); // NOLINT
-
-        if (IsKeyPressed(KEY_ONE)) {
-            sound_1->play();
-        }
-
-        if (IsKeyPressed(KEY_TWO)) {
-            sound_2->play();
-        }
-
-        if (IsKeyPressed(KEY_SPACE)) {
-            emitter->emit();
-        }
-
-        Vector2 input_1 =
-            (Vector2){(IsKeyDown(KEY_D) ? PLAYER_SPEED : 0.0f) -
-                          (IsKeyDown(KEY_A) ? PLAYER_SPEED : 0.0f),
-                      (IsKeyDown(KEY_S) ? PLAYER_SPEED : 0.0f) -
-                          (IsKeyDown(KEY_W) ? PLAYER_SPEED : 0.0f)};
-        player->vel = input_1;
-
-        game::do_game_loop();
-        EndTextureMode();
-
-        auto window_size_x = (float)GetScreenWidth();
-        auto window_size_y = (float)GetScreenHeight();
-        float aspect_ratio = (float)WINDOW_SIZE_X / (float)WINDOW_SIZE_Y;
-        BeginDrawing();
-        ClearBackground(BLACK);
-        if (window_size_x / window_size_y >= aspect_ratio) {
-            float main_tex_x = window_size_y * aspect_ratio;
-            DrawTexturePro(
-                main_tex.texture,
-                (Rectangle){0.0f, WINDOW_SIZE_Y, WINDOW_SIZE_X, -WINDOW_SIZE_Y},
-                (Rectangle){(window_size_x - main_tex_x) / 2,
-                            0.0f,
-                            main_tex_x,
-                            window_size_y},
-                (Vector2){0.0f, 0.0f},
-                0.0f,
-                WHITE);
-        } else {
-            float main_tex_y = window_size_x / aspect_ratio;
-            DrawTexturePro(
-                main_tex.texture,
-                (Rectangle){0.0f, WINDOW_SIZE_Y, WINDOW_SIZE_X, -WINDOW_SIZE_Y},
-                (Rectangle){0.0f,
-                            (window_size_y - main_tex_y) / 2,
-                            window_size_x,
-                            main_tex_y},
-                (Vector2){0.0f, 0.0f},
-                0.0f,
-                WHITE);
-        }
-        EndDrawing();
+        game_loop();
     }
+#endif
 
     CloseAudioDevice();
     CloseWindow();
