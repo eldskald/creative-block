@@ -129,7 +129,7 @@ build-web:
 
 # Editor target, compiles the level editor and places it at the project root
 editor:
-	$(CC) $(call rwildcard,editor,*.cpp) -o $(EDITOR_NAME) $(DEV_COMPILE_FLAGS) $(DEV_LINK_FLAGS)
+	$(CC) $(call rwildcard,editor,*.cpp) -o $(EDITOR_NAME)$(EXT) $(DEV_COMPILE_FLAGS) $(DEV_LINK_FLAGS)
 
 # Format files on ./src
 format:
