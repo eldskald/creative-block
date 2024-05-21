@@ -5,6 +5,7 @@
 #include "sfx.h"
 #include "shader.h"
 #include "sprite.h"
+#include "scene-manager.h"
 #include <raylib.h>
 
 game_element* game::root_ = nullptr;
@@ -13,6 +14,7 @@ void game::initial_setup() {
     sprite::initialize();
     sfx::initialize();
     shader::initialize();
+    scene_manager::initialize();
 }
 
 void game::do_game_loop() {

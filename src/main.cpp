@@ -95,7 +95,7 @@ int main() {
     game::initial_setup();
 
     // NOLINTBEGIN
-    game_element* scene = new game_element();
+    game_element* scene = game::get_root();
 
     physics_body* block_1 = new physics_body();
     block_1->pos = (Vector2){120, 290};
@@ -185,7 +185,6 @@ int main() {
     sound_2 = new sfx(sfx::sfx_2);
     scene->add_child(sound_2);
 
-    game::set_root(scene);
     anim->play();
 
     // For the sake of the web build, all textures must be powers of 2
