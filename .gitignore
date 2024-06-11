@@ -5,7 +5,7 @@
 /include
 /.tmp
 /emsdk
-level-editor
+level-editor.*
 .env
 
 # ripgrep

@@ -44,7 +44,7 @@ SETTINGS = $(file < settings.cfg)
 IMPORTS = $(file < imports.cfg)
 DEFINES := $(foreach LINE,$(SETTINGS),-D$(LINE)) $(foreach LINE,$(IMPORTS),-D$(LINE))
 
-DEV_COMPILE_FLAGS = -Wall -I./$(INCLUDE_DIR) $(DEFINES) -DDEV
+DEV_COMPILE_FLAGS = -std=c++17 -Wall -I./$(INCLUDE_DIR) $(DEFINES) -DDEV
 DEV_LINK_FLAGS = -L./$(DEV_LIBS) -lraylib
 ifeq ($(DEV_PLATFORM), Linux)
 	DEV_LINK_FLAGS += -lGL -lm -lpthread -ldl -lrt -lX11
@@ -54,6 +54,9 @@ ifeq ($(DEV_PLATFORM), Windows)
 	DEV_LINK_FLAGS += -lgdi32 -lwinmm -lpthread -static -static-libgcc -static-libstdc++
 	EXT := .exe
 endif
+
+EDITOR_COMPILE_FLAGS = -std=c++17 -Wall -I./$(INCLUDE_DIR)
+EDITOR_LINK_FLAGS = $(DEV_LINK_FLAGS)
 
 LINUX_COMPILE_FLAGS = -Wall -I./$(INCLUDE_DIR) $(DEFINES)
 LINUX_LINK_FLAGS = -L./$(LINUX_LIBS) -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
@@ -129,7 +132,7 @@ build-web:
 
 # Editor target, compiles the level editor and places it at the project root
 editor:
-	$(CC) $(call rwildcard,editor,*.cpp) -o $(EDITOR_NAME)$(EXT) $(DEV_COMPILE_FLAGS) $(DEV_LINK_FLAGS)
+	$(CC) $(call rwildcard,editor,*.cpp) -o $(EDITOR_NAME)$(EXT) $(EDITOR_COMPILE_FLAGS) $(EDITOR_LINK_FLAGS)
 
 # Format files on ./src
 format:

@@ -1,48 +1,54 @@
 #pragma once
 #include <raylib.h>
 
-const int EDITOR_FPS = 60;
-const int EDITOR_WINDOW_SIZE_X = WINDOW_SIZE_X + 8;
-const int EDITOR_WINDOW_SIZE_Y = WINDOW_SIZE_Y + 196;
-const char* const EDITOR_WINDOW_TITLE = "Level Editor";
+#define EDITOR_FPS 60
+#define LEVEL_SIZE_X 1280
+#define LEVEL_SIZE_Y 720
+#define EDITOR_WINDOW_SIZE_X (LEVEL_SIZE_X + 8)
+#define EDITOR_WINDOW_SIZE_Y (LEVEL_SIZE_Y + 196)
+#define EDITOR_WINDOW_TITLE "Level Editor"
 
-const int CELL_SIZE_X = SPRITESHEET_CELL_SIZE_X * PIXEL_SIZE_X;
-const int CELL_SIZE_Y = SPRITESHEET_CELL_SIZE_Y * PIXEL_SIZE_Y;
+#define SPRITESHEET_PATH "assets/spritesheet.png"
+#define SPRITESHEET_CELL_X 8
+#define SPRITESHEET_CELL_Y 8
 
-const int TILEMAP_ORIGIN_X = 4;
-const int TILEMAP_ORIGIN_Y = 4;
-const int TILEMAP_PIXEL_SIZE_X = WINDOW_SIZE_X;
-const int TILEMAP_PIXEL_SIZE_Y = WINDOW_SIZE_Y;
-const int TILEMAP_SIZE_X = WINDOW_SIZE_X / CELL_SIZE_X;
-const int TILEMAP_SIZE_Y = WINDOW_SIZE_Y / CELL_SIZE_Y;
+#define CELL_SIZE_X 32
+#define CELL_SIZE_Y 32
 
-const int TILESET_ORIGIN_X = 4;
-const int TILESET_ORIGIN_Y = TILEMAP_ORIGIN_Y + TILEMAP_PIXEL_SIZE_Y + 8;
-const int TILESET_ROWS = 2;
+#define TILEMAP_ORIGIN_X 4
+#define TILEMAP_ORIGIN_Y 4
+#define TILEMAP_PIXEL_SIZE_X (LEVEL_SIZE_X)
+#define TILEMAP_PIXEL_SIZE_Y (LEVEL_SIZE_Y)
+#define TILEMAP_SIZE_X (LEVEL_SIZE_X / 4)
+#define TILEMAP_SIZE_Y (LEVEL_SIZE_Y / 4)
 
-const int FONT_SIZE = 20;
-const int TEXT_SPACING = 2;
-const int INPUT_MAX_LENGTH = 20;
-const int INPUT_MARGIN = 4;
-const int INPUT_UNDERLINE_DIST = 2;
-const float INPUT_HOLD_KEY_START = 0.5;
-const float INPUT_HOLD_KEY_PERIOD = 0.05;
-const float INPUT_BLINK_TIME = 0.5;
+#define TILESET_ORIGIN_X 4
+#define TILESET_ORIGIN_Y (TILEMAP_ORIGIN_Y + TILEMAP_PIXEL_SIZE_Y + 8)
+#define TILESET_ROWS 2
 
-const int POPUP_WIDTH = 300;
-const int POPUP_HEIGHT = 132;
-const int POPUP_PADDING = 16;
-const int POPUP_LINE_SPACING = 6;
-const float POPUP_BUTTON_WIDTH = 100.0;
-const float POPUP_BUTTON_HEIGHT = 32.0;
+#define FONT_SIZE 20
+#define TEXT_SPACING 2
+#define INPUT_MAX_LENGTH 20
+#define INPUT_MARGIN 4
+#define INPUT_UNDERLINE_DIST 2
+#define INPUT_HOLD_KEY_START 0.5f
+#define INPUT_HOLD_KEY_PERIOD 0.05f
+#define INPUT_BLINK_TIME 0.5f
 
-const Color FG_COLOR = (Color){192, 202, 245, 255};      // #c0caf5
-const Color BG_COLOR = (Color){26, 27, 38, 255};         // #1a1b26
-const Color PRIMARY_COLOR = (Color){65, 166, 181, 255};  // #41a6b5
-const Color HOVERED_COLOR = (Color){115, 218, 202, 255}; // #73daca
-const Color FOCUSED_COLOR = (Color){187, 154, 247, 255}; // #bb9af7
-const Color CELL_HIGHLIGHT_COLOR = (Color){255, 255, 255, 32};
-const Color POPUP_BACKGROUND_SCREEN = (Color){0, 0, 0, 128};
+#define POPUP_WIDTH 300
+#define POPUP_HEIGHT 132
+#define POPUP_PADDING 16
+#define POPUP_LINE_SPACING 6
+#define POPUP_BUTTON_WIDTH 100.0f
+#define POPUP_BUTTON_HEIGHT 32.0f
+
+#define FG_COLOR (Color){192, 202, 245, 255}                // #c0caf5
+#define BG_COLOR (Color){26, 27, 38, 255}                   // #1a1b26
+#define PRIMARY_COLOR (Color){65, 166, 181, 255}            // #41a6b5
+#define HOVERED_COLOR (Color){115, 218, 202, 255}           // #73daca
+#define FOCUSED_COLOR (Color){187, 154, 247, 255}           // #bb9af7
+#define CELL_HIGHLIGHT_COLOR (Color){255, 255, 255, 32}
+#define POPUP_BACKGROUND_SCREEN (Color){0, 0, 0, 128}
 
 enum tile_type { background, block };
 

@@ -9,7 +9,6 @@
 #include "tileset.h"
 #include <iostream>
 #include <raylib.h>
-#include <vector>
 
 using namespace std;
 
@@ -38,7 +37,7 @@ void editor::save_tilemap_data() {
     string filepath =
         "editor/level-projects/" + file_input->get_input() + ".lvproj";
     string data = editor::tilemap_->convert_to_data();
-    SaveFileText(filepath.data(), data.data());
+    SaveFileText(filepath.c_str(), data.data());
 }
 
 void editor::load_tilemap_data() {
@@ -54,7 +53,7 @@ void editor::export_tilemap_data() {
     if (file_input->get_input().empty()) return;
     string data = data_exporter::get_export_text(editor::tilemap_->get_cells());
     string filepath = "levels/" + file_input->get_input() + ".dat";
-    SaveFileText(filepath.data(), data.data());
+    SaveFileText(filepath.c_str(), data.data());
 }
 
 void editor::initialize() {
