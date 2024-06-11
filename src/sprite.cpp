@@ -16,8 +16,8 @@ void sprite::tick_() {
                                SPRITESHEET_CELL_SIZE_Y},
                    (Rectangle){this->get_global_pos().x,
                                this->get_global_pos().y,
-                               SPRITESHEET_CELL_SIZE_X * PIXEL_SIZE_X,
-                               SPRITESHEET_CELL_SIZE_Y * PIXEL_SIZE_Y},
+                               SPRITESHEET_CELL_SIZE_X,
+                               SPRITESHEET_CELL_SIZE_Y},
                    (Vector2){0, 0},
                    0.0f,
                    this->tint);
