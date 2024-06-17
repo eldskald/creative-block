@@ -1,19 +1,19 @@
 #include "data-exporter.h"
 #include "defs.h"
 #include "tilemap.h"
-#include "tileset.h"
+#include "tileset_manager.h"
 #include <array>
 #include <iostream>
 #include <raylib.h>
 #include <string>
+#include <unordered_map>
 
 Vector2* data_exporter::find_next_block_start_(map* cells) {
     for (int i = 0; i < TILEMAP_SIZE_X; i++) {
         for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
             if (cells->at(i).at(j) == -1) {
                 continue;
-            } else if (tileset::get_tile_data(cells->at(i).at(j)).type ==
-                       tile_type::block) {
+            } else {
                 auto start = new Vector2();
                 start->x = (float)i;
                 start->y = (float)j;
@@ -27,7 +27,7 @@ Vector2* data_exporter::find_next_block_start_(map* cells) {
 string data_exporter::get_block_from_map_(Vector2 start, map* cells) {
 
     // Initiate block position and shape
-    Rectangle rect = (Rectangle){start.x, start.y, 1.0, 0.0};
+    Rectangle rect = (Rectangle){start.x, start.y, 1.0f, 0.0f};
 
     // Let's find the block height
     int coords_x = (int)start.x;
@@ -35,12 +35,9 @@ string data_exporter::get_block_from_map_(Vector2 start, map* cells) {
     while (true) {
         if (cells->at(coords_x).at(coords_y) == -1) {
             break;
-        } else if (tileset::get_tile_data(cells->at(coords_x).at(coords_y))
-                       .type != tile_type::block) {
-            break;
         } else {
             cells->at(coords_x).at(coords_y) = -1;
-            rect.height += 1.0;
+            rect.height += 1.0f;
             coords_y++;
             if (coords_y == TILEMAP_SIZE_Y) break;
         }
@@ -61,8 +58,7 @@ string data_exporter::get_block_from_map_(Vector2 start, map* cells) {
             if (cells->at(coords_x).at(coords_y + i) == -1) {
                 is_column_solid_blocks = false;
                 break;
-            } else if (tileset::get_tile_data(cells->at(coords_x).at(coords_y))
-                           .type != tile_type::block) {
+            } else {
                 is_column_solid_blocks = false;
                 break;
             }
@@ -115,11 +111,11 @@ string data_exporter::get_sprites_text_(map* cells) {
             if (cells->at(i).at(j) == -1) {
                 continue;
             } else {
-                Vector2 coords =
-                    tileset::get_tile_sprite_coords(cells->at(i).at(j));
+                Vector2 coords = tileset_manager::get_tile_sprite_coords(
+                    tileset::blocks, cells->at(i).at(j));
                 text += "[sprite]\n";
-                text += "pos = (" + to_string(i * CELL_SIZE_X) + "," +
-                        to_string(j * CELL_SIZE_Y) + ")\n";
+                text += "pos = (" + to_string(i * SPRITESHEET_CELL_X) + "," +
+                        to_string(j * SPRITESHEET_CELL_Y) + ")\n";
                 text += "atlas_coords = (" + to_string((int)coords.x) + "," +
                         to_string((int)coords.y) + ")\n";
                 text += "\n";
@@ -129,9 +125,10 @@ string data_exporter::get_sprites_text_(map* cells) {
     return text;
 }
 
-string data_exporter::get_export_text(map cells) {
+string data_exporter::get_export_text(unordered_map<tileset, map> cells) {
     string data = "";
-    data += data_exporter::get_sprites_text_(&cells);
-    data += data_exporter::get_physics_bodies_text_(&cells);
+    data += data_exporter::get_physics_bodies_text_(&cells.at(tileset::blocks));
+    data += data_exporter::get_sprites_text_(&cells.at(tileset::blocks));
+    data += data_exporter::get_sprites_text_(&cells.at(tileset::background));
     return data;
 }

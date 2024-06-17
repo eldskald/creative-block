@@ -3,12 +3,12 @@
 
 #define EDITOR_FPS 60
 #define LEVEL_SIZE_X 1280
-#define LEVEL_SIZE_Y 720
+#define LEVEL_SIZE_Y 704
 #define EDITOR_WINDOW_SIZE_X (LEVEL_SIZE_X + 8)
-#define EDITOR_WINDOW_SIZE_Y (LEVEL_SIZE_Y + 196)
+#define EDITOR_WINDOW_SIZE_Y (LEVEL_SIZE_Y + 232)
 #define EDITOR_WINDOW_TITLE "Level Editor"
 
-#define SPRITESHEET_PATH "assets/spritesheet.png"
+#define SPRITESHEET_PATH "assets/textures/spritesheet.png"
 #define SPRITESHEET_CELL_X 8
 #define SPRITESHEET_CELL_Y 8
 
@@ -19,8 +19,8 @@
 #define TILEMAP_ORIGIN_Y 4
 #define TILEMAP_PIXEL_SIZE_X (LEVEL_SIZE_X)
 #define TILEMAP_PIXEL_SIZE_Y (LEVEL_SIZE_Y)
-#define TILEMAP_SIZE_X (LEVEL_SIZE_X / 4)
-#define TILEMAP_SIZE_Y (LEVEL_SIZE_Y / 4)
+#define TILEMAP_SIZE_X 40
+#define TILEMAP_SIZE_Y 22
 
 #define TILESET_ORIGIN_X 4
 #define TILESET_ORIGIN_Y (TILEMAP_ORIGIN_Y + TILEMAP_PIXEL_SIZE_Y + 8)
@@ -42,15 +42,53 @@
 #define POPUP_BUTTON_WIDTH 100.0f
 #define POPUP_BUTTON_HEIGHT 32.0f
 
-#define FG_COLOR (Color){192, 202, 245, 255}                // #c0caf5
-#define BG_COLOR (Color){26, 27, 38, 255}                   // #1a1b26
-#define PRIMARY_COLOR (Color){65, 166, 181, 255}            // #41a6b5
-#define HOVERED_COLOR (Color){115, 218, 202, 255}           // #73daca
-#define FOCUSED_COLOR (Color){187, 154, 247, 255}           // #bb9af7
-#define CELL_HIGHLIGHT_COLOR (Color){255, 255, 255, 32}
-#define POPUP_BACKGROUND_SCREEN (Color){0, 0, 0, 128}
+#define FG_COLOR                                                               \
+    (Color) {                                                                  \
+        192, 202, 245, 255                                                     \
+    } // #c0caf5
+#define BG_COLOR                                                               \
+    (Color) {                                                                  \
+        26, 27, 38, 255                                                        \
+    } // #1a1b26
+#define PRIMARY_COLOR                                                          \
+    (Color) {                                                                  \
+        65, 166, 181, 255                                                      \
+    } // #41a6b5
+#define HOVERED_COLOR                                                          \
+    (Color) {                                                                  \
+        115, 218, 202, 255                                                     \
+    } // #73daca
+#define FOCUSED_COLOR                                                          \
+    (Color) {                                                                  \
+        187, 154, 247, 255                                                     \
+    } // #bb9af7
+#define CELL_HIGHLIGHT_COLOR                                                   \
+    (Color) {                                                                  \
+        255, 255, 255, 32                                                      \
+    }
+#define POPUP_BACKGROUND_SCREEN                                                \
+    (Color) {                                                                  \
+        0, 0, 0, 128                                                           \
+    }
 
-enum tile_type { background, block };
+enum tileset { blocks, background, interact };
+enum tile_type {
+    prop,
+    grass,
+    waterfall,
+    star,
+    water,
+    block,
+    platform,
+    player,
+    goal,
+    kill
+};
+
+#define TILESETS                                                               \
+    { blocks, background, interact }
+#define TILE_TYPES                                                             \
+    { prop, grass, waterfall, star, water, block, platform, player, goal, kill }
 
 using tile = struct tile {
     Vector2 spritesheet_coords;

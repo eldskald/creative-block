@@ -6,7 +6,7 @@
 #include "spritesheet.h"
 #include "text-input.h"
 #include "tilemap.h"
-#include "tileset.h"
+#include "tileset_manager.h"
 #include <iostream>
 #include <raylib.h>
 
@@ -14,7 +14,7 @@ using namespace std;
 
 bool editor::mouse_disabled = false;
 tilemap* editor::tilemap_ = nullptr;
-tileset* editor::tileset_ = nullptr;
+tileset_manager* editor::tileset_manager_ = nullptr;
 
 button* save_btn = nullptr;
 button* load_btn = nullptr;
@@ -59,7 +59,7 @@ void editor::export_tilemap_data() {
 void editor::initialize() {
     SetExitKey(KEY_NULL);
     spritesheet::initialize();
-    tileset::initialize();
+    tileset_manager::initialize();
     editor::tilemap_ = new tilemap();
 
     save_btn = new button();
@@ -116,7 +116,7 @@ void editor::tick() {
     editor::mouse_disabled = popup::is_popup_opened();
 
     editor::tilemap_->tick();
-    editor::tileset_->tick();
+    editor::tileset_manager_->tick();
     save_btn->tick();
     load_btn->tick();
     export_btn->tick();

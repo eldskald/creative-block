@@ -1,6 +1,6 @@
 #pragma once
 #include "tilemap.h"
-#include "tileset.h"
+#include "tileset_manager.h"
 #include <raylib.h>
 
 class editor {
@@ -12,7 +12,7 @@ public:
 
 private:
     static tilemap* tilemap_;
-    static tileset* tileset_;
+    static tileset_manager* tileset_manager_;
 
     static void save_tilemap_data();
     static void load_tilemap_data();

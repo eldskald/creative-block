@@ -2,6 +2,7 @@
 #include "defs.h"
 #include <array>
 #include <string>
+#include <unordered_map>
 
 using namespace std;
 
@@ -11,14 +12,14 @@ class tilemap {
 public:
     tilemap();
 
-    void set_tile(int x, int y, int tile_id);
-    map get_cells();
+    void set_tile(tileset set, int x, int y, int tile_id);
+    unordered_map<tileset, map> get_cells();
     string convert_to_data();
     void load_from_data(string data);
     void tick();
 
 private:
-    map cells_;
+    unordered_map<tileset, map> cells_;
 
     void highlight_hovered_cell_(int x, int y);
     void render_cell_(int x, int y);

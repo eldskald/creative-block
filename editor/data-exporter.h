@@ -1,15 +1,14 @@
 #pragma once
-#include "defs.h"
 #include "tilemap.h"
-#include <array>
 #include <raylib.h>
 #include <string>
+#include <unordered_map>
 
 using namespace std;
 
 class data_exporter {
 public:
-    static string get_export_text(map cells);
+    static string get_export_text(unordered_map<tileset, map> cells);
 
 private:
     static Vector2* find_next_block_start_(map* cells);
