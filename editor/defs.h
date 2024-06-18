@@ -23,8 +23,8 @@
 #define TILEMAP_SIZE_Y 22
 
 #define TILESET_ORIGIN_X 4
-#define TILESET_ORIGIN_Y (TILEMAP_ORIGIN_Y + TILEMAP_PIXEL_SIZE_Y + 8)
-#define TILESET_ROWS 2
+#define TILESET_ORIGIN_Y (TILEMAP_ORIGIN_Y + TILEMAP_PIXEL_SIZE_Y + 48)
+#define TILESET_ROWS 4
 
 #define FONT_SIZE 20
 #define TEXT_SPACING 2
@@ -73,11 +73,14 @@
 
 enum tileset { blocks, background, interact };
 enum tile_type {
+    null,
     prop,
     grass,
     waterfall,
     star,
     water,
+    drip,
+    leaves,
     block,
     platform,
     player,
@@ -88,7 +91,10 @@ enum tile_type {
 #define TILESETS                                                               \
     { blocks, background, interact }
 #define TILE_TYPES                                                             \
-    { prop, grass, waterfall, star, water, block, platform, player, goal, kill }
+    {                                                                          \
+        null, prop, grass, waterfall, star, water, drip, leaves, block,        \
+            platform, player, goal, kill                                       \
+    }
 
 using tile = struct tile {
     Vector2 spritesheet_coords;

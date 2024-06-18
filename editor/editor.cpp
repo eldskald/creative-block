@@ -2,12 +2,11 @@
 #include "button.h"
 #include "data-exporter.h"
 #include "defs.h"
-#include "popup.h"
 #include "spritesheet.h"
 #include "text-input.h"
 #include "tilemap.h"
 #include "tileset_manager.h"
-#include <iostream>
+#include "popup.h"
 #include <raylib.h>
 
 using namespace std;
@@ -15,22 +14,15 @@ using namespace std;
 bool editor::mouse_disabled = false;
 tilemap* editor::tilemap_ = nullptr;
 tileset_manager* editor::tileset_manager_ = nullptr;
+button* blocks_btn = nullptr;
+button* bg_btn = nullptr;
+button* interact_btn = nullptr;
 
 button* save_btn = nullptr;
 button* load_btn = nullptr;
 button* export_btn = nullptr;
 text_input* file_input = nullptr;
-popup* test_popup = nullptr;
 button* open_test_popup_btn = nullptr;
-
-void open_test_popup() {
-    test_popup->open();
-}
-
-void confirm_test_popup() {
-    cout << "funcionou weeee" << endl;
-    popup::close_current_popup();
-}
 
 void editor::save_tilemap_data() {
     if (file_input->get_input().empty()) return;
@@ -56,11 +48,51 @@ void editor::export_tilemap_data() {
     SaveFileText(filepath.c_str(), data.data());
 }
 
+void editor::change_to_blocks_tileset() {
+    tileset_manager::selected_set = tileset::blocks;
+    blocks_btn->set_toggle(true);
+    bg_btn->set_toggle(false);
+    interact_btn->set_toggle(false);
+}
+
+void editor::change_to_bg_tileset() {
+    tileset_manager::selected_set = tileset::background;
+    blocks_btn->set_toggle(false);
+    bg_btn->set_toggle(true);
+    interact_btn->set_toggle(false);
+}
+
+void editor::change_to_interact_tileset() {
+    tileset_manager::selected_set = tileset::interact;
+    blocks_btn->set_toggle(false);
+    bg_btn->set_toggle(false);
+    interact_btn->set_toggle(true);
+}
+
 void editor::initialize() {
     SetExitKey(KEY_NULL);
     spritesheet::initialize();
     tileset_manager::initialize();
     editor::tilemap_ = new tilemap();
+
+    blocks_btn = new button();
+    blocks_btn->label = "blocks";
+    blocks_btn->toggle_mode = true;
+    blocks_btn->rect = (Rectangle){4, TILESET_ORIGIN_Y - 40, 132, 32}; // NOLINT
+    blocks_btn->on_click = editor::change_to_blocks_tileset;
+    blocks_btn->set_toggle(true);
+
+    bg_btn = new button();
+    bg_btn->label = "background";
+    bg_btn->toggle_mode = true;
+    bg_btn->rect = (Rectangle){152, TILESET_ORIGIN_Y - 40, 132, 32}; // NOLINT
+    bg_btn->on_click = editor::change_to_bg_tileset;
+
+    interact_btn = new button();
+    interact_btn->label = "interact";
+    interact_btn->toggle_mode = true;
+    interact_btn->rect = (Rectangle){300, TILESET_ORIGIN_Y - 40, 132, 32}; // NOLINT
+    interact_btn->on_click = editor::change_to_interact_tileset;
 
     save_btn = new button();
     save_btn->label = "save";
@@ -84,18 +116,6 @@ void editor::initialize() {
     file_input->label = "level name";
     file_input->rect =
         (Rectangle){364, EDITOR_WINDOW_SIZE_Y - 40, 400, 32}; // NOLINT
-
-    open_test_popup_btn = new button();
-    open_test_popup_btn->label = "popup";
-    open_test_popup_btn->rect =
-        (Rectangle){800, EDITOR_WINDOW_SIZE_Y - 40, 100, 32}; // NOLINT
-    open_test_popup_btn->on_click = open_test_popup;
-
-    test_popup = new popup();
-    test_popup->line_1 = "reeeeeeeeeee!!";
-    test_popup->line_2 = "teste som oi teste";
-    test_popup->confirm_button = true;
-    test_popup->on_confirm = confirm_test_popup;
 }
 
 void editor::tick() {
@@ -117,11 +137,13 @@ void editor::tick() {
 
     editor::tilemap_->tick();
     editor::tileset_manager_->tick();
+    blocks_btn->tick();
+    bg_btn->tick();
+    interact_btn->tick();
     save_btn->tick();
     load_btn->tick();
     export_btn->tick();
     file_input->tick();
-    open_test_popup_btn->tick();
 
     // Popups ignore mouse disabled feature because they themselves disable it
     if (editor::mouse_disabled) {

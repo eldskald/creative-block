@@ -36,7 +36,9 @@ int tileset_manager::get_mouse_tile_id_(Vector2 mouse_pos) {
         mouse_pos, (Vector2){TILESET_ORIGIN_X, TILESET_ORIGIN_Y});
     int id = ((int)(offset.x) / CELL_SIZE_X) * TILESET_ROWS +
              (int)(offset.y) / CELL_SIZE_Y;
-    return id < tileset_manager::tiles_.size() ? id : -1;
+    return id < tileset_manager::tiles_.at(tileset_manager::selected_set).size()
+               ? id
+               : -1;
 }
 
 void tileset_manager::render_tile_(tileset set, int id) {
@@ -45,33 +47,84 @@ void tileset_manager::render_tile_(tileset set, int id) {
         tileset_manager::get_tile_pos_(id));
 }
 
+// Initializing each tile means going through each tile on the spritesheet
+// manually and setting here which ones are background, animations, blocks
+// and interactables. We are no linting to avoid defining consts for this.
+// NOLINTBEGIN
 void tileset_manager::initialize() {
     tileset_manager::selected_tile = {{tileset::blocks, -1},
                                       {tileset::background, -1},
                                       {tileset::interact, -1}};
 
-    auto block_tiles = vector<tile>{(tile){(Vector2){0, 0}, tile_type::block},
-                                    (tile){(Vector2){1, 0}, tile_type::block},
-                                    (tile){(Vector2){2, 0}, tile_type::block},
-                                    (tile){(Vector2){3, 0}, tile_type::block},
-                                    (tile){(Vector2){0, 1}, tile_type::block},
-                                    (tile){(Vector2){1, 1}, tile_type::block},
-                                    (tile){(Vector2){2, 1}, tile_type::block},
-                                    (tile){(Vector2){3, 1}, tile_type::block}};
-    auto bg_tiles = vector<tile>{(tile){(Vector2){0, 0}, tile_type::prop},
-                                 (tile){(Vector2){0, 1}, tile_type::prop}};
-    auto interact_tiles =
-        vector<tile>{(tile){(Vector2){0, 0}, tile_type::player},
-                     (tile){(Vector2){0, 1}, tile_type::goal}};
+    vector<tile> block_tiles;
+    for (int i = 0; i < 16; ++i) {
+        block_tiles.push_back((tile){(Vector2){(float)i, 0}, tile_type::block});
+        block_tiles.push_back((tile){(Vector2){(float)i, 1}, tile_type::block});
+        block_tiles.push_back((tile){(Vector2){(float)i, 2}, tile_type::block});
+        block_tiles.push_back((tile){(Vector2){(float)i, 3}, tile_type::block});
+    }
+
+    vector<tile> bg_tiles;
+    // grass
+    for (int i = 0; i < 4; ++i) {
+        bg_tiles.push_back((tile){(Vector2){(float)i, 8}, tile_type::grass});
+        bg_tiles.push_back((tile){(Vector2){(float)i, 10}, tile_type::grass});
+    }
+    // stones
+    for (int i = 4; i < 6; ++i) {
+        bg_tiles.push_back((tile){(Vector2){(float)i, 8}, tile_type::prop});
+        bg_tiles.push_back((tile){(Vector2){(float)i, 9}, tile_type::prop});
+        bg_tiles.push_back((tile){(Vector2){(float)i, 10}, tile_type::prop});
+        bg_tiles.push_back((tile){(Vector2){(float)i, 11}, tile_type::prop});
+    }
+    // mushrooms, bushes and trees
+    for (int i = 0; i < 6; ++i) {
+        bg_tiles.push_back((tile){(Vector2){(float)i, 12}, tile_type::prop});
+        bg_tiles.push_back((tile){(Vector2){(float)i, 13}, tile_type::prop});
+        bg_tiles.push_back((tile){(Vector2){(float)i, 14}, tile_type::prop});
+        bg_tiles.push_back((tile){(Vector2){(float)i, 15}, tile_type::prop});
+    }
+    // pipes, chains and drips
+    for (int i = 6; i < 9; ++i) {
+        bg_tiles.push_back((tile){(Vector2){(float)i, 8}, tile_type::prop});
+        bg_tiles.push_back((tile){(Vector2){(float)i, 9}, tile_type::prop});
+        bg_tiles.push_back((tile){(Vector2){(float)i, 10}, tile_type::prop});
+        bg_tiles.push_back((tile){(Vector2){(float)i, 11}, tile_type::prop});
+    }
+    bg_tiles.push_back((tile){(Vector2){10, 8}, tile_type::prop});
+    bg_tiles.push_back((tile){(Vector2){10, 9}, tile_type::prop});
+    bg_tiles.push_back((tile){(Vector2){10, 10}, tile_type::prop});
+    bg_tiles.push_back((tile){(Vector2){11, 10}, tile_type::drip});
+    bg_tiles.push_back((tile){(Vector2){11, 8}, tile_type::prop});
+    bg_tiles.push_back((tile){(Vector2){11, 9}, tile_type::prop});
+    bg_tiles.push_back((tile){(Vector2){10, 11}, tile_type::null});
+    bg_tiles.push_back((tile){(Vector2){10, 11}, tile_type::null});
+    // waterfalls
+    bg_tiles.push_back((tile){(Vector2){12, 8}, tile_type::prop});
+    bg_tiles.push_back((tile){(Vector2){12, 9}, tile_type::waterfall});
+    bg_tiles.push_back((tile){(Vector2){14, 8}, tile_type::prop});
+    bg_tiles.push_back((tile){(Vector2){14, 9}, tile_type::waterfall});
+    bg_tiles.push_back((tile){(Vector2){13, 8}, tile_type::prop});
+    bg_tiles.push_back((tile){(Vector2){13, 9}, tile_type::waterfall});
+    bg_tiles.push_back((tile){(Vector2){15, 8}, tile_type::prop});
+    bg_tiles.push_back((tile){(Vector2){15, 9}, tile_type::waterfall});
+
+    vector<tile> interact_tiles;
+    interact_tiles.push_back((tile){(Vector2){1, 5}, tile_type::player});
+    interact_tiles.push_back((tile){(Vector2){0, 4}, tile_type::goal});
+
     tileset_manager::tiles_ = {{tileset::blocks, block_tiles},
                                {tileset::background, bg_tiles},
                                {tileset::interact, interact_tiles}};
 }
+// NOLINTEND
 
 void tileset_manager::tick() {
 
     // Render the tiles
-    for (int i = 0; i < tileset_manager::tiles_.size(); i++) {
+    for (int i = 0;
+         i < tileset_manager::tiles_.at(tileset_manager::selected_set).size();
+         i++) {
         tileset_manager::render_tile_(tileset_manager::selected_set, i);
     }
 
