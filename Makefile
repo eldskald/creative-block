@@ -66,7 +66,7 @@ WEB_COMPILE_FLAGS = -Os -Wall -I./$(INCLUDE_DIR) -I$(EMSCRIPTEN_PATH)/cache/sysr
 WEB_LINK_FLAGS = -L./$(WEB_LIBS) -lraylib -s USE_GLFW=3 -s TOTAL_MEMORY=$(BUILD_WEB_HEAP_SIZE) -s FORCE_FILESYSTEM=1
 
 # Phony targets
-.PHONY: all clean install dev debug build-linux build-windows build-web editor format lint
+.PHONY: all clean install dev debug build-linux build-windows build-web editor debug-editor format lint
 
 # Default target, cleans and build for all platforms
 all: build-linux build-windows build-web
@@ -133,6 +133,14 @@ build-web:
 # Editor target, compiles the level editor and places it at the project root
 editor:
 	$(CC) $(call rwildcard,editor,*.cpp) -o $(EDITOR_NAME)$(EXT) $(EDITOR_COMPILE_FLAGS) $(EDITOR_LINK_FLAGS)
+
+# Debug editor target, builds a debug version of the editor, runs with the
+# debugger and deletes the build
+debug-editor:
+	-mkdir -p $(TEMP_DIR)
+	-$(CC) -O0 -g $(call rwildcard,editor,*.cpp) -o $(TEMP_DIR)/$(EDITOR_NAME)$(EXT) $(EDITOR_COMPILE_FLAGS) $(EDITOR_LINK_FLAGS)
+	-$(GDB) -tui $(TEMP_DIR)/$(EDITOR_NAME)$(EXT)
+	rm -rf ./$(TEMP_DIR)
 
 # Format files on ./src
 format:
