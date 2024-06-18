@@ -1,5 +1,4 @@
 #pragma once
-#include "defs.h"
 #include <raylib.h>
 #include <string>
 
@@ -9,12 +8,17 @@ class button {
 public:
     Rectangle rect{(Rectangle){0}};
     string label{""};
+    bool toggle_mode{false};
     void (*on_click)(){button::empty_on_click_};
+
+    bool is_pressed();
+    void set_toggle(bool value);
 
     void tick();
 
 private:
     bool being_clicked_{false};
+    bool pressed_{false};
 
     void render_();
     void detect_clicks_();

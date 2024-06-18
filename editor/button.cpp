@@ -16,24 +16,36 @@ bool button::is_being_hovered_() {
 }
 
 void button::detect_clicks_() {
+    if (editor::mouse_disabled) {
+        this->being_clicked_ = false;
+        return;
+    }
     if (this->is_being_hovered_() && IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
         this->being_clicked_ = true;
     } else if (this->being_clicked_ && IsMouseButtonUp(MOUSE_BUTTON_LEFT)) {
         this->being_clicked_ = false;
+        if (this->toggle_mode) this->pressed_ = !this->pressed_;
         this->on_click();
     } else {
         this->being_clicked_ = false;
     }
 }
 
+bool button::is_pressed() {
+    return this->toggle_mode && this->pressed_;
+}
+
+void button::set_toggle(bool value) {
+    if (this->toggle_mode) this->pressed_ = value;
+}
+
 void button::render_() {
     Color col = PRIMARY_COLOR;
+    if (this->pressed_) col = FOCUSED_COLOR;
     if (this->is_being_hovered_() && !editor::mouse_disabled) {
-        col = IsMouseButtonDown(MOUSE_BUTTON_LEFT) ? FOCUSED_COLOR
-                                                   : HOVERED_COLOR;
+        col = this->being_clicked_ ? FOCUSED_COLOR : HOVERED_COLOR;
     }
-    if (this->is_being_hovered_() && IsMouseButtonDown(MOUSE_BUTTON_LEFT) &&
-        !editor::mouse_disabled) {
+    if (this->being_clicked_ || this->pressed_) {
         DrawRectangleLinesEx((Rectangle){this->rect.x + 2,
                                          this->rect.y + 2,
                                          this->rect.width - 4,
