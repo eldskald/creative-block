@@ -36,9 +36,12 @@ int tileset_manager::get_mouse_tile_id_(Vector2 mouse_pos) {
         mouse_pos, (Vector2){TILESET_ORIGIN_X, TILESET_ORIGIN_Y});
     int id = ((int)(offset.x) / CELL_SIZE_X) * TILESET_ROWS +
              (int)(offset.y) / CELL_SIZE_Y;
-    return id < tileset_manager::tiles_.at(tileset_manager::selected_set).size()
-               ? id
-               : -1;
+    if (id >= tileset_manager::tiles_.at(tileset_manager::selected_set).size())
+        return -1;
+    if (tileset_manager::get_tile_data(tileset_manager::selected_set, id)
+            .type == tile_type::null)
+        return -1;
+    return id;
 }
 
 void tileset_manager::render_tile_(tileset set, int id) {
@@ -108,14 +111,52 @@ void tileset_manager::initialize() {
     bg_tiles.push_back((tile){(Vector2){13, 9}, tile_type::waterfall});
     bg_tiles.push_back((tile){(Vector2){15, 8}, tile_type::prop});
     bg_tiles.push_back((tile){(Vector2){15, 9}, tile_type::waterfall});
+    // stars
+    for (int i = 6; i < 9; ++i) {
+        bg_tiles.push_back((tile){(Vector2){(float)i, 12}, tile_type::star});
+    }
+    for (int i = 6; i < 9; ++i) {
+        bg_tiles.push_back((tile){(Vector2){(float)i, 14}, tile_type::prop});
+    }
 
-    vector<tile> interact_tiles;
-    interact_tiles.push_back((tile){(Vector2){1, 5}, tile_type::player});
-    interact_tiles.push_back((tile){(Vector2){0, 4}, tile_type::goal});
+    vector<tile> int_tiles;
+    int_tiles.push_back((tile){(Vector2){1, 5}, tile_type::player});
+    int_tiles.push_back((tile){(Vector2){0, 4}, tile_type::goal});
+    int_tiles.push_back((tile){(Vector2){7, 6}, tile_type::water});
+    int_tiles.push_back((tile){(Vector2){10, 11}, tile_type::null});
+    // spikes and platforms
+    int_tiles.push_back((tile){(Vector2){3, 4}, tile_type::kill});
+    int_tiles.push_back((tile){(Vector2){3, 5}, tile_type::kill});
+    int_tiles.push_back((tile){(Vector2){3, 6}, tile_type::kill});
+    int_tiles.push_back((tile){(Vector2){3, 7}, tile_type::kill});
+    int_tiles.push_back((tile){(Vector2){4, 4}, tile_type::kill});
+    int_tiles.push_back((tile){(Vector2){4, 5}, tile_type::kill});
+    int_tiles.push_back((tile){(Vector2){4, 6}, tile_type::kill});
+    int_tiles.push_back((tile){(Vector2){4, 7}, tile_type::platform});
+    int_tiles.push_back((tile){(Vector2){5, 4}, tile_type::kill});
+    int_tiles.push_back((tile){(Vector2){5, 5}, tile_type::kill});
+    int_tiles.push_back((tile){(Vector2){5, 6}, tile_type::kill});
+    int_tiles.push_back((tile){(Vector2){5, 7}, tile_type::platform});
+    int_tiles.push_back((tile){(Vector2){0, 7}, tile_type::platform});
+    int_tiles.push_back((tile){(Vector2){1, 7}, tile_type::platform});
+    int_tiles.push_back((tile){(Vector2){2, 7}, tile_type::platform});
+    int_tiles.push_back((tile){(Vector2){6, 7}, tile_type::platform});
+    // gates
+    int_tiles.push_back((tile){(Vector2){6, 4}, tile_type::button1});
+    int_tiles.push_back((tile){(Vector2){6, 5}, tile_type::gate1});
+    int_tiles.push_back((tile){(Vector2){6, 6}, tile_type::gate1});
+    int_tiles.push_back((tile){(Vector2){10, 11}, tile_type::null});
+    int_tiles.push_back((tile){(Vector2){6, 4}, tile_type::button2});
+    int_tiles.push_back((tile){(Vector2){6, 5}, tile_type::gate2});
+    int_tiles.push_back((tile){(Vector2){6, 6}, tile_type::gate2});
+    int_tiles.push_back((tile){(Vector2){10, 11}, tile_type::null});
+    int_tiles.push_back((tile){(Vector2){6, 4}, tile_type::button3});
+    int_tiles.push_back((tile){(Vector2){6, 5}, tile_type::gate3});
+    int_tiles.push_back((tile){(Vector2){6, 6}, tile_type::gate3});
 
     tileset_manager::tiles_ = {{tileset::blocks, block_tiles},
                                {tileset::background, bg_tiles},
-                               {tileset::interact, interact_tiles}};
+                               {tileset::interact, int_tiles}};
 }
 // NOLINTEND
 

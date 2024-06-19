@@ -85,7 +85,13 @@ enum tile_type {
     platform,
     player,
     goal,
-    kill
+    kill,
+    button1,
+    button2,
+    button3,
+    gate1,
+    gate2,
+    gate3,
 };
 
 #define TILESETS                                                               \
@@ -93,7 +99,8 @@ enum tile_type {
 #define TILE_TYPES                                                             \
     {                                                                          \
         null, prop, grass, waterfall, star, water, drip, leaves, block,        \
-            platform, player, goal, kill                                       \
+            platform, player, goal, kill, button1, gate1, button2, gate2,      \
+            button3, gate3                                                     \
     }
 
 using tile = struct tile {
