@@ -76,7 +76,7 @@ void text_input::move_cursor_left_(text_input* input) {
 }
 
 void text_input::move_cursor_right_(text_input* input) {
-    if (input->cursor_pos_ < input->input_lengths_.size() - 1) {
+    if (input->cursor_pos_ < (int)input->input_lengths_.size() - 1) {
         input->cursor_pos_++;
         input->cursor_blink_time_ = INPUT_BLINK_TIME;
     }
@@ -134,7 +134,7 @@ void text_input::update_inputs_() {
 
     // Get cursor lengths
     this->input_lengths_ = {0.0};
-    for (int i = 1; i <= this->input_codepoints_.size(); i++) {
+    for (int i = 1; i <= (int)this->input_codepoints_.size(); i++) {
 
         // We need to load each substring from codepoints because a single
         // codepoint doesn't necessarily translates into a single char, so

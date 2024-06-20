@@ -36,7 +36,8 @@ int tileset_manager::get_mouse_tile_id_(Vector2 mouse_pos) {
         mouse_pos, (Vector2){TILESET_ORIGIN_X, TILESET_ORIGIN_Y});
     int id = ((int)(offset.x) / CELL_SIZE_X) * TILESET_ROWS +
              (int)(offset.y) / CELL_SIZE_Y;
-    if (id >= tileset_manager::tiles_.at(tileset_manager::selected_set).size())
+    if (id >=
+        (int)tileset_manager::tiles_.at(tileset_manager::selected_set).size())
         return -1;
     if (tileset_manager::get_tile_data(tileset_manager::selected_set, id)
             .type == tile_type::null)
@@ -164,7 +165,8 @@ void tileset_manager::tick() {
 
     // Render the tiles
     for (int i = 0;
-         i < tileset_manager::tiles_.at(tileset_manager::selected_set).size();
+         i <
+         (int)tileset_manager::tiles_.at(tileset_manager::selected_set).size();
          i++) {
         tileset_manager::render_tile_(tileset_manager::selected_set, i);
     }
