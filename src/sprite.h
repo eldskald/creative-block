@@ -4,7 +4,9 @@
 #include <raylib.h>
 #include <vector>
 
-using keyframe = struct {
+using namespace std;
+
+using keyframe = struct keyframe {
     Vector2 atlas_coords;
     float duration;
 };

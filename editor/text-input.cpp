@@ -1,7 +1,6 @@
 #include "text-input.h"
 #include "defs.h"
 #include "editor.h"
-#include <iostream>
 #include <raylib.h>
 #include <string>
 

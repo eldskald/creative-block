@@ -16,7 +16,7 @@
 unordered_map<string, game_element*> data_loader::id_map_ = {};
 
 string data_loader::remove_whitespace(string text) {
-    for (int i = 0; i < text.size(); ++i) {
+    for (int i = 0; i < (int)text.size(); ++i) {
         if (isspace(text[i])) {
             text.erase(i, 1);
             i = 0;
