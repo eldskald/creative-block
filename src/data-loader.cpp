@@ -56,6 +56,19 @@ data_loader::get_top_element_block(vector<string>* data) {
     return block;
 }
 
+vector<string> data_loader::string_to_array(string str) {
+    vector<string> arr;
+    while (true) {
+        size_t next_semicolon = str.find(';');
+        string next_element = str.substr(0, next_semicolon);
+        arr.push_back(next_element);
+        if (next_semicolon == str.npos)
+            break;
+        str.erase(0, next_element.size() + 1);
+    }
+    return arr;
+}
+
 Vector2 data_loader::string_to_vector(string str) {
     if (str[0] != '(' || str[str.size() - 1] != ')')
         throw invalid_argument("value not a vector");
@@ -174,6 +187,33 @@ Shader* data_loader::string_to_shader(string str) {
     throw invalid_argument("value not a shader");
 }
 
+keyframe data_loader::string_to_keyframe(string str) {
+    if (str[0] != '(' || str[str.size() - 1] != ')')
+        throw invalid_argument("value not a keyframe");
+    string data = str.substr(1, str.size() - 2);
+    if (data[0] != '(' || data.find(')') == data.npos)
+        throw invalid_argument("value not a keyframe");
+    string atlas_coords_element = data.substr(0, data.find(')') + 1);
+    data.erase(0, atlas_coords_element.size());
+    if (data[0] != ',')
+        throw invalid_argument("value not a keyframe");
+    string duration_element = data.substr(1, data.size() - 1);
+    
+    keyframe frame = (keyframe){(Vector2){0}, 0.0f};
+    frame.atlas_coords = data_loader::string_to_vector(atlas_coords_element);
+    frame.duration = stof(duration_element);
+    return frame;
+}
+
+animation data_loader::string_to_animation(string str) {
+    vector<string> frames_string = data_loader::string_to_array(str);
+    animation anim;
+    for (string frame_string : frames_string) {
+        anim.push_back(data_loader::string_to_keyframe(frame_string));
+    }
+    return anim;
+}
+
 void data_loader::add_parent(game_element* element, string id) {
     if (data_loader::id_map_.count(id) == 0)
         throw invalid_argument("invalid parent id");
@@ -245,6 +285,8 @@ void data_loader::parse_sprite_property_line(sprite* sprite, string line) {
         sprite->tint = data_loader::string_to_color(prop_value);
     } else if (prop_name == "shader") {
         sprite->shader = data_loader::string_to_shader(prop_value);
+    } else if (prop_name == "animation") {
+        sprite->anim = data_loader::string_to_animation(prop_value);
     } else
         throw invalid_argument("invalid property name");
 }

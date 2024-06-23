@@ -26,12 +26,15 @@ private:
     static element_block get_top_element_block(vector<string>* data);
     static game_element* get_element_from_block(element_block block);
 
+    static vector<string> string_to_array(string str);
     static Vector2 string_to_vector(string str);
     static Rectangle string_to_rectangle(string str);
     static Color string_to_color(string str);
     static bool string_to_bool(string str);
     static physics_body::body_type string_to_body_type(string str);
     static Shader* string_to_shader(string str);
+    static keyframe string_to_keyframe(string str);
+    static animation string_to_animation(string str);
 
     static void add_parent(game_element* element, string id);
 
