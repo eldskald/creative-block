@@ -372,6 +372,7 @@ void physics_body::physics_tick_() {
 // This is for the game class to call on the root scene once and trigger
 // all physics ticks in order of parent first.
 void physics_body::trigger_physics_tick_(game_element* element) {
+    if (!element) return;
     auto body = dynamic_cast<physics_body*>(element);
     if (body) body->physics_tick_();
     list<game_element*> children = element->get_children();

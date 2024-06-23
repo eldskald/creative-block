@@ -20,5 +20,5 @@ public:
     static void initialize();
 
 private:
-    Sound sound_{(Sound){nullptr}};
+    Sound sound_{(Sound){{nullptr}}};
 };
