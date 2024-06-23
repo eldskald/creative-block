@@ -62,8 +62,7 @@ vector<string> data_loader::string_to_array(string str) {
         size_t next_semicolon = str.find(';');
         string next_element = str.substr(0, next_semicolon);
         arr.push_back(next_element);
-        if (next_semicolon == str.npos)
-            break;
+        if (next_semicolon == str.npos) break;
         str.erase(0, next_element.size() + 1);
     }
     return arr;
@@ -195,10 +194,9 @@ keyframe data_loader::string_to_keyframe(string str) {
         throw invalid_argument("value not a keyframe");
     string atlas_coords_element = data.substr(0, data.find(')') + 1);
     data.erase(0, atlas_coords_element.size());
-    if (data[0] != ',')
-        throw invalid_argument("value not a keyframe");
+    if (data[0] != ',') throw invalid_argument("value not a keyframe");
     string duration_element = data.substr(1, data.size() - 1);
-    
+
     keyframe frame = (keyframe){(Vector2){0}, 0.0f};
     frame.atlas_coords = data_loader::string_to_vector(atlas_coords_element);
     frame.duration = stof(duration_element);

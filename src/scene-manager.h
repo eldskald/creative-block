@@ -3,7 +3,7 @@
 
 class scene_manager {
 public:
-    enum scene {START_MENU, LEVEL_01};
+    enum scene { START_MENU, LEVEL_01 };
 
     static void initialize();
     static scene get_current_scene();

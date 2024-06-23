@@ -14,7 +14,7 @@ void scene_manager::initialize() {
     game::set_root(root);
     list<game_element*> elements = data_loader::load(START_MENU_FILE);
     for (auto element : elements) {
-        root->add_child(element);        
+        root->add_child(element);
     }
 }
 
