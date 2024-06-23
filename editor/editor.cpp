@@ -2,11 +2,11 @@
 #include "button.h"
 #include "data-exporter.h"
 #include "defs.h"
+#include "popup.h"
 #include "spritesheet.h"
 #include "text-input.h"
 #include "tilemap.h"
 #include "tileset_manager.h"
-#include "popup.h"
 #include <raylib.h>
 
 using namespace std;
@@ -91,7 +91,8 @@ void editor::initialize() {
     interact_btn = new button();
     interact_btn->label = "interact";
     interact_btn->toggle_mode = true;
-    interact_btn->rect = (Rectangle){300, TILESET_ORIGIN_Y - 40, 132, 32}; // NOLINT
+    interact_btn->rect =
+        (Rectangle){300, TILESET_ORIGIN_Y - 40, 132, 32}; // NOLINT
     interact_btn->on_click = editor::change_to_interact_tileset;
 
     save_btn = new button();

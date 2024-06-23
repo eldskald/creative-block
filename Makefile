@@ -145,7 +145,9 @@ debug-editor:
 # Format files on ./src
 format:
 	for FILE in $(call rwildcard,src,*.h *.cpp *.tpp); do clang-format -i $$FILE; done
+	for FILE in $(call rwildcard,editor,*.h *.cpp *.tpp); do clang-format -i $$FILE; done
 
 # Lint files on ./src
 lint:
 	for FILE in $(call rwildcard,src,*.h *.cpp *.tpp); do clang-tidy $$FILE; done
+	for FILE in $(call rwildcard,editor,*.h *.cpp *.tpp); do clang-tidy $$FILE; done
