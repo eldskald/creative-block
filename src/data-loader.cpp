@@ -285,6 +285,8 @@ void data_loader::parse_sprite_property_line(sprite* sprite, string line) {
         sprite->shader = data_loader::string_to_shader(prop_value);
     } else if (prop_name == "animation") {
         sprite->anim = data_loader::string_to_animation(prop_value);
+    } else if (prop_name == "animation_starting_phase") {
+        sprite->animation_starting_phase = stof(prop_value);
     } else
         throw invalid_argument("invalid property name");
 }

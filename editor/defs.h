@@ -42,6 +42,8 @@
 #define POPUP_BUTTON_WIDTH 100.0f
 #define POPUP_BUTTON_HEIGHT 32.0f
 
+#define GRASS_PHASE_DIFF_PER_TILE 0.02f
+
 #define FG_COLOR                                                               \
     (Color) {                                                                  \
         192, 202, 245, 255                                                     \

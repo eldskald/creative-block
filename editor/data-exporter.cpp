@@ -3,7 +3,6 @@
 #include "tilemap.h"
 #include "tileset_manager.h"
 #include <array>
-#include <iostream>
 #include <raylib.h>
 #include <string>
 #include <unordered_map>
@@ -50,15 +49,12 @@ string data_exporter::get_block_from_map_(Vector2 start, map* cells) {
     coords_y = (int)start.y;
     while (true) {
         coords_x++;
-        if (coords_x > TILEMAP_SIZE_X) break;
+        if (coords_x >= TILEMAP_SIZE_X) break;
 
         // Checks if the next column is solid
         bool is_column_solid_blocks = true;
         for (int i = 0; i < (int)rect.height; i++) {
             if (cells->at(coords_x).at(coords_y + i) == -1) {
-                is_column_solid_blocks = false;
-                break;
-            } else {
                 is_column_solid_blocks = false;
                 break;
             }
@@ -76,10 +72,10 @@ string data_exporter::get_block_from_map_(Vector2 start, map* cells) {
 
     // We've been treating the rect in cell unit lengths. We should transform
     // them to pixel before exporting data.
-    rect.x *= CELL_SIZE_X;
-    rect.y *= CELL_SIZE_Y;
-    rect.width *= CELL_SIZE_X;
-    rect.height *= CELL_SIZE_Y;
+    rect.x *= SPRITESHEET_CELL_X;
+    rect.y *= SPRITESHEET_CELL_Y;
+    rect.width *= SPRITESHEET_CELL_X;
+    rect.height *= SPRITESHEET_CELL_Y;
 
     // Make the return string based on the calculated rect
     string str = "[physics_body]\n";
@@ -104,7 +100,7 @@ string data_exporter::get_physics_bodies_text_(map* cells) {
     return text;
 }
 
-string data_exporter::get_sprites_text_(map* cells) {
+string data_exporter::get_blocks_sprites_text_(map* cells) {
     string text = "";
     for (int i = 0; i < TILEMAP_SIZE_X; i++) {
         for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
@@ -118,6 +114,7 @@ string data_exporter::get_sprites_text_(map* cells) {
                         to_string(j * SPRITESHEET_CELL_Y) + ")\n";
                 text += "atlas_coords = (" + to_string((int)coords.x) + "," +
                         to_string((int)coords.y) + ")\n";
+                text += "tint = (255,0,0,255)\n";
                 text += "\n";
             }
         }
@@ -125,10 +122,63 @@ string data_exporter::get_sprites_text_(map* cells) {
     return text;
 }
 
+string data_exporter::get_bg_props_text_(map* cells) {
+    string text = "";
+    for (int i = 0; i < TILEMAP_SIZE_X; i++) {
+        for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
+            int cell_id = cells->at(i).at(j);
+            if (cell_id == -1) continue;
+            tile data =
+                tileset_manager::get_tile_data(tileset::background, cell_id);
+            if (data.type != tile_type::prop) continue;
+            Vector2 coords = data.spritesheet_coords;
+            text += "[sprite]\n";
+            text += "pos = (" + to_string(i * SPRITESHEET_CELL_X) + "," +
+                    to_string(j * SPRITESHEET_CELL_Y) + ")\n";
+            text += "atlas_coords = (" + to_string((int)coords.x) + "," +
+                    to_string((int)coords.y) + ")\n";
+            text += "tint = (0,255,0,255)\n";
+            text += "\n";
+        }
+    }
+    return text;
+}
+
+string data_exporter::get_bg_grass_text_(map* cells) {
+    string text = "";
+    for (int i = 0; i < TILEMAP_SIZE_X; i++) {
+        for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
+            int cell_id = cells->at(i).at(j);
+            if (cell_id == -1) continue;
+            tile data =
+                tileset_manager::get_tile_data(tileset::background, cell_id);
+            if (data.type != tile_type::grass) continue;
+            Vector2 coords = data.spritesheet_coords;
+            string frame_1_str = "(" + to_string((int)coords.x) + "," +
+                                 to_string((int)coords.y) + ")";
+            string frame_2_str = "(" + to_string((int)coords.x) + "," +
+                                 to_string((int)coords.y + 1) + ")";
+            text += "[sprite]\n";
+            text += "pos = (" + to_string(i * SPRITESHEET_CELL_X) + "," +
+                    to_string(j * SPRITESHEET_CELL_Y) + ")\n";
+            text += "atlas_coords = " + frame_1_str + "\n";
+            text += "tint = (0,255,0,255)\n";
+            text += "animation = (" + frame_1_str + ",1.5);(" + frame_2_str +
+                    ",1.0);(" + frame_1_str + ",1.0);(" + frame_2_str +
+                    ",0.75)\n";
+            text += "animation_starting_phase = " +
+                    to_string((float)i * GRASS_PHASE_DIFF_PER_TILE) + "\n";
+            text += "\n";
+        }
+    }
+    return text;
+}
+
 string data_exporter::get_export_text(unordered_map<tileset, map> cells) {
     string data = "";
+    data += data_exporter::get_blocks_sprites_text_(&cells.at(tileset::blocks));
+    data += data_exporter::get_bg_props_text_(&cells.at(tileset::background));
+    data += data_exporter::get_bg_grass_text_(&cells.at(tileset::background));
     data += data_exporter::get_physics_bodies_text_(&cells.at(tileset::blocks));
-    data += data_exporter::get_sprites_text_(&cells.at(tileset::blocks));
-    data += data_exporter::get_sprites_text_(&cells.at(tileset::background));
     return data;
 }

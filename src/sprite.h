@@ -18,16 +18,18 @@ public:
     Vector2 atlas_coords{(Vector2){0}};
     Color tint{WHITE};
     animation anim;
+    float animation_starting_phase{0.0f};
     Shader* shader{shader::get_base()};
 
     static void initialize();
 
 protected:
     void tick_() override;
+    void enter_() override;
 
 private:
     int curr_frame_{0};
-    float curr_time_{0.0f};
+    float curr_phase_{0.0f};
 
     static Texture2D atlas_;
 };
