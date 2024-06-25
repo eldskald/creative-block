@@ -17,4 +17,5 @@ private:
     static string get_blocks_sprites_text_(map* cells);
     static string get_bg_props_text_(map* cells);
     static string get_bg_grass_text_(map* cells);
+    static string get_bg_waterfall_text_(map* cells);
 };
