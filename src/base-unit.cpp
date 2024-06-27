@@ -34,7 +34,8 @@ bool base_unit::is_grounded() {
 void base_unit::tick_() {
 
     // Accelerate left/right according to dir input
-    this->vel.x = clamp(this->vel.x + PLAYER_ACCELERATION * (this->dir_.x),
+    this->vel.x = clamp(this->vel.x + PLAYER_ACCELERATION * GetFrameTime() *
+                                          (this->dir_.x),
                         -PLAYER_SPEED,
                         PLAYER_SPEED);
 
@@ -45,14 +46,14 @@ void base_unit::tick_() {
         if (fabs(this->vel.x) < PLAYER_FRICTION) {
             this->vel.x = 0.0f;
         } else if (this->vel.x > 0.0f) {
-            this->vel.x -= PLAYER_FRICTION;
+            this->vel.x -= PLAYER_FRICTION * GetFrameTime();
         } else {
-            this->vel.x += PLAYER_FRICTION;
+            this->vel.x += PLAYER_FRICTION * GetFrameTime();
         }
     }
 
     // Gravity
-    this->vel.y += PLAYER_GRAVITY;
+    this->vel.y += PLAYER_GRAVITY * GetFrameTime();
 
     // Jump buffer. If it's smaller than the limit, you can jump
     this->jump_buffer_timer_ += GetFrameTime();

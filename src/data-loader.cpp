@@ -1,6 +1,7 @@
 #include "data-loader.h"
 #include "game-element.h"
 #include "physics-body.h"
+#include "player.h"
 #include "shader.h"
 #include "sprite.h"
 #include <cctype>
@@ -291,6 +292,22 @@ void data_loader::parse_sprite_property_line(sprite* sprite, string line) {
         throw invalid_argument("invalid property name");
 }
 
+void data_loader::parse_player_property_line(player* player, string line) {
+    if (line.find('=') == line.npos)
+        throw invalid_argument("property line has no '=' sign");
+
+    string prop_name = line.substr(0, line.find('='));
+    string prop_value =
+        line.substr(line.find('=') + 1, line.size() - line.find('=') - 1);
+    if (prop_name == "id") {
+        data_loader::id_map_[prop_value] = player;
+    } else if (prop_name == "parent") {
+        data_loader::add_parent(player, prop_value);
+    } else if (prop_name == "pos") {
+        player->pos = data_loader::string_to_vector(prop_value);
+    }
+}
+
 game_element* data_loader::get_element_from_block(element_block block) {
     if (block.type == "game_element") {
         auto* obj = new game_element();
@@ -313,6 +330,13 @@ game_element* data_loader::get_element_from_block(element_block block) {
         }
         return img;
     }
+    if (block.type == "player") {
+        auto* player_element = new player();
+        for (auto& line : block.properties) {
+            data_loader::parse_player_property_line(player_element, line);
+        }
+        return player_element;
+    }
     throw invalid_argument("invalid block type");
 }
 
@@ -328,7 +352,7 @@ list<game_element*> data_loader::load(const char* file) {
             element_block block = data_loader::get_top_element_block(&lines);
             blocks.push_back(block);
         }
-        for (auto& block : blocks) {
+        for (auto block : blocks) {
             elements.push_back(data_loader::get_element_from_block(block));
         }
     } catch (invalid_argument& e) {

@@ -2,6 +2,7 @@
 #include "game-element.h"
 #include "physics-body.h"
 #include "sprite.h"
+#include "player.h"
 #include <list>
 #include <string>
 #include <unordered_map>
@@ -43,4 +44,5 @@ private:
     static void parse_physics_body_property_line(physics_body* body,
                                                  string line);
     static void parse_sprite_property_line(sprite* sprite, string line);
+    static void parse_player_property_line(player* player, string line);
 };
