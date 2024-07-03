@@ -5,11 +5,13 @@ class shader {
 public:
     static void initialize();
     static Shader* get_base();
+    static Shader* get_screen();
     static Shader* get_particle();
     static Shader* get_sample();
 
 private:
     static Shader base_;
+    static Shader screen_;
     static Shader particle_;
     static Shader sample_;
 };
