@@ -44,7 +44,7 @@ To make a build, run one of these commands:
 make build-linux    # Makes a Linux build
 make build-windows  # Makes a Windows build
 make build-web      # Makes a Web (HTML5) build
-Makes               # All of the above
+make                # All of the above
 ```
 
 It will create a `build` directory and put the binary `app` in there, just run it to play the game.
