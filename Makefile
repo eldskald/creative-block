@@ -3,20 +3,12 @@
 rwildcard=$(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
 
 # Load .env default values and then .env itself
-DEV_PLATFORM ?= Linux
-CC ?= g++
-GDB ?= gdb
-EMSDK_PATH ?= $(HOME)/emsdk
-BUILD_WEB_HEAP_SIZE ?= 134217728
 -include .env
 export
 
 # Paths to compile raylib to web
 EMSCRIPTEN_PATH := $(EMSDK_PATH)/upstream/emscripten
-CLANG_PATH := $(EMSDK_PATH)/upstream/bin
-NODE_PATH := $(EMSDK_PATH)/node/12.9.1_64bit/bin
-PYTHON_PATH ?= $(PATH)
-PATH := $(shell printenv PATH):$(EMSDK_PATH):$(EMSCRIPTEN_PATH):$(CLANG_PATH):$(NODE_PATH)
+PATH := $(shell printenv PATH):$(EMSCRIPTEN_PATH)
 
 # File/directory names
 APP_NAME ?= app

@@ -44,7 +44,7 @@ void editor::load_tilemap_data() {
 void editor::export_tilemap_data() {
     if (file_input->get_input().empty()) return;
     string data = data_exporter::get_export_text(editor::tilemap_->get_cells());
-    string filepath = "scenes/" + file_input->get_input() + ".dat";
+    string filepath = "assets/scenes/" + file_input->get_input() + ".dat";
     SaveFileText(filepath.c_str(), data.data());
 }
 

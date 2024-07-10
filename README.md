@@ -4,7 +4,7 @@ This project is me trying to learn C++ with [raylib](https://github.com/raysan5/
 
 ## Dependencies
 
-This project is using the GNU Toolchain for C/C++ development, in particular, the [GNU Compiler Collection](https://www.gnu.org/software/gcc), the [MinGW-w64](https://www.mingw-w64.org/) compilers and [make](https://www.gnu.org/software/make). If you want to make an HTML5 build, you need to install [emsdk](https://emscripten.org/docs/getting_started/downloads.html).
+This project is using the GNU Toolchain for C/C++ development, in particular, the [GNU Compiler Collection](https://www.gnu.org/software/gcc), the [MinGW-w64](https://www.mingw-w64.org/) compilers and [make](https://www.gnu.org/software/make). If you want to make an HTML5 build, you need to install [emsdk](https://emscripten.org/docs/getting_started/downloads.html). See more details on below.
 
 Optionally, [gdb](https://www.sourceware.org/gdb/) to debug. You also need [git](https://git-scm.com/), of course.
 
@@ -73,6 +73,26 @@ make lint
 ```
 
 Read the [Makefile](Makefile) for more details.
+
+## Working with a web build
+
+To make a web build, you will need to have [emsdk](https://emscripten.org/docs/getting_started/downloads.html) version 3.1.62 and `python`. Follow the link on how to install it in this version. Then, you will need to setup an emscripten config file using the `clang` and `node` binaries that come on the `emsdk` repository, that means the following lines on your `.emscripten` file:
+
+```
+LLVM_ROOT = '<your-emsdk-directory>/upstream/bin'
+BINARYEN_ROOT = '<your-emsdk-directory>/upstream'
+NODE_JS = '<your-emsdk-directory>/node/18.20.3_64bit/bin/node'
+```
+
+If you can't compile either `raylib` or the game, pay attention to the error messages, might be some of these binaries that can't be found. Oh, and don't forget to setup your `.env` file with the path of your installation.
+
+After successfully compiling with `make build-web`, you can run the following python line on `build/web`:
+
+```console
+python -m http.server 3000
+```
+
+This will serve the web build folder on your `localhost:3000`. You can change the port to whatever you want.
 
 ## License
 
