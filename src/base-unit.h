@@ -18,5 +18,4 @@ private:
     Vector2 dir_{(Vector2){0}};
     float jump_buffer_timer_{0.0f};
     bool is_jumping_{false};
-    bool is_dropping_{false};
 };
