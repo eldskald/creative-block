@@ -6,11 +6,13 @@
 #include "sfx.h"
 #include "shader.h"
 #include "sprite.h"
+#include "renderer.h"
 #include <raylib.h>
 
 game_element* game::root_ = nullptr;
 
 void game::initial_setup() {
+    renderer::initialize();
     sprite::initialize();
     sfx::initialize();
     shader::initialize();
@@ -23,6 +25,7 @@ void game::do_game_loop() {
     physics_body::trigger_physics_tick_(game::root_);
     physics_body::update_areas_();
     game_element::trigger_tick_(game::root_);
+    renderer::render();
     game_element::delete_marked_();
 }
 

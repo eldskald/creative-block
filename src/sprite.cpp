@@ -2,6 +2,7 @@
 #include <raylib.h>
 
 Texture2D sprite::atlas_ = (Texture2D){0};
+list<sprite*> sprite::sprites_;
 
 void sprite::initialize() {
     sprite::atlas_ = LoadTexture(SPRITESHEET_FILE);
@@ -9,6 +10,11 @@ void sprite::initialize() {
 
 void sprite::enter_() {
     this->curr_phase_ = this->animation_starting_phase;
+    sprite::sprites_.push_back(this);
+}
+
+void sprite::exit_() {
+    sprite::sprites_.remove(this);
 }
 
 void sprite::tick_() {
@@ -21,18 +27,24 @@ void sprite::tick_() {
             this->atlas_coords = this->anim.at(this->curr_frame_).atlas_coords;
         }
     }
-    BeginShaderMode(*(this->shader));
-    DrawTexturePro(sprite::atlas_,
-                   (Rectangle){SPRITESHEET_CELL_SIZE_X * this->atlas_coords.x,
-                               SPRITESHEET_CELL_SIZE_Y * this->atlas_coords.y,
-                               SPRITESHEET_CELL_SIZE_X,
-                               SPRITESHEET_CELL_SIZE_Y},
-                   (Rectangle){this->get_global_pos().x,
-                               this->get_global_pos().y,
-                               SPRITESHEET_CELL_SIZE_X,
-                               SPRITESHEET_CELL_SIZE_Y},
-                   (Vector2){0, 0},
-                   0.0f,
-                   this->tint);
-    EndShaderMode();
+}
+
+void sprite::render_sprites_() {
+    for (auto sprite : sprite::sprites_) {
+        BeginShaderMode(*(sprite->shader));
+        DrawTexturePro(
+            sprite::atlas_,
+            (Rectangle){SPRITESHEET_CELL_SIZE_X * sprite->atlas_coords.x,
+                        SPRITESHEET_CELL_SIZE_Y * sprite->atlas_coords.y,
+                        SPRITESHEET_CELL_SIZE_X,
+                        SPRITESHEET_CELL_SIZE_Y},
+            (Rectangle){sprite->get_global_pos().x,
+                        sprite->get_global_pos().y,
+                        SPRITESHEET_CELL_SIZE_X,
+                        SPRITESHEET_CELL_SIZE_Y},
+            (Vector2){0, 0},
+            0.0f,
+            sprite->tint);
+        EndShaderMode();
+    }
 }
