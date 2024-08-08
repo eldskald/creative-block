@@ -4,7 +4,6 @@
 #include "physics-body.h"
 #include "scene-manager.h"
 #include "sfx.h"
-#include "shader.h"
 #include "sprite.h"
 #include "renderer.h"
 #include <raylib.h>
@@ -15,7 +14,6 @@ void game::initial_setup() {
     renderer::initialize();
     sprite::initialize();
     sfx::initialize();
-    shader::initialize();
     scene_manager::initialize();
 }
 

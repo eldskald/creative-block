@@ -5,7 +5,6 @@
 #include <cstdlib>
 #include <raylib.h>
 #include <raymath.h>
-#include <string>
 
 using namespace std;
 
@@ -78,7 +77,6 @@ void particle_effect::emit() {
         auto mask = new sprite();
         mask->atlas_coords = this->mask_atlas_coords;
         mask->tint = this->mask_tint;
-        mask->shader = &(particle->mask_shader);
         particle->add_child(mask);
         game::get_root()->add_child(particle);
     }

@@ -1,9 +1,7 @@
 #pragma once
 #include "game-element.h"
 #include "physics-body.h"
-#include "sprite.h"
 #include <raylib.h>
-#include <string>
 
 using namespace std;
 

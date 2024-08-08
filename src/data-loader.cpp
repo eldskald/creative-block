@@ -2,7 +2,6 @@
 #include "game-element.h"
 #include "physics-body.h"
 #include "player.h"
-#include "shader.h"
 #include "sprite.h"
 #include <cctype>
 #include <exception>
@@ -181,12 +180,6 @@ physics_body::body_type data_loader::string_to_body_type(string str) {
     throw invalid_argument("value not a body type");
 }
 
-Shader* data_loader::string_to_shader(string str) {
-    if (str == "base") return shader::get_base();
-    if (str == "sample") return shader::get_sample();
-    throw invalid_argument("value not a shader");
-}
-
 keyframe data_loader::string_to_keyframe(string str) {
     if (str[0] != '(' || str[str.size() - 1] != ')')
         throw invalid_argument("value not a keyframe");
@@ -282,8 +275,6 @@ void data_loader::parse_sprite_property_line(sprite* sprite, string line) {
         sprite->atlas_coords = data_loader::string_to_vector(prop_value);
     } else if (prop_name == "tint") {
         sprite->tint = data_loader::string_to_color(prop_value);
-    } else if (prop_name == "shader") {
-        sprite->shader = data_loader::string_to_shader(prop_value);
     } else if (prop_name == "animation") {
         sprite->anim = data_loader::string_to_animation(prop_value);
     } else if (prop_name == "animation_starting_phase") {

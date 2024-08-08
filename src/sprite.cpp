@@ -31,7 +31,6 @@ void sprite::tick_() {
 
 void sprite::render_sprites_() {
     for (auto sprite : sprite::sprites_) {
-        BeginShaderMode(*(sprite->shader));
         DrawTexturePro(
             sprite::atlas_,
             (Rectangle){SPRITESHEET_CELL_SIZE_X * sprite->atlas_coords.x,
@@ -45,6 +44,5 @@ void sprite::render_sprites_() {
             (Vector2){0, 0},
             0.0f,
             sprite->tint);
-        EndShaderMode();
     }
 }

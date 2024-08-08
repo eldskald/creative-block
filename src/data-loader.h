@@ -33,7 +33,6 @@ private:
     static Color string_to_color(string str);
     static bool string_to_bool(string str);
     static physics_body::body_type string_to_body_type(string str);
-    static Shader* string_to_shader(string str);
     static keyframe string_to_keyframe(string str);
     static animation string_to_animation(string str);
 

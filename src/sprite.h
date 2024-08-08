@@ -1,6 +1,5 @@
 #pragma once
 #include "game-element.h"
-#include "shader.h"
 #include <raylib.h>
 #include <vector>
 #include <list>
@@ -24,7 +23,6 @@ public:
     Color tint{WHITE};
     animation anim;
     float animation_starting_phase{0.0f};
-    Shader* shader{shader::get_base()};
 
     static void initialize();
 
