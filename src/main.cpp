@@ -1,6 +1,4 @@
-#include "game-element.h"
-#include "game.h"
-#include "physics-body.h"
+#include "core/game.h"
 #include <raylib.h>
 #include <raymath.h>
 

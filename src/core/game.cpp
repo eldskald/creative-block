@@ -1,11 +1,11 @@
-#include "game.h"
-#include "game-element.h"
-#include "inputs.h"
-#include "physics-body.h"
-#include "scene-manager.h"
-#include "sfx.h"
-#include "sprite.h"
-#include "renderer.h"
+#include "core/game.h"
+#include "engine/game-element.h"
+#include "engine/inputs.h"
+#include "engine/physics-body.h"
+#include "core/scene-manager.h"
+#include "engine/sfx.h"
+#include "engine/sprite.h"
+#include "engine/renderer.h"
 #include <raylib.h>
 
 game_element* game::root_ = nullptr;

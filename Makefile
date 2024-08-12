@@ -36,7 +36,7 @@ SETTINGS = $(file < settings.cfg)
 IMPORTS = $(file < imports.cfg)
 DEFINES := $(foreach LINE,$(SETTINGS),-D$(LINE)) $(foreach LINE,$(IMPORTS),-D$(LINE))
 
-DEV_COMPILE_FLAGS = -std=c++17 -Wall -I./$(INCLUDE_DIR) $(DEFINES) -DDEV
+DEV_COMPILE_FLAGS = -std=c++17 -Wall -I./src -I./$(INCLUDE_DIR) $(DEFINES) -DDEV
 DEV_LINK_FLAGS = -L./$(DEV_LIBS) -lraylib
 ifeq ($(DEV_PLATFORM), Linux)
 	DEV_LINK_FLAGS += -lGL -lm -lpthread -ldl -lrt -lX11
@@ -50,11 +50,11 @@ endif
 EDITOR_COMPILE_FLAGS = -std=c++17 -Wall -I./$(INCLUDE_DIR)
 EDITOR_LINK_FLAGS = $(DEV_LINK_FLAGS)
 
-LINUX_COMPILE_FLAGS = -Wall -I./$(INCLUDE_DIR) $(DEFINES)
+LINUX_COMPILE_FLAGS = -Wall -I./src -I./$(INCLUDE_DIR) $(DEFINES)
 LINUX_LINK_FLAGS = -L./$(LINUX_LIBS) -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
-WIN_COMPILE_FLAGS = -Wall -I./$(INCLUDE_DIR) $(DEFINES)
+WIN_COMPILE_FLAGS = -Wall -I./src -I./$(INCLUDE_DIR) $(DEFINES)
 WIN_LINK_FLAGS = -L./$(WIN_LIBS) -lraylib -lgdi32 -lwinmm -lpthread -static -static-libgcc -static-libstdc++
-WEB_COMPILE_FLAGS = -Os -Wall -I./$(INCLUDE_DIR) -I$(EMSCRIPTEN_PATH)/cache/sysroot/include $(DEFINES) --preload-file assets --shell-file $(BUILD_WEB_SHELL) -DWEB
+WEB_COMPILE_FLAGS = -Os -Wall -I./src -I./$(INCLUDE_DIR) -I$(EMSCRIPTEN_PATH)/cache/sysroot/include $(DEFINES) --preload-file assets --shell-file $(BUILD_WEB_SHELL) -DWEB
 WEB_LINK_FLAGS = -L./$(WEB_LIBS) -lraylib -s USE_GLFW=3 -s TOTAL_MEMORY=$(BUILD_WEB_HEAP_SIZE) -s FORCE_FILESYSTEM=1
 
 # Phony targets

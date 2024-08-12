@@ -1,6 +1,6 @@
 #pragma once
-#include "game-element.h"
-#include "physics-body.h"
+#include "engine/game-element.h"
+#include "engine/physics-body.h"
 #include <raylib.h>
 
 using namespace std;

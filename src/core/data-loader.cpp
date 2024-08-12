@@ -1,8 +1,8 @@
-#include "data-loader.h"
-#include "game-element.h"
-#include "physics-body.h"
-#include "player.h"
-#include "sprite.h"
+#include "core/data-loader.h"
+#include "engine/game-element.h"
+#include "engine/physics-body.h"
+#include "core/player.h"
+#include "engine/sprite.h"
 #include <cctype>
 #include <exception>
 #include <iostream>

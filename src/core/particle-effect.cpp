@@ -1,7 +1,7 @@
-#include "particle-effect.h"
-#include "game.h"
-#include "physics-body.h"
-#include "sprite.h"
+#include "core/particle-effect.h"
+#include "core/game.h"
+#include "engine/physics-body.h"
+#include "engine/sprite.h"
 #include <cstdlib>
 #include <raylib.h>
 #include <raymath.h>

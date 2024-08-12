@@ -1,7 +1,7 @@
-#include "player.h"
-#include "base-unit.h"
-#include "inputs.h"
-#include "sprite.h"
+#include "core/player.h"
+#include "core/base-unit.h"
+#include "engine/inputs.h"
+#include "engine/sprite.h"
 #include <raylib.h>
 
 player::player() {

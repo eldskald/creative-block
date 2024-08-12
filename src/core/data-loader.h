@@ -1,8 +1,8 @@
 #pragma once
-#include "game-element.h"
-#include "physics-body.h"
-#include "sprite.h"
-#include "player.h"
+#include "engine/game-element.h"
+#include "engine/physics-body.h"
+#include "engine/sprite.h"
+#include "core/player.h"
 #include <list>
 #include <string>
 #include <unordered_map>

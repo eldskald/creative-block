@@ -1,7 +1,7 @@
-#include "scene-manager.h"
-#include "data-loader.h"
-#include "game-element.h"
-#include "game.h"
+#include "core/scene-manager.h"
+#include "core/data-loader.h"
+#include "engine/game-element.h"
+#include "core/game.h"
 #include <list>
 #include <raylib.h>
 
