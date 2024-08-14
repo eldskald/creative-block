@@ -11,6 +11,7 @@
 game_element* game::root_ = nullptr;
 
 void game::initial_setup() {
+    SetRandomSeed(0);
     renderer::initialize();
     sprite::initialize();
     sfx::initialize();

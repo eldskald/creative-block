@@ -19,5 +19,6 @@ private:
     static string get_bg_grass_text_(map* cells);
     static string get_bg_waterfall_text_(map* cells);
     static string get_bg_stars_text_(map* cells);
+    static string get_bg_leaves_text_(map* cells);
     static string get_player_text_(map* cells);
 };

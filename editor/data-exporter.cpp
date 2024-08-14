@@ -144,6 +144,24 @@ string data_exporter::get_bg_props_text_(map* cells) {
     return text;
 }
 
+string data_exporter::get_bg_leaves_text_(map* cells) {
+    string text = "";
+    for (int i = 0; i < TILEMAP_SIZE_X; i++) {
+        for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
+            int cell_id = cells->at(i).at(j);
+            if (cell_id == -1) continue;
+            tile data =
+                tileset_manager::get_tile_data(tileset::background, cell_id);
+            if (data.type != tile_type::leaves) continue;
+            text += "[falling_leaves]\n";
+            text += "pos = (" + to_string(i * SPRITESHEET_CELL_X) + "," +
+                    to_string(j * SPRITESHEET_CELL_Y) + ")\n";
+            text += "\n";
+        }
+    }
+    return text;
+}
+
 string data_exporter::get_bg_grass_text_(map* cells) {
     string text = "";
     for (int i = 0; i < TILEMAP_SIZE_X; i++) {
@@ -264,6 +282,7 @@ string data_exporter::get_export_text(unordered_map<tileset, map> cells) {
     data +=
         data_exporter::get_bg_waterfall_text_(&cells.at(tileset::background));
     data += data_exporter::get_bg_stars_text_(&cells.at(tileset::background));
+    data += data_exporter::get_bg_leaves_text_(&cells.at(tileset::background));
     data += data_exporter::get_blocks_sprites_text_(&cells.at(tileset::blocks));
     data += data_exporter::get_physics_bodies_text_(&cells.at(tileset::blocks));
     data += data_exporter::get_player_text_(&cells.at(tileset::interact));

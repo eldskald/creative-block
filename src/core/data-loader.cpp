@@ -1,4 +1,5 @@
 #include "core/data-loader.h"
+#include "core/falling-leaves.h"
 #include "engine/game-element.h"
 #include "engine/physics-body.h"
 #include "core/player.h"
@@ -327,6 +328,13 @@ game_element* data_loader::get_element_from_block(element_block block) {
             data_loader::parse_player_property_line(player_element, line);
         }
         return player_element;
+    }
+    if (block.type == "falling_leaves") {
+        auto* emitter = new falling_leaves();
+        for (auto& line : block.properties) {
+            data_loader::parse_game_element_property_line(emitter, line);
+        }
+        return emitter;
     }
     throw invalid_argument("invalid block type");
 }
