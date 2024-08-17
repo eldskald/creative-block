@@ -1,4 +1,5 @@
 #include "renderer.h"
+#include "physics-body.h"
 #include "sprite.h"
 #include <array>
 #include <cmath>
@@ -19,6 +20,11 @@ Shader renderer::v_blur_shader_1_ = (Shader){0};
 Shader renderer::h_blur_shader_1_ = (Shader){0};
 Shader renderer::v_blur_shader_2_ = (Shader){0};
 Shader renderer::h_blur_shader_2_ = (Shader){0};
+#ifdef DEV
+bool renderer::showing_areas_ = false;
+bool renderer::showing_fixed_bodies_ = false;
+bool renderer::showing_kinematic_bodies_ = false;
+#endif
 
 const float aspect_ratio = (float)WINDOW_SIZE_X / (float)WINDOW_SIZE_Y;
 
@@ -63,6 +69,42 @@ void renderer::initialize() {
     renderer::set_shader_property_(renderer::base_screen_shader_,
                                    "bgMask",
                                    &bg_mask_value,
+                                   SHADER_UNIFORM_VEC4);
+    Color debug_1 = DEBUG_COLOR_1;
+    array<float, 4> debug_1_value = {(float)debug_1.r / normalize_const,
+                                     (float)debug_1.g / normalize_const,
+                                     (float)debug_1.b / normalize_const,
+                                     1.0f};
+    renderer::set_shader_property_(renderer::base_screen_shader_,
+                                   "debug1",
+                                   &debug_1_value,
+                                   SHADER_UNIFORM_VEC4);
+    Color debug_2 = DEBUG_COLOR_2;
+    array<float, 4> debug_2_value = {(float)debug_2.r / normalize_const,
+                                     (float)debug_2.g / normalize_const,
+                                     (float)debug_2.b / normalize_const,
+                                     1.0f};
+    renderer::set_shader_property_(renderer::base_screen_shader_,
+                                   "debug2",
+                                   &debug_2_value,
+                                   SHADER_UNIFORM_VEC4);
+    Color debug_3 = DEBUG_COLOR_3;
+    array<float, 4> debug_3_value = {(float)debug_3.r / normalize_const,
+                                     (float)debug_3.g / normalize_const,
+                                     (float)debug_3.b / normalize_const,
+                                     1.0f};
+    renderer::set_shader_property_(renderer::base_screen_shader_,
+                                   "debug3",
+                                   &debug_3_value,
+                                   SHADER_UNIFORM_VEC4);
+    Color debug_4 = DEBUG_COLOR_4;
+    array<float, 4> debug_4_value = {(float)debug_4.r / normalize_const,
+                                     (float)debug_4.g / normalize_const,
+                                     (float)debug_4.b / normalize_const,
+                                     1.0f};
+    renderer::set_shader_property_(renderer::base_screen_shader_,
+                                   "debug4",
+                                   &debug_4_value,
                                    SHADER_UNIFORM_VEC4);
 
     // Blur shader
@@ -119,6 +161,18 @@ void renderer::render() {
                    0.0f,
                    WHITE);
     EndDrawing();
+#ifdef DEV
+    if (IsKeyPressed(KEY_ONE)) {
+        renderer::showing_areas_ = !renderer::showing_areas_;
+    }
+    if (IsKeyPressed(KEY_TWO)) {
+        renderer::showing_fixed_bodies_ = !renderer::showing_fixed_bodies_;
+    }
+    if (IsKeyPressed(KEY_THREE)) {
+        renderer::showing_kinematic_bodies_ =
+            !renderer::showing_kinematic_bodies_;
+    }
+#endif
 }
 
 void renderer::update_window_size_() {
@@ -154,11 +208,40 @@ void renderer::update_tex_sizes_() {
 void renderer::render_base_() {
     BeginTextureMode(renderer::base_tex_1_);
     ClearBackground(BLANK);
+    sprite::render_sprites_();
 #ifdef DEV
     string fps = to_string(GetFPS()) + " FPS";
-    DrawText(fps.data(), 4, 4, 8, MAIN_MASK_COLOR); // NOLINT
+    DrawText(fps.data(), 4, 4, 8, DEBUG_COLOR_1);
+    if (renderer::showing_areas_) {
+        for (auto* area : physics_body::areas_) {
+            DrawRectangleLines(area->get_global_pos().x + area->collision_box.x,
+                               area->get_global_pos().y + area->collision_box.y,
+                               area->collision_box.width,
+                               area->collision_box.height,
+                               DEBUG_COLOR_2);
+        }
+    }
+    if (renderer::showing_fixed_bodies_) {
+        for (auto* body : physics_body::bodies_) {
+            if (body->type != physics_body::body_type::fixed) continue;
+            DrawRectangleLines(body->get_global_pos().x + body->collision_box.x,
+                               body->get_global_pos().y + body->collision_box.y,
+                               body->collision_box.width,
+                               body->collision_box.height,
+                               DEBUG_COLOR_3);
+        }
+    }
+    if (renderer::showing_kinematic_bodies_) {
+        for (auto* body : physics_body::bodies_) {
+            if (body->type != physics_body::body_type::kinematic) continue;
+            DrawRectangleLines(body->get_global_pos().x + body->collision_box.x,
+                               body->get_global_pos().y + body->collision_box.y,
+                               body->collision_box.width,
+                               body->collision_box.height,
+                               DEBUG_COLOR_4);
+        }
+    }
 #endif
-    sprite::render_sprites_();
     EndTextureMode();
 
     BeginTextureMode(renderer::base_tex_2_);

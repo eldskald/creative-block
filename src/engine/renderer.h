@@ -22,6 +22,11 @@ private:
     static Shader h_blur_shader_1_;
     static Shader v_blur_shader_2_;
     static Shader h_blur_shader_2_;
+#ifdef DEV
+    static bool showing_areas_;
+    static bool showing_fixed_bodies_;
+    static bool showing_kinematic_bodies_;
+#endif
 
     static void set_shader_property_(Shader shader,
                                      string property,

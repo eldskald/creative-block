@@ -62,7 +62,11 @@ list<physics_body*> physics_body::get_detected_bodies() {
 }
 
 bool physics_body::collision_detected() {
-    return this->collision_detected_;
+    if (!this->get_bodies_touching_top().empty()) return true;
+    if (!this->get_bodies_touching_left().empty()) return true;
+    if (!this->get_bodies_touching_bottom().empty()) return true;
+    if (!this->get_bodies_touching_right().empty()) return true;
+    return false;
 }
 
 list<physics_body*>
@@ -356,16 +360,13 @@ float physics_body::move_and_drag_children_v_(float delta_d) {
 void physics_body::physics_tick_() {
     if (this->type != kinematic) return;
 
-    this->collision_detected_ = false;
     float delta_x = this->vel.x * GetFrameTime();
     float delta_y = this->vel.y * GetFrameTime();
     if (!FloatEquals(delta_x, this->move_and_drag_children_h_(delta_x))) {
         this->vel.x = 0.0f;
-        this->collision_detected_ = true;
     }
     if (!FloatEquals(delta_y, this->move_and_drag_children_v_(delta_y))) {
         this->vel.y = 0.0f;
-        this->collision_detected_ = true;
     }
 }
 

@@ -7,11 +7,17 @@
 using namespace std;
 
 class game;
+#ifdef DEV
+class renderer;
+#endif
 
 const int COLLISION_LAYERS = 8;
 
 class physics_body : public game_element {
     friend class game;
+#ifdef DEV
+    friend class renderer;
+#endif
 
 public:
     enum body_type { kinematic, fixed, area };
@@ -45,7 +51,6 @@ protected:
 
 private:
     list<physics_body*> detected_bodies_;
-    bool collision_detected_{false};
 
     Rectangle get_collision_rect_();
     float compute_h_movement_(float delta_d, bool ignore_children = false);
