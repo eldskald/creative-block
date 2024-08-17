@@ -224,38 +224,38 @@ float physics_body::move_and_drag_children_h_(float delta_d) {
     list<game_element*> children = this->get_children();
     for (auto i : children) {
         auto* child = dynamic_cast<physics_body*>(i);
-        if (child) {
-            if (ordered_children.empty())
+        if (!child) continue;
+        if (child->type != kinematic) continue;
+        if (ordered_children.empty())
+            ordered_children.push_back(child);
+        else {
+            float child_col_x =
+                child->get_global_pos().x + child->collision_box.x;
+            float top_col_x = ordered_children.back()->get_global_pos().x +
+                              ordered_children.back()->collision_box.x;
+            if (child_col_x >= top_col_x)
                 ordered_children.push_back(child);
             else {
-                float child_col_x =
-                    child->get_global_pos().x + child->collision_box.x;
-                float top_col_x = ordered_children.back()->get_global_pos().x +
-                                  ordered_children.back()->collision_box.x;
-                if (child_col_x >= top_col_x)
-                    ordered_children.push_back(child);
-                else {
-                    if (delta >= 0.0f) {
-                        for (auto j = ordered_children.begin();
-                             j != ordered_children.end();
-                             ++j) {
-                            float body_col_x = (*j)->get_global_pos().x +
-                                               (*j)->collision_box.x;
-                            if (child_col_x >= body_col_x) {
-                                ordered_children.emplace(j, child);
-                                break;
-                            }
+                if (delta >= 0.0f) {
+                    for (auto j = ordered_children.begin();
+                         j != ordered_children.end();
+                         ++j) {
+                        float body_col_x =
+                            (*j)->get_global_pos().x + (*j)->collision_box.x;
+                        if (child_col_x >= body_col_x) {
+                            ordered_children.emplace(j, child);
+                            break;
                         }
-                    } else {
-                        for (auto j = ordered_children.begin();
-                             j != ordered_children.end();
-                             ++j) {
-                            float body_col_x = (*j)->get_global_pos().x +
-                                               (*j)->collision_box.x;
-                            if (child_col_x < body_col_x) {
-                                ordered_children.emplace(j, child);
-                                break;
-                            }
+                    }
+                } else {
+                    for (auto j = ordered_children.begin();
+                         j != ordered_children.end();
+                         ++j) {
+                        float body_col_x =
+                            (*j)->get_global_pos().x + (*j)->collision_box.x;
+                        if (child_col_x < body_col_x) {
+                            ordered_children.emplace(j, child);
+                            break;
                         }
                     }
                 }
@@ -297,38 +297,38 @@ float physics_body::move_and_drag_children_v_(float delta_d) {
     list<game_element*> children = this->get_children();
     for (auto i : children) {
         auto* child = dynamic_cast<physics_body*>(i);
-        if (child) {
-            if (ordered_children.empty())
+        if (!child) continue;
+        if (child->type != kinematic) continue;
+        if (ordered_children.empty())
+            ordered_children.push_back(child);
+        else {
+            float child_col_y =
+                child->get_global_pos().y + child->collision_box.y;
+            float top_col_y = ordered_children.back()->get_global_pos().y +
+                              ordered_children.back()->collision_box.y;
+            if (child_col_y >= top_col_y)
                 ordered_children.push_back(child);
             else {
-                float child_col_y =
-                    child->get_global_pos().y + child->collision_box.y;
-                float top_col_y = ordered_children.back()->get_global_pos().y +
-                                  ordered_children.back()->collision_box.y;
-                if (child_col_y >= top_col_y)
-                    ordered_children.push_back(child);
-                else {
-                    if (delta >= 0.0f) {
-                        for (auto j = ordered_children.begin();
-                             j != ordered_children.end();
-                             ++j) {
-                            float body_col_y = (*j)->get_global_pos().y +
-                                               (*j)->collision_box.y;
-                            if (child_col_y >= body_col_y) {
-                                ordered_children.emplace(j, child);
-                                break;
-                            }
+                if (delta >= 0.0f) {
+                    for (auto j = ordered_children.begin();
+                         j != ordered_children.end();
+                         ++j) {
+                        float body_col_y =
+                            (*j)->get_global_pos().y + (*j)->collision_box.y;
+                        if (child_col_y >= body_col_y) {
+                            ordered_children.emplace(j, child);
+                            break;
                         }
-                    } else {
-                        for (auto j = ordered_children.begin();
-                             j != ordered_children.end();
-                             ++j) {
-                            float body_col_y = (*j)->get_global_pos().y +
-                                               (*j)->collision_box.y;
-                            if (child_col_y < body_col_y) {
-                                ordered_children.emplace(j, child);
-                                break;
-                            }
+                    }
+                } else {
+                    for (auto j = ordered_children.begin();
+                         j != ordered_children.end();
+                         ++j) {
+                        float body_col_y =
+                            (*j)->get_global_pos().y + (*j)->collision_box.y;
+                        if (child_col_y < body_col_y) {
+                            ordered_children.emplace(j, child);
+                            break;
                         }
                     }
                 }
