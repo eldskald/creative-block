@@ -8,13 +8,13 @@
 using namespace std;
 
 falling_leaves::falling_leaves() {
-    this->to_next_particle_ = (float)GetRandomValue(10, 180) / 10.0f;
+    this->to_next_particle_ = (float)GetRandomValue(10, 300) / 10.0f;
 }
 
 void falling_leaves::tick_() {
     this->to_next_particle_ -= GetFrameTime();
-    if (this->to_next_particle_ <= 0.0f) {
-        this->to_next_particle_ = (float)GetRandomValue(10, 180) / 10.0f;
+    if (this->to_next_particle_ <= 0.0f && this->free_) {
+        this->free_ = false;
         this->spawn_particle_();
     }
 }
@@ -23,26 +23,28 @@ void falling_leaves::spawn_particle_() {
     Vector2 init_pos = this->pos;
     init_pos.x += (float)GetRandomValue(0, 16) - 8.0f;
     init_pos.y += (float)GetRandomValue(0, 16) - 8.0f;
-    auto particle = new falling_leaves::particle_(init_pos);
+    auto particle = new falling_leaves::particle_(init_pos, this);
     game::get_root()->add_child(particle);
 }
 
-falling_leaves::particle_::particle_(Vector2 init_pos) {
+falling_leaves::particle_::particle_(Vector2 init_pos,
+                                     falling_leaves* emitter) {
     this->pos = init_pos;
+    this->emitter_ = emitter;
+    this->type = physics_body::body_type::area;
+    this->collision_mask = PARTICLE_LEAF_COLLISION_MASK;
+    this->collision_box = PARTICLE_LEAF_COLLISION_BOX;
     auto* mask = new sprite();
     mask->atlas_coords = PARTICLE_LEAF_ATLAS_COORDS;
     mask->tint = BG_MASK_COLOR;
     this->add_child(mask);
-    auto* area = new physics_body();
-    area->type = physics_body::body_type::area;
-    area->collision_mask = PARTICLE_LEAF_COLLISION_MASK;
-    area->collision_box = PARTICLE_LEAF_COLLISION_BOX;
-    this->add_child(area);
-    this->area = area;
 }
 
 void falling_leaves::particle_::tick_() {
-    if (!this->area->get_detected_bodies().empty()) {
+    if (!this->get_detected_bodies().empty()) {
+        this->emitter_->to_next_particle_ =
+            (float)GetRandomValue(10, 300) / 10.0f;
+        this->emitter_->free_ = true;
         this->mark_for_deletion();
         return;
     }
@@ -53,5 +55,4 @@ void falling_leaves::particle_::tick_() {
     this->vel.y = -cos(this->time_ * 2.0f * PI / PARTICLE_LEAF_SWAY_PERIOD) *
                       PARTICLE_LEAF_SWAY_AMPLITUDE_Y +
                   PARTICLE_LEAF_BASE_SPEED_Y;
-
 }
