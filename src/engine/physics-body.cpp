@@ -358,15 +358,18 @@ float physics_body::move_and_drag_children_v_(float delta_d) {
 }
 
 void physics_body::physics_tick_() {
-    if (this->type != kinematic) return;
-
     float delta_x = this->vel.x * GetFrameTime();
     float delta_y = this->vel.y * GetFrameTime();
-    if (!FloatEquals(delta_x, this->move_and_drag_children_h_(delta_x))) {
-        this->vel.x = 0.0f;
-    }
-    if (!FloatEquals(delta_y, this->move_and_drag_children_v_(delta_y))) {
-        this->vel.y = 0.0f;
+    if (this->type == kinematic) {
+        if (!FloatEquals(delta_x, this->move_and_drag_children_h_(delta_x))) {
+            this->vel.x = 0.0f;
+        }
+        if (!FloatEquals(delta_y, this->move_and_drag_children_v_(delta_y))) {
+            this->vel.y = 0.0f;
+        }
+    } else {
+        this->pos.x += delta_x;
+        this->pos.y += delta_y;
     }
 }
 
