@@ -54,6 +54,9 @@ void base_unit::tick_() {
 
     // Gravity
     this->vel.y += PLAYER_GRAVITY * GetFrameTime();
+    if (this->vel.y > PLAYER_MAX_FALL_SPEED) {
+        this->vel.y = PLAYER_MAX_FALL_SPEED;
+    }
 
     // Jump buffer. If it's smaller than the limit, you can jump
     this->jump_buffer_timer_ += GetFrameTime();
