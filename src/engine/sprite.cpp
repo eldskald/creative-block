@@ -6,6 +6,7 @@ list<sprite*> sprite::sprites_;
 
 void sprite::initialize() {
     sprite::atlas_ = LoadTexture(SPRITESHEET_FILE);
+    SetTextureWrap(sprite::atlas_, TEXTURE_WRAP_CLAMP);
 }
 
 void sprite::enter_() {
