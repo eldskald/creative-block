@@ -1,6 +1,7 @@
 #include "core/data-loader.h"
 #include "core/falling-leaves.h"
 #include "core/water-drip.h"
+#include "core/puff.h"
 #include "engine/game-element.h"
 #include "engine/physics-body.h"
 #include "core/player.h"
@@ -339,6 +340,13 @@ game_element* data_loader::get_element_from_block(element_block block) {
     }
     if (block.type == "water_drip") {
         auto* emitter = new water_drip();
+        for (auto& line : block.properties) {
+            data_loader::parse_game_element_property_line(emitter, line);
+        }
+        return emitter;
+    }
+    if (block.type == "puff") {
+        auto* emitter = new puff();
         for (auto& line : block.properties) {
             data_loader::parse_game_element_property_line(emitter, line);
         }

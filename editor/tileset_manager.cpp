@@ -102,7 +102,7 @@ void tileset_manager::initialize() {
     bg_tiles.push_back((tile){(Vector2){11, 8}, tile_type::prop});
     bg_tiles.push_back((tile){(Vector2){11, 9}, tile_type::prop});
     bg_tiles.push_back((tile){(Vector2){13, 11}, tile_type::leaves});
-    bg_tiles.push_back((tile){(Vector2){10, 11}, tile_type::null});
+    bg_tiles.push_back((tile){(Vector2){9, 15}, tile_type::puff});
     // waterfalls
     bg_tiles.push_back((tile){(Vector2){12, 8}, tile_type::prop});
     bg_tiles.push_back((tile){(Vector2){12, 9}, tile_type::waterfall});
