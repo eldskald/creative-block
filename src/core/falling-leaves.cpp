@@ -8,7 +8,10 @@
 using namespace std;
 
 falling_leaves::falling_leaves() {
-    this->to_next_particle_ = (float)GetRandomValue(10, 300) / 10.0f;
+    this->to_next_particle_ =
+        (float)GetRandomValue(PARTICLE_LEAF_MIN_SPAWN_TIME * 10,
+                              PARTICLE_LEAF_MAX_SPAWN_TIME * 10) /
+        10.0f;
 }
 
 void falling_leaves::tick_() {
@@ -21,8 +24,10 @@ void falling_leaves::tick_() {
 
 void falling_leaves::spawn_particle_() {
     Vector2 init_pos = this->pos;
-    init_pos.x += (float)GetRandomValue(0, 16) - 8.0f;
-    init_pos.y += (float)GetRandomValue(0, 16) - 8.0f;
+    init_pos.x += (float)GetRandomValue(0, SPRITESHEET_CELL_SIZE_X * 2) -
+                  SPRITESHEET_CELL_SIZE_X;
+    init_pos.y += (float)GetRandomValue(0, SPRITESHEET_CELL_SIZE_Y * 2) -
+                  SPRITESHEET_CELL_SIZE_Y;
     auto particle = new falling_leaves::particle_(init_pos, this);
     game::get_root()->add_child(particle);
 }
@@ -43,7 +48,9 @@ falling_leaves::particle_::particle_(Vector2 init_pos,
 void falling_leaves::particle_::tick_() {
     if (!this->get_detected_bodies().empty()) {
         this->emitter_->to_next_particle_ =
-            (float)GetRandomValue(10, 300) / 10.0f;
+            (float)GetRandomValue(PARTICLE_LEAF_MIN_SPAWN_TIME * 10,
+                                  PARTICLE_LEAF_MAX_SPAWN_TIME * 10) /
+            10.0f;
         this->emitter_->free_ = true;
         this->mark_for_deletion();
         return;

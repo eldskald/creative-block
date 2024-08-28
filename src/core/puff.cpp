@@ -25,8 +25,10 @@ void puff::tick_() {
 
 void puff::spawn_particle_() {
     Vector2 init_pos = this->pos;
-    init_pos.x += (float)GetRandomValue(0, 16) - 8.0f;
-    init_pos.y += (float)GetRandomValue(0, 16) - 8.0f;
+    init_pos.x += (float)GetRandomValue(0, SPRITESHEET_CELL_SIZE_X * 2) -
+                  SPRITESHEET_CELL_SIZE_X;
+    init_pos.y += (float)GetRandomValue(0, SPRITESHEET_CELL_SIZE_Y * 2) -
+                  SPRITESHEET_CELL_SIZE_Y;
     auto particle = new puff::particle_(init_pos, this);
     game::get_root()->add_child(particle);
 }
