@@ -17,5 +17,6 @@ protected:
 private:
     Vector2 dir_{(Vector2){0}};
     float jump_buffer_timer_{0.0f};
+    bool is_pre_buffering_jump_{false};
     bool is_jumping_{false};
 };

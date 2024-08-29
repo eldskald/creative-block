@@ -13,10 +13,15 @@ void base_unit::press_jump() {
     if (this->jump_buffer_timer_ <= PLAYER_JUMP_BUFFER && !this->is_jumping_) {
         this->vel.y = -PLAYER_JUMP_SPEED;
         this->is_jumping_ = true;
+        this->is_pre_buffering_jump_ = false;
+    } else {
+        this->is_pre_buffering_jump_ = true;
+        this->jump_buffer_timer_ = 0.0f;
     }
 }
 
 void base_unit::release_jump() {
+    this->is_pre_buffering_jump_ = false;
     if (this->is_jumping_) {
         this->vel.y *= PLAYER_JUMP_SPEED_CUT;
         this->is_jumping_ = false;
@@ -58,10 +63,19 @@ void base_unit::tick_() {
         this->vel.y = PLAYER_MAX_FALL_SPEED;
     }
 
-    // Jump buffer. If it's smaller than the limit, you can jump
+    // Jump buffer. It's supposed to let you pressed jump just before touching
+    // the ground and still let you jump, as well as let you press jump right
+    // after just running off an edge and still jump.
     this->jump_buffer_timer_ += GetFrameTime();
+    if (this->is_pre_buffering_jump_ &&
+        this->jump_buffer_timer_ <= PLAYER_JUMP_BUFFER && this->is_grounded()) {
+        this->vel.y = -PLAYER_JUMP_SPEED;
+        this->is_jumping_ = true;
+        this->is_pre_buffering_jump_ = false;
+    }
     if (this->is_grounded()) {
         this->jump_buffer_timer_ = 0.0f;
+        this->is_pre_buffering_jump_ = false;
     }
     if (this->is_jumping_) {
         this->jump_buffer_timer_ = PLAYER_JUMP_BUFFER + 1.0f;
