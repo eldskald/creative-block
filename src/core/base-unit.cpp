@@ -46,9 +46,8 @@ void base_unit::tick_() {
 
     // Accelerate the other way in case there is no dir input or the player
     // switched dir input
-    if ((this->vel.x * this->dir_.x == -1 or this->dir_.x == 0) &&
-        this->vel.x != 0.0f) {
-        if (fabs(this->vel.x) < PLAYER_FRICTION) {
+    if (this->vel.x * this->dir_.x <= 0.0f && this->vel.x != 0.0f) {
+        if (fabs(this->vel.x) < PLAYER_FRICTION * GetFrameTime()) {
             this->vel.x = 0.0f;
         } else if (this->vel.x > 0.0f) {
             this->vel.x -= PLAYER_FRICTION * GetFrameTime();
