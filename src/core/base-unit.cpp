@@ -38,25 +38,25 @@ bool base_unit::is_grounded() {
 
 void base_unit::tick_() {
 
+    // Brake in case there is no dir input or the player is going the other way
+    if (this->vel.x * this->dir_.x <= 0.0f && this->vel.x != 0.0f) {
+        float sign = this->vel.x > 0.0f ? -1.0f : 1.0f;
+        this->vel.x += PLAYER_FRICTION * GetFrameTime() * sign;
+    }
+
+    // Stop the player from jittering after it stops moving
+    if (this->dir_.x == 0.0f && this->vel.x != 0.0f &&
+        fabs(this->vel.x) < PLAYER_FRICTION * GetFrameTime()) {
+        this->vel.x = 0.0f;
+    }
+
     // Accelerate left/right according to dir input
     this->vel.x = clamp(this->vel.x + PLAYER_ACCELERATION * GetFrameTime() *
                                           (this->dir_.x),
                         -PLAYER_SPEED,
                         PLAYER_SPEED);
 
-    // Accelerate the other way in case there is no dir input or the player
-    // switched dir input
-    if (this->vel.x * this->dir_.x <= 0.0f && this->vel.x != 0.0f) {
-        if (fabs(this->vel.x) < PLAYER_FRICTION * GetFrameTime()) {
-            this->vel.x = 0.0f;
-        } else if (this->vel.x > 0.0f) {
-            this->vel.x -= PLAYER_FRICTION * GetFrameTime();
-        } else {
-            this->vel.x += PLAYER_FRICTION * GetFrameTime();
-        }
-    }
-
-    // Gravity
+    // Gravity. Can't clamp because there's no max vertical rising speed
     this->vel.y += PLAYER_GRAVITY * GetFrameTime();
     if (this->vel.y > PLAYER_MAX_FALL_SPEED) {
         this->vel.y = PLAYER_MAX_FALL_SPEED;
