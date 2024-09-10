@@ -36,7 +36,7 @@ void renderer::initialize() {
     renderer::blur_tex_2_ = LoadRenderTexture(MAIN_TEX_SIZE, MAIN_TEX_SIZE);
     SetTextureFilter(renderer::blur_tex_2_.texture, TEXTURE_FILTER_TRILINEAR);
     renderer::final_tex_ = LoadRenderTexture(2, 2);
-    renderer::stretched_tex_size_ = (Vector2){2.0f, 2.0f};
+    renderer::stretched_tex_size_ = (Vector2){2, 2};
     renderer::window_size_ =
         (Vector2){(float)GetRenderWidth(), (float)GetRenderHeight()};
 
@@ -181,8 +181,8 @@ void renderer::update_window_size_() {
 }
 
 void renderer::update_tex_sizes_() {
-    float window_size_x = (float)GetRenderWidth();
-    float window_size_y = (float)GetRenderHeight();
+    auto window_size_x = (float)GetRenderWidth();
+    auto window_size_y = (float)GetRenderHeight();
     bool increased_size = false;
 
     // Multiplying sizes by 2 so they remain powers of 2
@@ -211,34 +211,37 @@ void renderer::render_base_() {
     sprite::render_sprites_();
 #ifdef DEV
     string fps = to_string(GetFPS()) + " FPS";
-    DrawText(fps.data(), 4, 4, 8, DEBUG_COLOR_1);
+    DrawText(fps.data(), 4, 4, 8, DEBUG_COLOR_1); // NOLINT
     if (renderer::showing_areas_) {
         for (auto* area : physics_body::areas_) {
-            DrawRectangleLines(area->get_global_pos().x + area->collision_box.x,
-                               area->get_global_pos().y + area->collision_box.y,
-                               area->collision_box.width,
-                               area->collision_box.height,
-                               DEBUG_COLOR_2);
+            DrawRectangleLines(
+                (int)area->get_global_pos().x + (int)area->collision_box.x,
+                (int)area->get_global_pos().y + (int)area->collision_box.y,
+                (int)area->collision_box.width,
+                (int)area->collision_box.height,
+                DEBUG_COLOR_2);
         }
     }
     if (renderer::showing_fixed_bodies_) {
         for (auto* body : physics_body::bodies_) {
             if (body->type != physics_body::body_type::fixed) continue;
-            DrawRectangleLines(body->get_global_pos().x + body->collision_box.x,
-                               body->get_global_pos().y + body->collision_box.y,
-                               body->collision_box.width,
-                               body->collision_box.height,
-                               DEBUG_COLOR_3);
+            DrawRectangleLines(
+                (int)body->get_global_pos().x + (int)body->collision_box.x,
+                (int)body->get_global_pos().y + (int)body->collision_box.y,
+                (int)body->collision_box.width,
+                (int)body->collision_box.height,
+                DEBUG_COLOR_3);
         }
     }
     if (renderer::showing_kinematic_bodies_) {
         for (auto* body : physics_body::bodies_) {
             if (body->type != physics_body::body_type::kinematic) continue;
-            DrawRectangleLines(body->get_global_pos().x + body->collision_box.x,
-                               body->get_global_pos().y + body->collision_box.y,
-                               body->collision_box.width,
-                               body->collision_box.height,
-                               DEBUG_COLOR_4);
+            DrawRectangleLines(
+                (int)body->get_global_pos().x + (int)body->collision_box.x,
+                (int)body->get_global_pos().y + (int)body->collision_box.y,
+                (int)body->collision_box.width,
+                (int)body->collision_box.height,
+                DEBUG_COLOR_4);
         }
     }
 #endif

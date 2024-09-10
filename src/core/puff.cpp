@@ -8,11 +8,15 @@
 
 using namespace std;
 
-puff::puff() {
-    this->to_next_particle_ =
-        (float)GetRandomValue(PARTICLE_PUFF_MIN_SPAWN_TIME * 10,
-                              PARTICLE_PUFF_MAX_SPAWN_TIME * 10) /
-        10.0f;
+const float TAU = 2.0f * PI;
+const int ITEN = 10;
+const float FTEN = 10.0f;
+
+puff::puff()
+    : to_next_particle_(
+          (float)GetRandomValue(PARTICLE_PUFF_MIN_SPAWN_TIME * ITEN,
+                                PARTICLE_PUFF_MAX_SPAWN_TIME * ITEN) /
+          FTEN) {
 }
 
 void puff::tick_() {
@@ -33,12 +37,12 @@ void puff::spawn_particle_() {
     game::get_root()->add_child(particle);
 }
 
-puff::particle_::particle_(Vector2 init_pos, puff* emitter) {
+puff::particle_::particle_(Vector2 init_pos, puff* emitter)
+    : emitter_(emitter),
+      lifetime_((float)GetRandomValue(PARTICLE_PUFF_MIN_LIFETIME * ITEN,
+                                      PARTICLE_PUFF_MAX_LIFETIME * ITEN) /
+                FTEN) {
     this->pos = init_pos;
-    this->emitter_ = emitter;
-    this->lifetime_ = (float)GetRandomValue(PARTICLE_PUFF_MIN_LIFETIME * 10,
-                                            PARTICLE_PUFF_MAX_LIFETIME * 10) /
-                      10.0f;
     this->type = physics_body::body_type::area;
     this->collision_mask = PARTICLE_PUFF_COLLISION_MASK;
     this->collision_box = PARTICLE_PUFF_COLLISION_BOX;
@@ -50,16 +54,16 @@ puff::particle_::particle_(Vector2 init_pos, puff* emitter) {
 
 void puff::particle_::tick_() {
     this->time_ += GetFrameTime();
-    this->vel.x = -cos(this->time_ * 2.0f * PI / PARTICLE_PUFF_PERIOD) *
+    this->vel.x = -cos(this->time_ * TAU / PARTICLE_PUFF_PERIOD) *
                   PARTICLE_PUFF_AMPLITUDE;
-    this->vel.y = -cos(this->time_ * 2.0f * PI / PARTICLE_PUFF_PERIOD) *
+    this->vel.y = -cos(this->time_ * TAU / PARTICLE_PUFF_PERIOD) *
                       PARTICLE_PUFF_AMPLITUDE +
                   PARTICLE_PUFF_VERT_SPEED;
     if (this->time_ >= this->lifetime_) {
         this->emitter_->to_next_particle_ =
-            (float)GetRandomValue(PARTICLE_PUFF_MIN_SPAWN_TIME * 10,
-                                  PARTICLE_PUFF_MAX_SPAWN_TIME * 10) /
-            10.0f;
+            (float)GetRandomValue(PARTICLE_PUFF_MIN_SPAWN_TIME * ITEN,
+                                  PARTICLE_PUFF_MAX_SPAWN_TIME * ITEN) /
+            FTEN;
         this->emitter_->free_ = true;
         this->mark_for_deletion();
         return;

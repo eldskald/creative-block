@@ -7,9 +7,12 @@
 
 using namespace std;
 
-water_drip::water_drip() {
-    this->to_next_particle_ =
-        (float)GetRandomValue(10, PARTICLE_DRIP_SPAWN_TIME * 10) / 10.0f;
+const int ITEN = 10;
+const float FTEN = 10.0f;
+
+water_drip::water_drip()
+    : to_next_particle_(
+          (float)GetRandomValue(ITEN, PARTICLE_DRIP_SPAWN_TIME * ITEN) / FTEN) {
     this->atlas_coords = PARTICLE_DRIP_FRAME_1_ATLAS_COORDS;
     this->tint = BG_MASK_COLOR;
 }

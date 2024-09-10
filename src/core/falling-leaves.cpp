@@ -7,11 +7,15 @@
 
 using namespace std;
 
-falling_leaves::falling_leaves() {
-    this->to_next_particle_ =
-        (float)GetRandomValue(PARTICLE_LEAF_MIN_SPAWN_TIME * 10,
-                              PARTICLE_LEAF_MAX_SPAWN_TIME * 10) /
-        10.0f;
+const float TAU = 2.0f * PI;
+const int ITEN = 10;
+const float FTEN = 10.0f;
+
+falling_leaves::falling_leaves()
+    : to_next_particle_(
+          (float)GetRandomValue(PARTICLE_LEAF_MIN_SPAWN_TIME * ITEN,
+                                PARTICLE_LEAF_MAX_SPAWN_TIME * ITEN) /
+          FTEN) {
 }
 
 void falling_leaves::tick_() {
@@ -32,10 +36,9 @@ void falling_leaves::spawn_particle_() {
     game::get_root()->add_child(particle);
 }
 
-falling_leaves::particle_::particle_(Vector2 init_pos,
-                                     falling_leaves* emitter) {
+falling_leaves::particle_::particle_(Vector2 init_pos, falling_leaves* emitter)
+    : emitter_(emitter) {
     this->pos = init_pos;
-    this->emitter_ = emitter;
     this->type = physics_body::body_type::area;
     this->collision_mask = PARTICLE_LEAF_COLLISION_MASK;
     this->collision_box = PARTICLE_LEAF_COLLISION_BOX;
@@ -48,18 +51,18 @@ falling_leaves::particle_::particle_(Vector2 init_pos,
 void falling_leaves::particle_::tick_() {
     if (!this->get_detected_bodies().empty()) {
         this->emitter_->to_next_particle_ =
-            (float)GetRandomValue(PARTICLE_LEAF_MIN_SPAWN_TIME * 10,
-                                  PARTICLE_LEAF_MAX_SPAWN_TIME * 10) /
-            10.0f;
+            (float)GetRandomValue(PARTICLE_LEAF_MIN_SPAWN_TIME * ITEN,
+                                  PARTICLE_LEAF_MAX_SPAWN_TIME * ITEN) /
+            FTEN;
         this->emitter_->free_ = true;
         this->mark_for_deletion();
         return;
     }
     this->time_ += GetFrameTime();
-    this->vel.x = -cos(this->time_ * 2.0f * PI / PARTICLE_LEAF_SWAY_PERIOD) *
+    this->vel.x = -cos(this->time_ * TAU / PARTICLE_LEAF_SWAY_PERIOD) *
                       PARTICLE_LEAF_SWAY_AMPLITUDE_X +
                   PARTICLE_LEAF_BASE_SPEED_X;
-    this->vel.y = -cos(this->time_ * 2.0f * PI / PARTICLE_LEAF_SWAY_PERIOD) *
+    this->vel.y = -cos(this->time_ * TAU / PARTICLE_LEAF_SWAY_PERIOD) *
                       PARTICLE_LEAF_SWAY_AMPLITUDE_Y +
                   PARTICLE_LEAF_BASE_SPEED_Y;
 }

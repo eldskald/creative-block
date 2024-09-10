@@ -5,13 +5,13 @@ Checks:          'clang-diagnostic-*,
                     -cppcoreguidelines-non-private-member-variables-in-classes,
                     -cppcoreguidelines-avoid-non-const-global-variables,
                     -cppcoreguidelines-owning-memory,
-                    -cppcoreguidelines-macro-usage
+                    -cppcoreguidelines-macro-usage,
+                    -cppcoreguidelines-macro-to-enum,
                   modernize-*,
-                    -modernize-use-trailing-return-type
-                    -modernize-macro-to-enum'
+                    -modernize-use-trailing-return-type,
+                    -modernize-macro-to-enum,'
 WarningsAsErrors: true
 HeaderFilterRegex: ''
-AnalyzeTemporaryDtors: false
 CheckOptions:
   - key:             cert-dcl16-c.NewSuffixes
     value:           'L;LL;LU;LLU'
