@@ -7,6 +7,8 @@
 #include <string>
 #include <unordered_map>
 
+int data_exporter::current_id_count_ = 0;
+
 Vector2* data_exporter::find_next_block_start_(map* cells) {
     for (int i = 0; i < TILEMAP_SIZE_X; i++) {
         for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
@@ -311,7 +313,195 @@ string data_exporter::get_player_text_(map* cells) {
     }
     return text;
 }
+
+string data_exporter::get_spikes_text_(map* cells) {
+    string text = "";
+    for (int i = 0; i < TILEMAP_SIZE_X; i++) {
+        for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
+            int cell_id = cells->at(i).at(j);
+            if (cell_id == -1) continue;
+            tile data =
+                tileset_manager::get_tile_data(tileset::interact, cell_id);
+            switch (data.type) {
+            case tile_type::spike_t: {
+                int id = data_exporter::current_id_count_++;
+                text += "[killbox]\n";
+                text += "id = " + to_string(id) + "\n";
+                text += "pos = (" + to_string(i * SPRITESHEET_CELL_X) + "," +
+                        to_string(j * SPRITESHEET_CELL_Y) + ")\n";
+                text += "collision_box = (0,0," +
+                        to_string(SPRITESHEET_CELL_X) + "," +
+                        to_string(SPRITESHEET_CELL_Y / 2) + ")\n";
+                text += "collision_mask = 00000011\n\n";
+                text += "[sprite]\n";
+                text += "parent = " + to_string(id) + "\n";
+                text += "atlas_coords = (3,4)\n";
+                text += "tint = (255,0,0,255)\n";
+                break;
+            }
+            case tile_type::spike_b: {
+                int id = data_exporter::current_id_count_++;
+                text += "[killbox]\n";
+                text += "id = " + to_string(id) + "\n";
+                text += "pos = (" + to_string(i * SPRITESHEET_CELL_X) + "," +
+                        to_string(j * SPRITESHEET_CELL_Y) + ")\n";
+                text += "collision_box = (0," +
+                        to_string(SPRITESHEET_CELL_Y / 2) + "," +
+                        to_string(SPRITESHEET_CELL_X) + "," +
+                        to_string(SPRITESHEET_CELL_Y / 2) + ")\n";
+                text += "collision_mask = 00000011\n\n";
+                text += "[sprite]\n";
+                text += "parent = " + to_string(id) + "\n";
+                text += "atlas_coords = (3,5)\n";
+                text += "tint = (255,0,0,255)\n";
+                break;
+            }
+            case tile_type::spike_l: {
+                int id = data_exporter::current_id_count_++;
+                text += "[killbox]\n";
+                text += "id = " + to_string(id) + "\n";
+                text += "pos = (" + to_string(i * SPRITESHEET_CELL_X) + "," +
+                        to_string(j * SPRITESHEET_CELL_Y) + ")\n";
+                text += "collision_box = (0,0," +
+                        to_string(SPRITESHEET_CELL_X / 2) + "," +
+                        to_string(SPRITESHEET_CELL_Y) + ")\n";
+                text += "collision_mask = 00000011\n\n";
+                text += "[sprite]\n";
+                text += "parent = " + to_string(id) + "\n";
+                text += "atlas_coords = (3,6)\n";
+                text += "tint = (255,0,0,255)\n";
+                break;
+            }
+            case tile_type::spike_r: {
+                int id = data_exporter::current_id_count_++;
+                text += "[killbox]\n";
+                text += "id = " + to_string(id) + "\n";
+                text += "pos = (" + to_string(i * SPRITESHEET_CELL_X) + "," +
+                        to_string(j * SPRITESHEET_CELL_Y) + ")\n";
+                text += "collision_box = (" +
+                        to_string(SPRITESHEET_CELL_X / 2) + ",0," +
+                        to_string(SPRITESHEET_CELL_X / 2) + "," +
+                        to_string(SPRITESHEET_CELL_Y) + ")\n";
+                text += "collision_mask = 00000011\n\n";
+                text += "[sprite]\n";
+                text += "parent = " + to_string(id) + "\n";
+                text += "atlas_coords = (3,7)\n";
+                text += "tint = (255,0,0,255)\n";
+                break;
+            }
+            case tile_type::spike_v_t: {
+                int id = data_exporter::current_id_count_++;
+                text += "[killbox]\n";
+                text += "id = " + to_string(id) + "\n";
+                text += "pos = (" + to_string(i * SPRITESHEET_CELL_X) + "," +
+                        to_string(j * SPRITESHEET_CELL_Y) + ")\n";
+                text += "collision_box = (" +
+                        to_string(SPRITESHEET_CELL_X / 4) + "," +
+                        to_string(SPRITESHEET_CELL_Y / 4) + "," +
+                        to_string(SPRITESHEET_CELL_X / 2) + "," +
+                        to_string(SPRITESHEET_CELL_Y / 4 * 3) + ")\n";
+                text += "collision_mask = 00000011\n\n";
+                text += "[sprite]\n";
+                text += "parent = " + to_string(id) + "\n";
+                text += "atlas_coords = (4,4)\n";
+                text += "tint = (255,0,0,255)\n";
+                break;
+            }
+            case tile_type::spike_v_m: {
+                int id = data_exporter::current_id_count_++;
+                text += "[killbox]\n";
+                text += "id = " + to_string(id) + "\n";
+                text += "pos = (" + to_string(i * SPRITESHEET_CELL_X) + "," +
+                        to_string(j * SPRITESHEET_CELL_Y) + ")\n";
+                text += "collision_box = (" +
+                        to_string(SPRITESHEET_CELL_X / 4) + ",0," +
+                        to_string(SPRITESHEET_CELL_X / 2) + "," +
+                        to_string(SPRITESHEET_CELL_Y) + ")\n";
+                text += "collision_mask = 00000011\n\n";
+                text += "[sprite]\n";
+                text += "parent = " + to_string(id) + "\n";
+                text += "atlas_coords = (4,5)\n";
+                text += "tint = (255,0,0,255)\n";
+                break;
+            }
+            case tile_type::spike_v_b: {
+                int id = data_exporter::current_id_count_++;
+                text += "[killbox]\n";
+                text += "id = " + to_string(id) + "\n";
+                text += "pos = (" + to_string(i * SPRITESHEET_CELL_X) + "," +
+                        to_string(j * SPRITESHEET_CELL_Y) + ")\n";
+                text += "collision_box = (" +
+                        to_string(SPRITESHEET_CELL_X / 4) + ",0," +
+                        to_string(SPRITESHEET_CELL_X / 2) + "," +
+                        to_string(SPRITESHEET_CELL_Y / 4 * 3) + ")\n";
+                text += "collision_mask = 00000011\n\n";
+                text += "[sprite]\n";
+                text += "parent = " + to_string(id) + "\n";
+                text += "atlas_coords = (4,6)\n";
+                text += "tint = (255,0,0,255)\n";
+                break;
+            }
+            case tile_type::spike_h_l: {
+                int id = data_exporter::current_id_count_++;
+                text += "[killbox]\n";
+                text += "id = " + to_string(id) + "\n";
+                text += "pos = (" + to_string(i * SPRITESHEET_CELL_X) + "," +
+                        to_string(j * SPRITESHEET_CELL_Y) + ")\n";
+                text += "collision_box = (" +
+                        to_string(SPRITESHEET_CELL_X / 4) + "," +
+                        to_string(SPRITESHEET_CELL_Y / 4) + "," +
+                        to_string(SPRITESHEET_CELL_X / 4 * 3) + "," +
+                        to_string(SPRITESHEET_CELL_Y / 2) + ")\n";
+                text += "collision_mask = 00000011\n\n";
+                text += "[sprite]\n";
+                text += "parent = " + to_string(id) + "\n";
+                text += "atlas_coords = (5,4)\n";
+                text += "tint = (255,0,0,255)\n";
+                break;
+            }
+            case tile_type::spike_h_m: {
+                int id = data_exporter::current_id_count_++;
+                text += "[killbox]\n";
+                text += "id = " + to_string(id) + "\n";
+                text += "pos = (" + to_string(i * SPRITESHEET_CELL_X) + "," +
+                        to_string(j * SPRITESHEET_CELL_Y) + ")\n";
+                text += "collision_box = (0," +
+                        to_string(SPRITESHEET_CELL_Y / 4) + "," +
+                        to_string(SPRITESHEET_CELL_X) + "," +
+                        to_string(SPRITESHEET_CELL_Y / 2) + ")\n";
+                text += "collision_mask = 00000011\n\n";
+                text += "[sprite]\n";
+                text += "parent = " + to_string(id) + "\n";
+                text += "atlas_coords = (5,5)\n";
+                text += "tint = (255,0,0,255)\n";
+                break;
+            }
+            case tile_type::spike_h_r: {
+                int id = data_exporter::current_id_count_++;
+                text += "[killbox]\n";
+                text += "id = " + to_string(id) + "\n";
+                text += "pos = (" + to_string(i * SPRITESHEET_CELL_X) + "," +
+                        to_string(j * SPRITESHEET_CELL_Y) + ")\n";
+                text += "collision_box = (0," +
+                        to_string(SPRITESHEET_CELL_Y / 4) + "," +
+                        to_string(SPRITESHEET_CELL_X / 4 * 3) + "," +
+                        to_string(SPRITESHEET_CELL_Y / 2) + ")\n";
+                text += "collision_mask = 00000011\n\n";
+                text += "[sprite]\n";
+                text += "parent = " + to_string(id) + "\n";
+                text += "atlas_coords = (5,6)\n";
+                text += "tint = (255,0,0,255)\n";
+                break;
+            }
+            default: continue;
+            }
+        }
+    }
+    return text;
+}
+
 string data_exporter::get_export_text(unordered_map<tileset, map> cells) {
+    data_exporter::current_id_count_ = 0;
     string data = "";
     data += data_exporter::get_bg_props_text_(&cells.at(tileset::background));
     data += data_exporter::get_bg_grass_text_(&cells.at(tileset::background));
@@ -323,6 +513,7 @@ string data_exporter::get_export_text(unordered_map<tileset, map> cells) {
     data += data_exporter::get_bg_puffs_text_(&cells.at(tileset::background));
     data += data_exporter::get_blocks_sprites_text_(&cells.at(tileset::blocks));
     data += data_exporter::get_physics_bodies_text_(&cells.at(tileset::blocks));
+    data += data_exporter::get_spikes_text_(&cells.at(tileset::interact));
     data += data_exporter::get_player_text_(&cells.at(tileset::interact));
     return data;
 }

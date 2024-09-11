@@ -126,17 +126,17 @@ void tileset_manager::initialize() {
     int_tiles.push_back((tile){(Vector2){7, 6}, tile_type::water});
     int_tiles.push_back((tile){(Vector2){10, 11}, tile_type::null});
     // spikes and platforms
-    int_tiles.push_back((tile){(Vector2){3, 4}, tile_type::kill});
-    int_tiles.push_back((tile){(Vector2){3, 5}, tile_type::kill});
-    int_tiles.push_back((tile){(Vector2){3, 6}, tile_type::kill});
-    int_tiles.push_back((tile){(Vector2){3, 7}, tile_type::kill});
-    int_tiles.push_back((tile){(Vector2){4, 4}, tile_type::kill});
-    int_tiles.push_back((tile){(Vector2){4, 5}, tile_type::kill});
-    int_tiles.push_back((tile){(Vector2){4, 6}, tile_type::kill});
+    int_tiles.push_back((tile){(Vector2){3, 4}, tile_type::spike_t});
+    int_tiles.push_back((tile){(Vector2){3, 5}, tile_type::spike_b});
+    int_tiles.push_back((tile){(Vector2){3, 6}, tile_type::spike_l});
+    int_tiles.push_back((tile){(Vector2){3, 7}, tile_type::spike_r});
+    int_tiles.push_back((tile){(Vector2){4, 4}, tile_type::spike_v_t});
+    int_tiles.push_back((tile){(Vector2){4, 5}, tile_type::spike_v_m});
+    int_tiles.push_back((tile){(Vector2){4, 6}, tile_type::spike_v_b});
     int_tiles.push_back((tile){(Vector2){4, 7}, tile_type::platform});
-    int_tiles.push_back((tile){(Vector2){5, 4}, tile_type::kill});
-    int_tiles.push_back((tile){(Vector2){5, 5}, tile_type::kill});
-    int_tiles.push_back((tile){(Vector2){5, 6}, tile_type::kill});
+    int_tiles.push_back((tile){(Vector2){5, 4}, tile_type::spike_h_l});
+    int_tiles.push_back((tile){(Vector2){5, 5}, tile_type::spike_h_m});
+    int_tiles.push_back((tile){(Vector2){5, 6}, tile_type::spike_h_r});
     int_tiles.push_back((tile){(Vector2){5, 7}, tile_type::platform});
     int_tiles.push_back((tile){(Vector2){0, 7}, tile_type::platform});
     int_tiles.push_back((tile){(Vector2){1, 7}, tile_type::platform});

@@ -11,6 +11,8 @@ public:
     Vector2 get_dir();
     bool is_grounded();
 
+    virtual void kill();
+
 protected:
     void tick_() override;
 

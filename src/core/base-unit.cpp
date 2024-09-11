@@ -36,6 +36,10 @@ bool base_unit::is_grounded() {
     return !this->get_bodies_touching_bottom().empty();
 }
 
+void base_unit::kill() {
+    return;
+}
+
 void base_unit::tick_() {
 
     // Brake in case there is no dir input or the player is going the other way

@@ -86,7 +86,16 @@ enum tile_type {
     platform,
     player,
     goal,
-    kill,
+    spike_t,
+    spike_b,
+    spike_l,
+    spike_r,
+    spike_v_t,
+    spike_v_m,
+    spike_v_b,
+    spike_h_l,
+    spike_h_m,
+    spike_h_r,
     button1,
     button2,
     button3,
@@ -97,9 +106,11 @@ enum tile_type {
 
 #define TILESETS {blocks, background, interact}
 #define TILE_TYPES                                                             \
-    {null,    prop,  grass,   waterfall, star,    water, drip,                 \
-     leaves,  puff,  block,   platform,  player,  goal,  kill,                 \
-     button1, gate1, button2, gate2,     button3, gate3}
+    {null,      prop,      grass,     waterfall, star,      water,             \
+     drip,      leaves,    puff,      block,     platform,  player,            \
+     goal,      spike_t,   spike_b,   spike_l,   spike_r,   spike_v_t,         \
+     spike_v_m, spike_v_b, spike_h_l, spike_h_m, spike_h_r, button1,           \
+     gate1,     button2,   gate2,     button3,   gate3}
 
 using tile = struct tile {
     Vector2 spritesheet_coords;

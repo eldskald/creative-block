@@ -1,5 +1,6 @@
 #include "core/player.h"
 #include "core/base-unit.h"
+#include "core/scene-manager.h"
 #include "engine/inputs.h"
 #include "engine/sprite.h"
 #include <raylib.h>
@@ -15,6 +16,13 @@ player::player() {
     player_sprite->atlas_coords = player_sprite_coords;
     player_sprite->tint = MAIN_MASK_COLOR;
     this->add_child(player_sprite);
+}
+
+void player::kill() {
+    if (this->killed_) return;
+    this->killed_ = true;
+    this->mark_for_deletion();
+    scene_manager::spawn_player();
 }
 
 void player::tick_() {

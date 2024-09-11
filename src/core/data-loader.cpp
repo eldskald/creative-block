@@ -1,10 +1,11 @@
 #include "core/data-loader.h"
 #include "core/falling-leaves.h"
-#include "core/water-drip.h"
+#include "core/killbox.h"
+#include "core/player.h"
 #include "core/puff.h"
+#include "core/water-drip.h"
 #include "engine/game-element.h"
 #include "engine/physics-body.h"
-#include "core/player.h"
 #include "engine/sprite.h"
 #include <cctype>
 #include <exception>
@@ -351,6 +352,13 @@ game_element* data_loader::get_element_from_block(element_block block) {
             data_loader::parse_game_element_property_line(emitter, line);
         }
         return emitter;
+    }
+    if (block.type == "killbox") {
+        auto* killer = new killbox();
+        for (auto& line : block.properties) {
+            data_loader::parse_physics_body_property_line(killer, line);
+        }
+        return killer;
     }
     throw invalid_argument("invalid block type");
 }
