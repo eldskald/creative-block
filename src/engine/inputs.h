@@ -11,8 +11,9 @@ class inputs {
     friend class game;
 
 public:
-    enum action { left, right, up, down, jump, spawn_shadow, reset };
+    enum action CONTROLS_ACTIONS;
 
+    static void initialize();
     static Vector2 get_dir_input();
     static bool did_dir_input_change();
     static bool is_action_pressed(action input);

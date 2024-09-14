@@ -4,64 +4,23 @@
 #include <unordered_map>
 #include <vector>
 
-unordered_map<inputs::action, vector<int>> inputs::action_buttons_ = {
-    {action::left, vector<int>{GAMEPAD_BUTTON_LEFT_FACE_LEFT}},
-    {action::right, vector<int>{GAMEPAD_BUTTON_LEFT_FACE_RIGHT}},
-    {action::up, vector<int>{GAMEPAD_BUTTON_LEFT_FACE_UP}},
-    {action::down, vector<int>{GAMEPAD_BUTTON_LEFT_FACE_DOWN}},
-    {action::jump,
-     vector<int>{GAMEPAD_BUTTON_RIGHT_FACE_DOWN,
-                 GAMEPAD_BUTTON_RIGHT_FACE_LEFT,
-                 GAMEPAD_BUTTON_RIGHT_FACE_UP,
-                 GAMEPAD_BUTTON_RIGHT_FACE_RIGHT}},
-    {action::spawn_shadow,
-     vector<int>{GAMEPAD_BUTTON_LEFT_TRIGGER_1, GAMEPAD_BUTTON_LEFT_TRIGGER_2}},
-    {action::reset, vector<int>{GAMEPAD_BUTTON_MIDDLE_RIGHT}},
-};
-
-unordered_map<inputs::action, vector<int>> inputs::action_keys_ = {
-    {action::left, vector<int>{KEY_A, KEY_LEFT}},
-    {action::right, vector<int>{KEY_D, KEY_RIGHT}},
-    {action::up, vector<int>{KEY_W, KEY_UP}},
-    {action::down, vector<int>{KEY_S, KEY_DOWN}},
-    {action::jump, vector<int>{KEY_J, KEY_Z}},
-    {action::spawn_shadow, vector<int>{KEY_K}},
-    {action::reset, vector<int>{KEY_BACKSPACE}},
-};
-
-unordered_map<inputs::action, bool> inputs::action_down_ = {
-    {action::left, false},
-    {action::right, false},
-    {action::up, false},
-    {action::down, false},
-    {action::jump, false},
-    {action::spawn_shadow, false},
-    {action::reset, false},
-};
-
-unordered_map<inputs::action, bool> inputs::action_pressed_ = {
-    {action::left, false},
-    {action::right, false},
-    {action::up, false},
-    {action::down, false},
-    {action::jump, false},
-    {action::spawn_shadow, false},
-    {action::reset, false},
-};
-
-unordered_map<inputs::action, bool> inputs::action_released_ = {
-    {action::left, false},
-    {action::right, false},
-    {action::up, false},
-    {action::down, false},
-    {action::jump, false},
-    {action::spawn_shadow, false},
-    {action::reset, false},
-};
+unordered_map<inputs::action, vector<int>> inputs::action_keys_ = CONTROLS_KEYBOARD;
+unordered_map<inputs::action, vector<int>> inputs::action_buttons_ = CONTROLS_GAMEPAD;
+unordered_map<inputs::action, bool> inputs::action_down_ = {};
+unordered_map<inputs::action, bool> inputs::action_pressed_ = {};
+unordered_map<inputs::action, bool> inputs::action_released_ = {};
 
 Vector2 inputs::dir_input_ = (Vector2){0};
 
 bool inputs::dir_input_changed_ = false;
+
+void inputs::initialize() {
+    for (auto action : CONTROLS_ACTIONS) {
+        inputs::action_down_.insert({action, false});
+        inputs::action_pressed_.insert({action, false});
+        inputs::action_released_.insert({action, false});
+    }
+}
 
 void inputs::tick_() {
 
@@ -76,7 +35,7 @@ void inputs::tick_() {
     inputs::dir_input_ = new_dir_input;
 
     // Update action states
-    for (auto [action, _value] : action_buttons_) {
+    for (auto action : CONTROLS_ACTIONS) {
         action_pressed_[action] = false;
         action_released_[action] = false;
         if (!action_down_[action] && inputs::is_action_down_(action)) {

@@ -16,6 +16,7 @@ void game::initial_setup() {
     sprite::initialize();
     sfx::initialize();
     scene_manager::initialize();
+    inputs::initialize();
 }
 
 void game::do_game_loop() {
