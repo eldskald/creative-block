@@ -32,6 +32,7 @@ void scene_manager::spawn_player() {
     auto* new_player = new player();
     new_player->pos = scene_manager::player_spawn_point_;
     game::get_root()->add_child(new_player);
+    new_player->emit_respawn_particles();
 }
 
 void scene_manager::change_scene(scene scene) {

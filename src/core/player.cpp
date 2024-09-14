@@ -1,6 +1,7 @@
 #include "core/player.h"
 #include "core/base-unit.h"
 #include "core/death-particles.h"
+#include "core/respawn-particles.h"
 #include "core/scene-manager.h"
 #include "engine/inputs.h"
 #include "engine/sprite.h"
@@ -18,11 +19,20 @@ player::player() {
     player_sprite->tint = MAIN_MASK_COLOR;
     this->add_child(player_sprite);
     this->sprite_ = player_sprite;
-    auto* emitter = new death_particles();
-    emitter->tint = MAIN_MASK_COLOR;
-    emitter->pos.y = -SPRITESHEET_CELL_SIZE_Y / 2;
-    this->add_child(emitter);
-    this->death_particles_emitter_ = emitter;
+    auto* death_emitter = new death_particles();
+    death_emitter->tint = MAIN_MASK_COLOR;
+    death_emitter->pos.y = -SPRITESHEET_CELL_SIZE_Y / 2;
+    this->add_child(death_emitter);
+    this->death_particles_emitter_ = death_emitter;
+    auto* respawn_emitter = new respawn_particles();
+    respawn_emitter->tint = MAIN_MASK_COLOR;
+    respawn_emitter->pos.y = -SPRITESHEET_CELL_SIZE_Y / 2;
+    this->add_child(respawn_emitter);
+    this->respawn_particles_emitter_ = respawn_emitter;
+}
+
+void player::emit_respawn_particles() {
+    this->respawn_particles_emitter_->emit();
 }
 
 void player::kill() {

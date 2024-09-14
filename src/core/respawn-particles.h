@@ -3,7 +3,7 @@
 #include "engine/physics-body.h"
 #include <raylib.h>
 
-class death_particles : public game_element {
+class respawn_particles : public game_element {
 public:
     Color tint{WHITE};
 

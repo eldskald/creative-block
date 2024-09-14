@@ -47,7 +47,7 @@ void death_particles::particle_::tick_() {
     }
     if (collision_detected) {
         this->bounces_++;
-        if (this->bounces_ > PARTICLE_DEATH_MAX_BOUNCES) {
+        if (this->bounces_ >= PARTICLE_DEATH_MAX_BOUNCES) {
             this->mark_for_deletion();
         }
     }
