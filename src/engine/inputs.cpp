@@ -10,10 +10,6 @@ unordered_map<inputs::action, bool> inputs::action_down_ = {};
 unordered_map<inputs::action, bool> inputs::action_pressed_ = {};
 unordered_map<inputs::action, bool> inputs::action_released_ = {};
 
-Vector2 inputs::dir_input_ = (Vector2){0};
-
-bool inputs::dir_input_changed_ = false;
-
 void inputs::initialize() {
     for (auto action : CONTROLS_ACTIONS) {
         inputs::action_down_.insert({action, false});
@@ -23,18 +19,6 @@ void inputs::initialize() {
 }
 
 void inputs::tick_() {
-
-    // Updating dir input
-    Vector2 new_dir_input =
-        (Vector2){(float)(inputs::is_action_down_(action::right)) -
-                      (float)(inputs::is_action_down_(action::left)),
-                  (float)inputs::is_action_down_(action::down) -
-                      (float)(inputs::is_action_down_(action::up))};
-    inputs::dir_input_changed_ =
-        !Vector2Equals(new_dir_input, inputs::dir_input_);
-    inputs::dir_input_ = new_dir_input;
-
-    // Update action states
     for (auto action : CONTROLS_ACTIONS) {
         action_pressed_[action] = false;
         action_released_[action] = false;
@@ -71,12 +55,4 @@ bool inputs::is_action_down(action act) {
 
 bool inputs::is_action_up(action act) {
     return !inputs::action_down_[act];
-}
-
-Vector2 inputs::get_dir_input() {
-    return (Vector2){inputs::dir_input_.x, inputs::dir_input_.y};
-}
-
-bool inputs::did_dir_input_change() {
-    return inputs::dir_input_changed_;
 }

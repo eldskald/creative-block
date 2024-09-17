@@ -1,6 +1,16 @@
 #pragma once
 #include "engine/physics-body.h"
+#include "engine/inputs.h"
 #include <raylib.h>
+#include <list>
+
+using input = struct input {
+    inputs::action action;
+    bool pressed;
+    float time;
+};
+
+using input_history = list<input>;
 
 class base_unit : public physics_body {
 public:
