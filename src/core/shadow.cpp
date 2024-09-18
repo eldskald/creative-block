@@ -12,8 +12,8 @@ using namespace std;
 shadow::shadow(input_history history) : history_(std::move(history)) {
     this->collision_box =
         (Rectangle){0, 0, SPRITESHEET_CELL_SIZE_X, SPRITESHEET_CELL_SIZE_Y};
-    this->collision_mask = COL_MASK_PLAYER;
-    this->collision_layer = COL_LAYER_PLAYER;
+    this->collision_mask = COL_MASK_SHADOW;
+    this->collision_layer = COL_LAYER_SHADOW;
     auto* shadow_sprite = new sprite();
     shadow_sprite->atlas_coords = PLAYER_ATLAS_COORDS;
     shadow_sprite->tint = SHADOW_MASK_COLOR;
