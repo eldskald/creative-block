@@ -6,7 +6,6 @@
 #include "core/shadow.h"
 #include "engine/game-element.h"
 #include <list>
-#include <iostream>
 #include <raylib.h>
 
 using namespace std;
@@ -60,10 +59,6 @@ void scene_manager::new_shadow_history_(input_history history) {
     }
 }
 
-void scene_manager::remove_shadow(shadow* shadow) {
-    scene_manager::shadows_.erase(shadow->get_iterator_to_self());
-}
-
 void scene_manager::change_scene(scene scene) {
     list<game_element*> elements;
     switch (scene) {
@@ -90,13 +85,14 @@ void scene_manager::change_scene(scene scene) {
 
 void scene_manager::spawn_shadows_() {
     while (!scene_manager::shadows_.empty()) {
-        scene_manager::shadows_.front()->remove();
+        scene_manager::shadows_.front()->mark_for_deletion();
+        scene_manager::shadows_.pop_front();
     }
     for (auto history : scene_manager::shadow_histories_) {
-        cout << history.size() << endl;
         auto* new_shadow = new shadow(history);
         new_shadow->pos = scene_manager::player_spawn_point_;
         game::get_root()->add_child(new_shadow);
         new_shadow->emit_spawn_particles();
+        scene_manager::shadows_.push_back(new_shadow);
     }
 }

@@ -77,6 +77,8 @@ void player::history_tick_() {
 
 void player::shadow_tick_() {
     if (inputs::is_action_pressed(inputs::action::shadow)) {
+        this->history_.push_back(
+            (input){inputs::action::shadow, true, this->time_});
         scene_manager::shadow_pressed(this->history_, this);
         this->history_.clear();
         this->time_ = 0.0f;

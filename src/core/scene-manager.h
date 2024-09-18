@@ -12,7 +12,6 @@ public:
     static void initialize();
     static scene get_current_scene();
     static void respawn_player();
-    static void remove_shadow(shadow* shadow);
     static void change_scene(scene scene);
     static void shadow_pressed(input_history history, player* player);
 

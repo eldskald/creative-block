@@ -2,7 +2,6 @@
 #include "core/base-unit.h"
 #include "core/death-particles.h"
 #include "core/respawn-particles.h"
-#include "core/scene-manager.h"
 #include "engine/sprite.h"
 #include <algorithm>
 #include <raylib.h>
@@ -32,14 +31,6 @@ shadow::shadow(input_history history) : history_(std::move(history)) {
     this->spawn_particles_emitter_ = spawn_emitter;
 }
 
-void shadow::set_iterator_to_self(list<shadow*>::iterator it) {
-    this->iterator_to_self_ = it;
-}
-
-list<shadow*>::iterator shadow::get_iterator_to_self() {
-    return this->iterator_to_self_;
-}
-
 void shadow::emit_spawn_particles() {
     this->spawn_particles_emitter_->emit();
 }
@@ -50,29 +41,25 @@ void shadow::kill() {
     this->death_particles_emitter_->emit();
     this->collision_layer = 0b00000000;
     this->collision_mask = 0b00000000;
-    scene_manager::remove_shadow(this);
-    this->mark_for_deletion();
-}
-
-void shadow::remove() {
-    scene_manager::remove_shadow(this);
     this->mark_for_deletion();
 }
 
 void shadow::tick_() {
-    if (this->history_.empty()) return;
-
-    this->time_ += GetFrameTime();
-    input curr = this->history_.front();
-    if (this->time_ >= curr.time) {
-        this->read_input_(curr);
-        this->history_.pop_front();
+    if (!this->history_.empty()) {
+        this->time_ += GetFrameTime();
+        input curr = this->history_.front();
+        if (this->time_ >= curr.time) {
+            this->read_input_(curr);
+            this->history_.pop_front();
+        }
     }
 
     this->base_unit::tick_();
 }
 
 void shadow::read_input_(input input) {
+    if (this->inputs_ended_) return;
+
     switch (input.action) {
     case inputs::action::jump: {
         if (input.pressed)
@@ -108,6 +95,11 @@ void shadow::read_input_(input input) {
         else
             this->curr_dir_.y -= 1.0f;
         break;
+    }
+    case inputs::action::shadow: {
+        this->release_jump();
+        this->curr_dir_ = (Vector2){0.0f, 0.0f};
+        this->inputs_ended_ = true;
     }
     default:
         break;
