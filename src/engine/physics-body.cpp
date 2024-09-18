@@ -17,8 +17,10 @@ list<physics_body*> physics_body::get_bodies_touching_top() {
         floor(this->get_global_pos().y + this->collision_box.y - 1.0f),
         floor(this->collision_box.width),
         1.0f};
-    return physics_body::get_colliders(
-        rect, this->collision_mask, this->collision_layer);
+    return physics_body::get_colliders(rect,
+                                       this->collision_mask |
+                                           this->v_collision_mask,
+                                       this->collision_layer);
 }
 
 list<physics_body*> physics_body::get_bodies_touching_left() {
@@ -38,8 +40,10 @@ list<physics_body*> physics_body::get_bodies_touching_bottom() {
                           this->collision_box.height),
                     floor(this->collision_box.width),
                     1.0f};
-    return physics_body::get_colliders(
-        rect, this->collision_mask, this->collision_layer);
+    return physics_body::get_colliders(rect,
+                                       this->collision_mask |
+                                           this->v_collision_mask,
+                                       this->collision_layer);
 }
 
 list<physics_body*> physics_body::get_bodies_touching_right() {
@@ -179,7 +183,9 @@ float physics_body::compute_v_movement_(float delta_d, bool ignore_children) {
 
     // Iterate through all bodies found on the trail.
     list<physics_body*> colliders = physics_body::get_colliders(
-        target_rec, this->collision_mask, this->collision_layer);
+        target_rec,
+        this->collision_mask | this->v_collision_mask,
+        this->collision_layer);
     for (auto collider : colliders) {
 
         // Ignore the body if it is among the following:

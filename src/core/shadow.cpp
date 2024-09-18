@@ -12,8 +12,9 @@ using namespace std;
 shadow::shadow(input_history history) : history_(std::move(history)) {
     this->collision_box =
         (Rectangle){0, 0, SPRITESHEET_CELL_SIZE_X, SPRITESHEET_CELL_SIZE_Y};
-    this->collision_mask = COL_MASK_SHADOW;
     this->collision_layer = COL_LAYER_SHADOW;
+    this->collision_mask = COL_MASK_SHADOW;
+    this->v_collision_mask = COL_V_MASK_PLAYER_SHADOW;
     auto* shadow_sprite = new sprite();
     shadow_sprite->atlas_coords = PLAYER_ATLAS_COORDS;
     shadow_sprite->tint = SHADOW_MASK_COLOR;
@@ -41,10 +42,13 @@ void shadow::kill() {
     this->death_particles_emitter_->emit();
     this->collision_layer = 0b00000000;
     this->collision_mask = 0b00000000;
-    this->mark_for_deletion();
+    this->v_collision_mask = 0b00000000;
+    this->sprite_->mark_for_deletion();
 }
 
 void shadow::tick_() {
+    if (this->killed_) return;
+
     if (!this->history_.empty()) {
         this->time_ += GetFrameTime();
         input curr = this->history_.front();
