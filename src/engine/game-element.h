@@ -23,6 +23,7 @@ public:
     list<game_element*> get_children();
     void add_child(game_element* element);
     void remove_child(game_element* child);
+    void reparent(game_element* new_parent);
     void mark_for_deletion();
     bool descends_from(game_element* element);
     bool is_on_tree();
@@ -36,9 +37,11 @@ protected:
 private:
     game_element* parent_{nullptr};
     list<game_element*> children_;
+    game_element* next_parent_{nullptr};
     bool is_on_tree_{false};
     bool is_marked_for_deletion_{false};
 
+    static list<game_element*> to_be_reparented_;
     static list<game_element*> marked_for_deletion_;
 
     static void trigger_enter_(game_element* element);
@@ -46,4 +49,5 @@ private:
     static void trigger_tick_(game_element* element);
     static void rec_mark_for_deletion_(game_element* element);
     static void delete_marked_();
+    static void reparent_elements_();
 };

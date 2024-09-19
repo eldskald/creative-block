@@ -18,15 +18,15 @@ int scene_manager::level_shadows_limit_ = 1;
 
 void scene_manager::initialize() {
     auto* root = new game_element();
-    game::set_root(root);
     list<game_element*> elements = data_loader::load(START_MENU_FILE);
-    for (auto element : elements) {
+    for (auto* element : elements) {
         root->add_child(element);
         auto* player_element = dynamic_cast<player*>(element);
         if (player_element) {
             scene_manager::player_spawn_point_ = player_element->pos;
         }
     }
+    game::set_root(root);
 }
 
 scene_manager::scene scene_manager::get_current_scene() {
@@ -73,7 +73,6 @@ void scene_manager::change_scene(scene scene) {
     }
     game::get_root()->mark_for_deletion();
     auto* new_root = new game_element();
-    game::set_root(new_root);
     for (game_element* element : elements) {
         new_root->add_child(element);
         auto* player_element = dynamic_cast<player*>(element);
@@ -81,6 +80,7 @@ void scene_manager::change_scene(scene scene) {
             scene_manager::player_spawn_point_ = player_element->pos;
         }
     }
+    game::set_root(new_root);
 }
 
 void scene_manager::spawn_shadows_() {

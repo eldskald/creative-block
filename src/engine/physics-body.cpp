@@ -17,10 +17,20 @@ list<physics_body*> physics_body::get_bodies_touching_top() {
         floor(this->get_global_pos().y + this->collision_box.y - 1.0f),
         floor(this->collision_box.width),
         1.0f};
-    return physics_body::get_colliders(rect,
-                                       this->collision_mask |
-                                           this->v_collision_mask,
-                                       this->collision_layer);
+    auto bodies = physics_body::get_colliders(rect,
+                                              this->collision_mask |
+                                                  this->v_collision_mask,
+                                              this->collision_layer);
+
+    // Only count bodies that aren't overlapping
+    list<physics_body*> touching_bodies;
+    for (auto* body : bodies) {
+        if (!CheckCollisionRecs(body->get_collision_rect_(),
+                                this->get_collision_rect_())) {
+            touching_bodies.push_back(body);
+        }
+    }
+    return touching_bodies;
 }
 
 list<physics_body*> physics_body::get_bodies_touching_left() {
@@ -29,8 +39,18 @@ list<physics_body*> physics_body::get_bodies_touching_left() {
         floor(this->get_global_pos().y + this->collision_box.y),
         1.0f,
         floor(this->collision_box.height)};
-    return physics_body::get_colliders(
+    auto bodies = physics_body::get_colliders(
         rect, this->collision_mask, this->collision_layer);
+
+    // Only count bodies that aren't overlapping
+    list<physics_body*> touching_bodies;
+    for (auto* body : bodies) {
+        if (!CheckCollisionRecs(body->get_collision_rect_(),
+                                this->get_collision_rect_())) {
+            touching_bodies.push_back(body);
+        }
+    }
+    return touching_bodies;
 }
 
 list<physics_body*> physics_body::get_bodies_touching_bottom() {
@@ -40,10 +60,20 @@ list<physics_body*> physics_body::get_bodies_touching_bottom() {
                           this->collision_box.height),
                     floor(this->collision_box.width),
                     1.0f};
-    return physics_body::get_colliders(rect,
-                                       this->collision_mask |
-                                           this->v_collision_mask,
-                                       this->collision_layer);
+    auto bodies = physics_body::get_colliders(rect,
+                                              this->collision_mask |
+                                                  this->v_collision_mask,
+                                              this->collision_layer);
+
+    // Only count bodies that aren't overlapping
+    list<physics_body*> touching_bodies;
+    for (auto* body : bodies) {
+        if (!CheckCollisionRecs(body->get_collision_rect_(),
+                                this->get_collision_rect_())) {
+            touching_bodies.push_back(body);
+        }
+    }
+    return touching_bodies;
 }
 
 list<physics_body*> physics_body::get_bodies_touching_right() {
@@ -53,8 +83,18 @@ list<physics_body*> physics_body::get_bodies_touching_right() {
                     floor(this->get_global_pos().y + this->collision_box.y),
                     1.0f,
                     floor(this->collision_box.height)};
-    return physics_body::get_colliders(
+    auto bodies = physics_body::get_colliders(
         rect, this->collision_mask, this->collision_layer);
+
+    // Only count bodies that aren't overlapping
+    list<physics_body*> touching_bodies;
+    for (auto* body : bodies) {
+        if (!CheckCollisionRecs(body->get_collision_rect_(),
+                                this->get_collision_rect_())) {
+            touching_bodies.push_back(body);
+        }
+    }
+    return touching_bodies;
 }
 
 list<physics_body*> physics_body::get_detected_bodies() {

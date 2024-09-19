@@ -1,7 +1,9 @@
 #include "core/base-unit.h"
+#include "core/game.h"
 #include <algorithm>
 #include <cmath>
 #include <raylib.h>
+#include <raymath.h>
 
 using namespace std;
 
@@ -92,4 +94,18 @@ void base_unit::tick_() {
     // The code that cause the jump is on the press_jump() function, and the
     // code that causes a jump to end when you release the button is on the
     // release_jump() function.
+
+    // Checks if it is on top of another base_unit to see if it gets carried
+    bool is_carried = false;
+    for (auto* body : this->get_bodies_touching_bottom()) {
+        auto* unit = dynamic_cast<base_unit*>(body);
+        if (unit) {
+            is_carried = true;
+            if (this->get_parent() != unit) this->reparent(unit);
+            break;
+        }
+    }
+    if (!is_carried && this->get_parent() != game::get_root()) {
+        this->reparent(game::get_root());
+    }
 }

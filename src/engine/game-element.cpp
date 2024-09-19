@@ -1,10 +1,12 @@
 #include "game-element.h"
 #include <list>
+#include <raylib.h>
 #include <raymath.h>
 
 using namespace std;
 
 list<game_element*> game_element::marked_for_deletion_ = {};
+list<game_element*> game_element::to_be_reparented_ = {};
 
 game_element* game_element::get_parent() {
     return this->parent_;
@@ -19,20 +21,23 @@ list<game_element*> game_element::get_children() {
 }
 
 void game_element::add_child(game_element* element) {
-    if (element->parent_) {
-        return;
-    }
+    if (element->parent_) return;
     element->parent_ = this;
     this->children_.push_back(element);
     if (this->is_on_tree_) game_element::trigger_enter_(element);
 }
 
 void game_element::remove_child(game_element* child) {
-    if (child->parent_ == this) {
-        if (child->is_on_tree_) game_element::trigger_exit_(child);
-        this->children_.remove(child);
-        child->parent_ = nullptr;
-    }
+    if (child->parent_ != this) return;
+    if (child->is_on_tree_) game_element::trigger_exit_(child);
+    this->children_.remove(child);
+    child->parent_ = nullptr;
+}
+
+void game_element::reparent(game_element* new_parent) {
+    if (!this->is_on_tree_) return;
+    this->next_parent_ = new_parent;
+    game_element::to_be_reparented_.push_back(this);
 }
 
 bool game_element::descends_from(game_element* element) {
@@ -116,4 +121,16 @@ void game_element::delete_marked_() {
         delete element;
     }
     game_element::marked_for_deletion_.clear();
+}
+
+void game_element::reparent_elements_() {
+    if (game_element::to_be_reparented_.empty()) return;
+    while (!game_element::to_be_reparented_.empty()) {
+        auto* element = game_element::to_be_reparented_.front();
+        game_element::to_be_reparented_.pop_front();
+        element->pos = Vector2Subtract(element->get_global_pos(),
+                                       element->next_parent_->get_global_pos());
+        element->parent_->remove_child(element);
+        element->next_parent_->add_child(element);
+    }
 }

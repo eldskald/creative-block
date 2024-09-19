@@ -44,6 +44,7 @@ void shadow::kill() {
     this->collision_mask = 0b00000000;
     this->v_collision_mask = 0b00000000;
     this->sprite_->mark_for_deletion();
+    this->sprite_ = nullptr;
 }
 
 void shadow::tick_() {
