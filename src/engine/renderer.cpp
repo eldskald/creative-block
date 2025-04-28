@@ -16,14 +16,12 @@ RenderTexture2D renderer::final_tex_ = (RenderTexture2D){0};
 Vector2 renderer::stretched_tex_size_ = (Vector2){0};
 Vector2 renderer::window_size_ = (Vector2){0};
 Shader renderer::base_screen_shader_ = (Shader){0};
-Shader renderer::v_blur_shader_1_ = (Shader){0};
-Shader renderer::h_blur_shader_1_ = (Shader){0};
-Shader renderer::v_blur_shader_2_ = (Shader){0};
-Shader renderer::h_blur_shader_2_ = (Shader){0};
+Shader renderer::blur_shader_ = (Shader){0};
 #ifdef DEV
 bool renderer::showing_areas_ = false;
 bool renderer::showing_fixed_bodies_ = false;
 bool renderer::showing_kinematic_bodies_ = false;
+renderer::bloom_debug renderer::texture_rendered_ = final;
 #endif
 
 const float aspect_ratio = (float)WINDOW_SIZE_X / (float)WINDOW_SIZE_Y;
@@ -33,8 +31,12 @@ void renderer::initialize() {
     renderer::base_tex_1_ = LoadRenderTexture(MAIN_TEX_SIZE, MAIN_TEX_SIZE);
     renderer::base_tex_2_ = LoadRenderTexture(MAIN_TEX_SIZE, MAIN_TEX_SIZE);
     renderer::blur_tex_1_ = LoadRenderTexture(MAIN_TEX_SIZE, MAIN_TEX_SIZE);
+    SetTextureFilter(renderer::blur_tex_1_.texture, TEXTURE_FILTER_TRILINEAR);
+    SetTextureWrap(renderer::blur_tex_1_.texture, TEXTURE_WRAP_CLAMP);
     renderer::blur_tex_2_ = LoadRenderTexture(MAIN_TEX_SIZE, MAIN_TEX_SIZE);
     SetTextureFilter(renderer::blur_tex_2_.texture, TEXTURE_FILTER_TRILINEAR);
+    SetTextureWrap(renderer::blur_tex_2_.texture, TEXTURE_WRAP_CLAMP);
+    renderer::final_tex_ = LoadRenderTexture(2, 2);
     renderer::final_tex_ = LoadRenderTexture(2, 2);
     renderer::stretched_tex_size_ = (Vector2){2, 2};
     renderer::window_size_ =
@@ -107,38 +109,17 @@ void renderer::initialize() {
                                    &debug_4_value,
                                    SHADER_UNIFORM_VEC4);
 
-    // Blur shader
-    renderer::h_blur_shader_1_ = LoadShader(BASE_VERT_SHADER, BLUR_SHADER);
-    renderer::v_blur_shader_1_ = LoadShader(BASE_VERT_SHADER, BLUR_SHADER);
-    renderer::h_blur_shader_2_ = LoadShader(BASE_VERT_SHADER, BLUR_SHADER);
-    renderer::v_blur_shader_2_ = LoadShader(BASE_VERT_SHADER, BLUR_SHADER);
+    renderer::blur_shader_ = LoadShader(BASE_VERT_SHADER, BLUR_SHADER);
     array<float, 2> tex_size = {MAIN_TEX_SIZE, MAIN_TEX_SIZE};
-    renderer::set_shader_property_(renderer::h_blur_shader_1_,
+    float intensity_1 = BLOOM_INTENSITY;
+    renderer::set_shader_property_(renderer::blur_shader_,
                                    "textureSize",
                                    &tex_size,
                                    SHADER_UNIFORM_VEC2);
-    renderer::set_shader_property_(renderer::v_blur_shader_1_,
-                                   "textureSize",
-                                   &tex_size,
-                                   SHADER_UNIFORM_VEC2);
-    renderer::set_shader_property_(renderer::h_blur_shader_2_,
-                                   "textureSize",
-                                   &tex_size,
-                                   SHADER_UNIFORM_VEC2);
-    renderer::set_shader_property_(renderer::v_blur_shader_2_,
-                                   "textureSize",
-                                   &tex_size,
-                                   SHADER_UNIFORM_VEC2);
-    array<float, 2> right = {1.0f, 0.0f};
-    renderer::set_shader_property_(
-        renderer::h_blur_shader_1_, "direction", &right, SHADER_UNIFORM_VEC2);
-    renderer::set_shader_property_(
-        renderer::h_blur_shader_2_, "direction", &right, SHADER_UNIFORM_VEC2);
-    array<float, 2> up = {0.0f, -1.0f};
-    renderer::set_shader_property_(
-        renderer::v_blur_shader_1_, "direction", &up, SHADER_UNIFORM_VEC2);
-    renderer::set_shader_property_(
-        renderer::v_blur_shader_2_, "direction", &up, SHADER_UNIFORM_VEC2);
+    renderer::set_shader_property_(renderer::blur_shader_,
+                                   "intensity",
+                                   &intensity_1,
+                                   SHADER_UNIFORM_FLOAT);
 }
 
 void renderer::render() {
@@ -148,6 +129,41 @@ void renderer::render() {
     renderer::post_process_();
     BeginDrawing();
     ClearBackground(BLACK);
+#ifdef DEV
+    switch (renderer::texture_rendered_) {
+    case final: {
+        DrawTexturePro(renderer::final_tex_.texture,
+                       (Rectangle){0.0f,
+                                   0.0f,
+                                   renderer::stretched_tex_size_.x,
+                                   -renderer::stretched_tex_size_.y},
+                       (Rectangle){0.0f,
+                                   0.0f,
+                                   renderer::stretched_tex_size_.x,
+                                   renderer::stretched_tex_size_.y},
+                       (Vector2){0, 0},
+                       0.0f,
+                       WHITE);
+        break;
+    }
+    case base_1: {
+        renderer::stretch_texture_(base_tex_1_.texture);
+        break;
+    }
+    case base_2: {
+        renderer::stretch_texture_(base_tex_2_.texture);
+        break;
+    }
+    case blur_1: {
+        renderer::stretch_texture_(blur_tex_1_.texture);
+        break;
+    }
+    case blur_2: {
+        renderer::stretch_texture_(blur_tex_2_.texture);
+        break;
+    }
+    }
+#else
     DrawTexturePro(renderer::final_tex_.texture,
                    (Rectangle){0.0f,
                                0.0f,
@@ -157,20 +173,36 @@ void renderer::render() {
                                0.0f,
                                renderer::stretched_tex_size_.x,
                                renderer::stretched_tex_size_.y},
-                   (Vector2){0.0f, 0.0f},
+                   (Vector2){0, 0},
                    0.0f,
                    WHITE);
+#endif
     EndDrawing();
 #ifdef DEV
-    if (IsKeyPressed(KEY_ONE)) {
+    if (IsKeyPressed(DEBUG_CTL_SHOW_AREAS)) {
         renderer::showing_areas_ = !renderer::showing_areas_;
     }
-    if (IsKeyPressed(KEY_TWO)) {
+    if (IsKeyPressed(DEBUG_CTL_SHOW_FIXED_BODIES)) {
         renderer::showing_fixed_bodies_ = !renderer::showing_fixed_bodies_;
     }
-    if (IsKeyPressed(KEY_THREE)) {
+    if (IsKeyPressed(DEBUG_CTL_SHOW_KINEMATIC_BODIES)) {
         renderer::showing_kinematic_bodies_ =
             !renderer::showing_kinematic_bodies_;
+    }
+    if (IsKeyPressed(DEBUG_CTL_RENDER_FINAL)) {
+        renderer::texture_rendered_ = final;
+    }
+    if (IsKeyPressed(DEBUG_CTL_RENDER_BLUR_1)) {
+        renderer::texture_rendered_ = blur_1;
+    }
+    if (IsKeyPressed(DEBUG_CTL_RENDER_BLUR_2)) {
+        renderer::texture_rendered_ = blur_2;
+    }
+    if (IsKeyPressed(DEBUG_CTL_RENDER_BASE_1)) {
+        renderer::texture_rendered_ = base_1;
+    }
+    if (IsKeyPressed(DEBUG_CTL_RENDER_BASE_2)) {
+        renderer::texture_rendered_ = base_2;
     }
 #endif
 }
@@ -250,19 +282,28 @@ void renderer::render_base_() {
     BeginTextureMode(renderer::base_tex_2_);
     ClearBackground(BLANK);
     BeginShaderMode(renderer::base_screen_shader_);
-    DrawTexture(renderer::base_tex_1_.texture, 0, 0, WHITE);
+    DrawTexturePro(renderer::base_tex_1_.texture,
+                   (Rectangle){0, 0, MAIN_TEX_SIZE, -MAIN_TEX_SIZE},
+                   (Rectangle){0, 0, MAIN_TEX_SIZE, MAIN_TEX_SIZE},
+                   (Vector2){0, 0},
+                   0.0f,
+                   WHITE);
     EndShaderMode();
     EndTextureMode();
 }
 
 // Takes a texture of size WINDOW_SIZE_X by WINDOW_SIZE_Y and stretches it to
-// fill the window size while maintaining aspect ratio and centralized.
+// fill the window size while maintaining aspect ratio and centralized, also it
+// assumes the texture is a RenderTexture and thus y-inverted.
 void renderer::stretch_texture_(Texture2D texture) {
     if (renderer::window_size_.x / renderer::window_size_.y >= aspect_ratio) {
         float stretched_tex_x = renderer::window_size_.y * aspect_ratio;
         DrawTexturePro(
             texture,
-            (Rectangle){0.0f, 0.0f, WINDOW_SIZE_X, WINDOW_SIZE_Y},
+            (Rectangle){0.0f,
+                        MAIN_TEX_SIZE - WINDOW_SIZE_Y,
+                        WINDOW_SIZE_X,
+                        -WINDOW_SIZE_Y},
             (Rectangle){(renderer::window_size_.x - stretched_tex_x) / 2,
                         0.0f,
                         stretched_tex_x,
@@ -274,7 +315,10 @@ void renderer::stretch_texture_(Texture2D texture) {
         float stretched_tex_y = renderer::window_size_.x / aspect_ratio;
         DrawTexturePro(
             texture,
-            (Rectangle){0.0f, 0.0f, WINDOW_SIZE_X, WINDOW_SIZE_Y},
+            (Rectangle){0.0f,
+                        MAIN_TEX_SIZE - WINDOW_SIZE_Y,
+                        WINDOW_SIZE_X,
+                        -WINDOW_SIZE_Y},
             (Rectangle){0.0f,
                         (renderer::window_size_.y - stretched_tex_y) / 2,
                         renderer::window_size_.x,
@@ -288,15 +332,25 @@ void renderer::stretch_texture_(Texture2D texture) {
 void renderer::post_process_() {
     BeginTextureMode(renderer::blur_tex_1_);
     ClearBackground(BLACK);
-    BeginShaderMode(renderer::h_blur_shader_1_);
-    DrawTexture(renderer::base_tex_2_.texture, 0, 0, WHITE);
+    BeginShaderMode(renderer::blur_shader_);
+    DrawTexturePro(renderer::base_tex_2_.texture,
+                   (Rectangle){0.0f, 0.0f, MAIN_TEX_SIZE, -MAIN_TEX_SIZE},
+                   (Rectangle){0.0f, 0.0f, MAIN_TEX_SIZE, MAIN_TEX_SIZE},
+                   (Vector2){0.0f, 0.0f},
+                   0.0f,
+                   WHITE);
     EndShaderMode();
     EndTextureMode();
 
     BeginTextureMode(renderer::blur_tex_2_);
     ClearBackground(BLACK);
-    BeginShaderMode(renderer::v_blur_shader_1_);
-    DrawTexture(renderer::blur_tex_1_.texture, 0, 0, WHITE);
+    BeginShaderMode(renderer::blur_shader_);
+    DrawTexturePro(renderer::blur_tex_1_.texture,
+                   (Rectangle){0.0f, 0.0f, MAIN_TEX_SIZE, -MAIN_TEX_SIZE},
+                   (Rectangle){0.0f, 0.0f, MAIN_TEX_SIZE, MAIN_TEX_SIZE},
+                   (Vector2){0.0f, 0.0f},
+                   0.0f,
+                   WHITE);
     EndShaderMode();
     EndTextureMode();
 
