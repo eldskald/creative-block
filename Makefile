@@ -71,19 +71,19 @@ clean:
 install:
 	-rm -rf ./$(INCLUDE_DIR) ./$(LIBS_DIR)
 	-mkdir -p $(TEMP_DIR) $(INCLUDE_DIR) $(LIBS_DIR) $(LINUX_LIBS) $(WIN_LIBS) $(WEB_LIBS)
-	-cd $(TEMP_DIR) && git clone --depth 1 --branch 5.0 https://github.com/raysan5/raylib.git
+	-cd $(TEMP_DIR) && git clone --depth 1 --branch 5.5 https://github.com/raysan5/raylib.git
 	-cd $(TEMP_DIR)/raylib/src && make PLATFORM=PLATFORM_DESKTOP
 	-cp $(TEMP_DIR)/raylib/src/raylib.h ./$(INCLUDE_DIR)
 	-cp $(TEMP_DIR)/raylib/src/raymath.h ./$(INCLUDE_DIR)
 	-mv $(TEMP_DIR)/raylib/src/libraylib.a ./$(LINUX_LIBS)
 	-rm -rf ./$(TEMP_DIR)
 	-mkdir -p $(TEMP_DIR)
-	-cd $(TEMP_DIR) && git clone --depth 1 --branch 5.0 https://github.com/raysan5/raylib.git
+	-cd $(TEMP_DIR) && git clone --depth 1 --branch 5.5 https://github.com/raysan5/raylib.git
 	-cd $(TEMP_DIR)/raylib/src && make PLATFORM=PLATFORM_DESKTOP OS=Windows_NT CC=x86_64-w64-mingw32-gcc AR=x86_64-w64-mingw32-ar
 	-mv $(TEMP_DIR)/raylib/src/libraylib.a ./$(WIN_LIBS)
 	-rm -rf ./$(TEMP_DIR)
 	-mkdir -p $(TEMP_DIR)
-	-cd $(TEMP_DIR) && git clone --depth 1 --branch 5.0 https://github.com/raysan5/raylib.git
+	-cd $(TEMP_DIR) && git clone --depth 1 --branch 5.5 https://github.com/raysan5/raylib.git
 	-cd $(TEMP_DIR)/raylib/src && make PLATFORM=PLATFORM_WEB -B
 	-mv $(TEMP_DIR)/raylib/src/libraylib.a ./$(WEB_LIBS)
 	rm -rf ./$(TEMP_DIR)
