@@ -8,7 +8,6 @@ uniform sampler2D texture0;
 uniform vec4 colDiffuse;
 
 uniform vec2 textureSize;
-uniform float intensity;
 
 //    1    8   28   56   70   56   28    8    1
 //    8   64  224  448  560  448  224   64    8
@@ -113,5 +112,5 @@ void main() {
         texture2D(texture0, uv + vec2(3, 4) / textureSize) * 8.0 +
         texture2D(texture0, uv + vec2(4, 4) / textureSize) * 1.0;
 
-    gl_FragColor = col * colDiffuse * intensity / 65536.0;
+    gl_FragColor = col * colDiffuse / 65536.0;
 }

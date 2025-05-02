@@ -2,7 +2,6 @@
 #include "physics-body.h"
 #include "sprite.h"
 #include <array>
-#include <cmath>
 #include <raylib.h>
 #include <string>
 
@@ -16,7 +15,8 @@ RenderTexture2D renderer::final_tex_ = (RenderTexture2D){0};
 Vector2 renderer::stretched_tex_size_ = (Vector2){0};
 Vector2 renderer::window_size_ = (Vector2){0};
 Shader renderer::base_screen_shader_ = (Shader){0};
-Shader renderer::blur_shader_ = (Shader){0};
+Shader renderer::blur_shader_1_ = (Shader){0};
+Shader renderer::blur_shader_2_ = (Shader){0};
 #ifdef DEV
 bool renderer::showing_areas_ = false;
 bool renderer::showing_fixed_bodies_ = false;
@@ -109,17 +109,20 @@ void renderer::initialize() {
                                    &debug_4_value,
                                    SHADER_UNIFORM_VEC4);
 
-    renderer::blur_shader_ = LoadShader(BASE_VERT_SHADER, BLUR_SHADER);
+    // Two blur shaders for the two passes. The first one blurs with intensity
+    // taken into account, and takes the base_tex_1_ so the shader knows where
+    // background pixels are to intensify them even more.
+    renderer::blur_shader_1_ = LoadShader(BASE_VERT_SHADER, FIRST_BLUR_SHADER);
     array<float, 2> tex_size = {MAIN_TEX_SIZE, MAIN_TEX_SIZE};
-    float intensity_1 = BLOOM_INTENSITY;
-    renderer::set_shader_property_(renderer::blur_shader_,
+    renderer::set_shader_property_(renderer::blur_shader_1_,
                                    "textureSize",
                                    &tex_size,
                                    SHADER_UNIFORM_VEC2);
-    renderer::set_shader_property_(renderer::blur_shader_,
-                                   "intensity",
-                                   &intensity_1,
-                                   SHADER_UNIFORM_FLOAT);
+    renderer::blur_shader_2_ = LoadShader(BASE_VERT_SHADER, SECOND_BLUR_SHADER);
+    renderer::set_shader_property_(renderer::blur_shader_2_,
+                                   "textureSize",
+                                   &tex_size,
+                                   SHADER_UNIFORM_VEC2);
 }
 
 void renderer::render() {
@@ -332,7 +335,7 @@ void renderer::stretch_texture_(Texture2D texture) {
 void renderer::post_process_() {
     BeginTextureMode(renderer::blur_tex_1_);
     ClearBackground(BLACK);
-    BeginShaderMode(renderer::blur_shader_);
+    BeginShaderMode(renderer::blur_shader_1_);
     DrawTexturePro(renderer::base_tex_2_.texture,
                    (Rectangle){0.0f, 0.0f, MAIN_TEX_SIZE, -MAIN_TEX_SIZE},
                    (Rectangle){0.0f, 0.0f, MAIN_TEX_SIZE, MAIN_TEX_SIZE},
@@ -344,7 +347,7 @@ void renderer::post_process_() {
 
     BeginTextureMode(renderer::blur_tex_2_);
     ClearBackground(BLACK);
-    BeginShaderMode(renderer::blur_shader_);
+    BeginShaderMode(renderer::blur_shader_2_);
     DrawTexturePro(renderer::blur_tex_1_.texture,
                    (Rectangle){0.0f, 0.0f, MAIN_TEX_SIZE, -MAIN_TEX_SIZE},
                    (Rectangle){0.0f, 0.0f, MAIN_TEX_SIZE, MAIN_TEX_SIZE},

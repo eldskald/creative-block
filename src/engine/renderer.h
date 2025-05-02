@@ -18,7 +18,8 @@ private:
     static Vector2 stretched_tex_size_;
     static Vector2 window_size_;
     static Shader base_screen_shader_;
-    static Shader blur_shader_;
+    static Shader blur_shader_1_;
+    static Shader blur_shader_2_;
 #ifdef DEV
     static bool showing_areas_;
     static bool showing_fixed_bodies_;
