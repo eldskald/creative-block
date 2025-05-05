@@ -11,6 +11,34 @@ using namespace std;
 list<physics_body*> physics_body::bodies_;
 list<physics_body*> physics_body::areas_;
 
+// This function is to get the position in space of the collision shape of any
+// given body. We take the floor of everything because colliding with floats is
+// inconsistent, so we make every physics rect only move in integer increments.
+Rectangle physics_body::get_collision_rect_() {
+    return (Rectangle){floor(this->get_global_pos().x + this->collision_box.x),
+                       floor(this->get_global_pos().y + this->collision_box.y),
+                       floor(this->collision_box.width),
+                       floor(this->collision_box.height)};
+}
+
+list<physics_body*> physics_body::get_physics_body_children_() {
+    list<physics_body*> children;
+    for (auto i : this->get_children()) {
+        auto* child = dynamic_cast<physics_body*>(i);
+        if (!child) continue;
+        children.push_back(child);
+    }
+    return children;
+}
+
+list<Rectangle> physics_body::get_children_collision_rects_() {
+    list<Rectangle> rects;
+    for (auto i : this->get_physics_body_children_()) {
+        rects.push_back(i->get_collision_rect_());
+    }
+    return rects;
+}
+
 list<physics_body*> physics_body::get_bodies_touching_top() {
     Rectangle rect = (Rectangle){
         floor(this->get_global_pos().x + this->collision_box.x),
@@ -131,16 +159,6 @@ physics_body::get_colliders(Rectangle collision_box,
     return colliders;
 }
 
-// This function is to get the position in space of the collision shape of any
-// given body. We take the floor of everything because colliding with floats is
-// inconsistent, so we make every physics rect only move in integer increments.
-Rectangle physics_body::get_collision_rect_() {
-    return (Rectangle){floor(this->get_global_pos().x + this->collision_box.x),
-                       floor(this->get_global_pos().y + this->collision_box.y),
-                       floor(this->collision_box.width),
-                       floor(this->collision_box.height)};
-}
-
 // Calculate where the body would stop if it tried to move delta_d in the X
 // axis. Will be equal to delta_d if there are no collisions, or some smaller
 // number in case it collides. It is done by getting the rectangle that would
@@ -148,7 +166,6 @@ Rectangle physics_body::get_collision_rect_() {
 // all bodies colliding with it. Bodies already colliding will be ignored.
 float physics_body::compute_h_movement_(float delta_d, bool ignore_children) {
     float delta = delta_d;
-    if (delta == 0.0f) return 0.0f;
 
     // The trail. We only take the floor on the Y axis here because we want to
     // be able to move on a float amount, but if we don't take the floor on the
@@ -204,7 +221,6 @@ float physics_body::compute_h_movement_(float delta_d, bool ignore_children) {
 // collide only if the body is coming from above and is not colliding already.
 float physics_body::compute_v_movement_(float delta_d, bool ignore_children) {
     float delta = delta_d;
-    if (delta == 0.0f) return 0.0f;
 
     // The trail. We only take the floor on the X axis here because we want to
     // be able to move on a float amount, but if we don't take the floor on the
@@ -257,147 +273,67 @@ float physics_body::compute_v_movement_(float delta_d, bool ignore_children) {
     return delta;
 }
 
+// Move the body and then bring the children on top back the same distance that
+// was moved, because as we move the body we will automatically move its
+// children without taking physics into account, so we need to move them back
+// and call this same function on each one of them. We don't need to worry about
+// collisions with the children because they are all on top of the body and
+// can't collide with it. We also don't need to worry about collisions between
+// the children because they can't collide on the X axis, only on the Y.
 float physics_body::move_and_drag_children_h_(float delta_d) {
-    if (delta_d == 0.0f) return 0.0f;
+    if (FloatEquals(delta_d, 0.0f)) return 0.0f;
     float delta = this->compute_h_movement_(delta_d, true);
+    if (FloatEquals(delta, 0.0f)) return 0.0f;
 
-    // Order children by their collision box's global position.
-    // The logic is: the children will all move on the same direction, so we
-    // should first move the ones in front, and then the second most in front,
-    // etc etc. This way we stop bodies that are touching to get separated
-    // by a gap equal to the delta.
-    list<physics_body*> ordered_children;
-    list<game_element*> children = this->get_children();
-    for (auto i : children) {
-        auto* child = dynamic_cast<physics_body*>(i);
-        if (!child) continue;
-        if (child->type != kinematic) continue;
-        if (ordered_children.empty())
-            ordered_children.push_back(child);
-        else {
-            float child_col_x =
-                child->get_global_pos().x + child->collision_box.x;
-            float top_col_x = ordered_children.back()->get_global_pos().x +
-                              ordered_children.back()->collision_box.x;
-            if (child_col_x >= top_col_x)
-                ordered_children.push_back(child);
-            else {
-                if (delta >= 0.0f) {
-                    for (auto j = ordered_children.begin();
-                         j != ordered_children.end();
-                         ++j) {
-                        float body_col_x =
-                            (*j)->get_global_pos().x + (*j)->collision_box.x;
-                        if (child_col_x >= body_col_x) {
-                            ordered_children.emplace(j, child);
-                            break;
-                        }
-                    }
-                } else {
-                    for (auto j = ordered_children.begin();
-                         j != ordered_children.end();
-                         ++j) {
-                        float body_col_x =
-                            (*j)->get_global_pos().x + (*j)->collision_box.x;
-                        if (child_col_x < body_col_x) {
-                            ordered_children.emplace(j, child);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    // Call this function on all this body's children, now that they are
-    // ordered.
-    for (auto i : ordered_children) {
-        i->move_and_drag_children_h_(delta);
-    }
-
-    // After we moved all its children, we calculate the movement again, this
-    // time allowing it to collide with its children and then move it.
-    delta = this->compute_h_movement_(delta);
     this->pos.x += delta;
-
-    // Remember we already moved all the children, but changing this body's
-    // position will also change the children's global position, so we have to
-    // correct it.
-    for (auto i : ordered_children) {
+    list<physics_body*> children = this->get_physics_body_children_();
+    for (auto i : children) {
         i->pos.x -= delta;
+        i->move_and_drag_children_h_(delta);
     }
 
     return delta;
 }
 
 float physics_body::move_and_drag_children_v_(float delta_d) {
-    if (delta_d == 0.0f) return 0.0f;
-    float delta = this->compute_v_movement_(delta_d, true);
+    if (FloatEquals(delta_d, 0.0f)) return 0.0f;
+    if (delta_d > 0.0f) return this->move_and_drag_children_down_(delta_d);
+    return this->move_and_drag_children_up_(delta_d);
+}
 
-    // Order children by their collision box's global position.
-    // The logic is: the children will all move on the same direction, so we
-    // should first move the ones in front, and then the second most in front,
-    // etc etc. This way we stop bodies that are touching to get separated
-    // by a gap equal to the delta.
-    list<physics_body*> ordered_children;
-    list<game_element*> children = this->get_children();
+// When going up, we should move the children from top to bottom. While moving
+// them, we reuse the delta because this guarantees the delta will only go down
+// as they collide, so we don't move the following bodies more than necessary.
+float physics_body::move_and_drag_children_up_(float delta_d) {
+    float delta = delta_d;
+    list<physics_body*> children = this->get_physics_body_children_();
     for (auto i : children) {
-        auto* child = dynamic_cast<physics_body*>(i);
-        if (!child) continue;
-        if (child->type != kinematic) continue;
-        if (ordered_children.empty())
-            ordered_children.push_back(child);
-        else {
-            float child_col_y =
-                child->get_global_pos().y + child->collision_box.y;
-            float top_col_y = ordered_children.back()->get_global_pos().y +
-                              ordered_children.back()->collision_box.y;
-            if (child_col_y >= top_col_y)
-                ordered_children.push_back(child);
-            else {
-                if (delta >= 0.0f) {
-                    for (auto j = ordered_children.begin();
-                         j != ordered_children.end();
-                         ++j) {
-                        float body_col_y =
-                            (*j)->get_global_pos().y + (*j)->collision_box.y;
-                        if (child_col_y >= body_col_y) {
-                            ordered_children.emplace(j, child);
-                            break;
-                        }
-                    }
-                } else {
-                    for (auto j = ordered_children.begin();
-                         j != ordered_children.end();
-                         ++j) {
-                        float body_col_y =
-                            (*j)->get_global_pos().y + (*j)->collision_box.y;
-                        if (child_col_y < body_col_y) {
-                            ordered_children.emplace(j, child);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
+        delta = i->move_and_drag_children_up_(delta);
     }
-
-    // Call this function on all this body's children, now that they are
-    // ordered.
-    for (auto i : ordered_children) {
-        i->move_and_drag_children_v_(delta);
-    }
-
-    // After we moved all its children, we calculate the movement again, this
-    // time allowing it to collide with its children and then move it.
     delta = this->compute_v_movement_(delta);
     this->pos.y += delta;
 
-    // Remember we already moved all the children, but changing this body's
-    // position will also change the children's global position, so we have to
-    // correct it.
-    for (auto i : ordered_children) {
+    // After moving the body, because of the composite system of game_object we
+    // will also move the children, and without taking collision into account.
+    // We already moved them, so just readjusting them should be enough.
+    for (auto i : children) {
         i->pos.y -= delta;
+    }
+    return delta;
+}
+
+// When going down, move them from bottom to top.
+float physics_body::move_and_drag_children_down_(float delta_d) {
+    float delta = this->compute_v_movement_(delta_d);
+    this->pos.y += delta;
+
+    // Same thing as in move_and_drag_children_up_, when moving the parent we
+    // end up moving the children too because of the composite system, so we
+    // put them back and then move them with move_and_drag_children_down_.
+    list<physics_body*> children = this->get_physics_body_children_();
+    for (auto i : children) {
+        i->pos.y -= delta;
+        i->move_and_drag_children_down_(delta);
     }
 
     return delta;

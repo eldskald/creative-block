@@ -24,7 +24,7 @@ bool renderer::showing_kinematic_bodies_ = false;
 renderer::bloom_debug renderer::texture_rendered_ = final;
 #endif
 
-const float aspect_ratio = (float)WINDOW_SIZE_X / (float)WINDOW_SIZE_Y;
+const float ASPECT_RATIO = (float)WINDOW_SIZE_X / (float)WINDOW_SIZE_Y;
 
 void renderer::initialize() {
     // For the sake of the web build, all textures must be powers of 2
@@ -299,8 +299,8 @@ void renderer::render_base_() {
 // fill the window size while maintaining aspect ratio and centralized, also it
 // assumes the texture is a RenderTexture and thus y-inverted.
 void renderer::stretch_texture_(Texture2D texture) {
-    if (renderer::window_size_.x / renderer::window_size_.y >= aspect_ratio) {
-        float stretched_tex_x = renderer::window_size_.y * aspect_ratio;
+    if (renderer::window_size_.x / renderer::window_size_.y >= ASPECT_RATIO) {
+        float stretched_tex_x = renderer::window_size_.y * ASPECT_RATIO;
         DrawTexturePro(
             texture,
             (Rectangle){0.0f,
@@ -315,7 +315,7 @@ void renderer::stretch_texture_(Texture2D texture) {
             0.0f,
             WHITE);
     } else {
-        float stretched_tex_y = renderer::window_size_.x / aspect_ratio;
+        float stretched_tex_y = renderer::window_size_.x / ASPECT_RATIO;
         DrawTexturePro(
             texture,
             (Rectangle){0.0f,

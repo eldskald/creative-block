@@ -54,10 +54,14 @@ private:
     list<physics_body*> detected_bodies_;
 
     Rectangle get_collision_rect_();
+    list<physics_body*> get_physics_body_children_();
+    list<Rectangle> get_children_collision_rects_();
     float compute_h_movement_(float delta_d, bool ignore_children = false);
     float compute_v_movement_(float delta_d, bool ignore_children = false);
     float move_and_drag_children_h_(float delta_d);
     float move_and_drag_children_v_(float delta_d);
+    float move_and_drag_children_up_(float delta_d);
+    float move_and_drag_children_down_(float delta_d);
     list<physics_body*> find_entering_bodies_();
     list<physics_body*> find_exiting_bodies_();
 

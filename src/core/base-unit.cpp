@@ -102,10 +102,18 @@ void base_unit::tick_() {
         if (unit) {
             is_carried = true;
             if (this->get_parent() != unit) this->reparent(unit);
+            // We do this next line because reparenting happens at the end of
+            // the tick cycle, and moves the child's pos to match it's pos on
+            // screen in relation to its new parent. The point is to fix the y
+            // pos to eliminate fraction values because they were accumulating
+            // and would cause the body to fall off its parent when it moved
+            // down, usually after a jump for example.
+            else this->pos.y = -this->collision_box.height;
             break;
         }
     }
     if (!is_carried && this->get_parent() != game::get_root()) {
         this->reparent(game::get_root());
     }
+
 }
