@@ -7,6 +7,7 @@ using namespace std;
 class renderer {
 public:
     static void initialize();
+    static void unload();
     static void render();
 
 private:

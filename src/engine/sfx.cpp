@@ -9,6 +9,11 @@ void sfx::initialize() {
     sfx::sfx_2 = LoadWave(SFX_2);
 }
 
+void sfx::unload() {
+    UnloadWave(sfx::sfx_1);
+    UnloadWave(sfx::sfx_2);
+}
+
 sfx::sfx(Wave sound) {
     this->sound_ = LoadSoundFromWave(sound);
 }

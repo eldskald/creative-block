@@ -10,13 +10,19 @@
 
 game_element* game::root_ = nullptr;
 
-void game::initial_setup() {
+void game::on_start() {
     SetRandomSeed(0);
     renderer::initialize();
     sprite::initialize();
     sfx::initialize();
     scene_manager::initialize();
     inputs::initialize();
+}
+
+void game::on_close() {
+    renderer::unload();
+    sprite::unload();
+    sfx::unload();
 }
 
 void game::do_game_loop() {

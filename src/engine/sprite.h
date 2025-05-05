@@ -25,6 +25,7 @@ public:
     float animation_starting_phase{0.0f};
 
     static void initialize();
+    static void unload();
 
 protected:
     void enter_() override;

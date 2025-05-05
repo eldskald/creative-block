@@ -12,11 +12,11 @@ RenderTexture2D renderer::base_tex_2_ = (RenderTexture2D){0};
 RenderTexture2D renderer::blur_tex_1_ = (RenderTexture2D){0};
 RenderTexture2D renderer::blur_tex_2_ = (RenderTexture2D){0};
 RenderTexture2D renderer::final_tex_ = (RenderTexture2D){0};
-Vector2 renderer::stretched_tex_size_ = (Vector2){0};
-Vector2 renderer::window_size_ = (Vector2){0};
 Shader renderer::base_screen_shader_ = (Shader){0};
 Shader renderer::blur_shader_1_ = (Shader){0};
 Shader renderer::blur_shader_2_ = (Shader){0};
+Vector2 renderer::stretched_tex_size_ = (Vector2){0};
+Vector2 renderer::window_size_ = (Vector2){0};
 #ifdef DEV
 bool renderer::showing_areas_ = false;
 bool renderer::showing_fixed_bodies_ = false;
@@ -123,6 +123,17 @@ void renderer::initialize() {
                                    "textureSize",
                                    &tex_size,
                                    SHADER_UNIFORM_VEC2);
+}
+
+void renderer::unload() {
+    UnloadRenderTexture(renderer::base_tex_1_);
+    UnloadRenderTexture(renderer::base_tex_2_);
+    UnloadRenderTexture(renderer::blur_tex_1_);
+    UnloadRenderTexture(renderer::blur_tex_2_);
+    UnloadRenderTexture(renderer::final_tex_);
+    UnloadShader(renderer::base_screen_shader_);
+    UnloadShader(renderer::blur_shader_1_);
+    UnloadShader(renderer::blur_shader_2_);
 }
 
 void renderer::render() {

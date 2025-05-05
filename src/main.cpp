@@ -18,7 +18,7 @@ int main() {
     InitAudioDevice();
     SetExitKey(KEY_NULL);
 
-    game::initial_setup();
+    game::on_start();
 
 #ifdef WEB
     emscripten_set_main_loop(game::do_game_loop, TARGET_FPS, 1);
@@ -32,6 +32,8 @@ int main() {
         game::do_game_loop();
     }
 #endif
+
+    game::on_close();
 
     CloseAudioDevice();
     CloseWindow();

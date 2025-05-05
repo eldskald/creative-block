@@ -18,6 +18,7 @@ public:
     static Wave sfx_2;
 
     static void initialize();
+    static void unload();
 
 private:
     Sound sound_{(Sound){{nullptr}}};

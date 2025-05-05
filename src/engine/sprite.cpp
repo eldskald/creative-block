@@ -10,6 +10,10 @@ void sprite::initialize() {
     SetTextureWrap(sprite::atlas_, TEXTURE_WRAP_CLAMP);
 }
 
+void sprite::unload() {
+    UnloadTexture(sprite::atlas_);
+}
+
 void sprite::enter_() {
     this->curr_phase_ = this->animation_starting_phase;
     sprite::sprites_.push_back(this);

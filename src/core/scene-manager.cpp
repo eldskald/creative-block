@@ -19,9 +19,9 @@ int scene_manager::level_shadows_limit_ = 1;
 void scene_manager::initialize() {
     auto* root = new game_element();
     list<game_element*> elements = data_loader::load(START_MENU_FILE);
-    for (auto* element : elements) {
+    for (auto element : elements) {
         root->add_child(element);
-        auto* player_element = dynamic_cast<player*>(element);
+        auto player_element = dynamic_cast<player*>(element);
         if (player_element) {
             scene_manager::player_spawn_point_ = player_element->pos;
         }
