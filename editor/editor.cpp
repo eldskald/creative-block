@@ -22,13 +22,14 @@ button* save_btn = nullptr;
 button* load_btn = nullptr;
 button* export_btn = nullptr;
 text_input* file_input = nullptr;
+text_input* txt_input = nullptr;
 button* open_test_popup_btn = nullptr;
 
 void editor::save_tilemap_data() {
     if (file_input->get_input().empty()) return;
     string filepath =
         "editor/level-projects/" + file_input->get_input() + ".lvproj";
-    string data = editor::tilemap_->convert_to_data();
+    string data = editor::tilemap_->convert_to_data(txt_input->get_input());
     SaveFileText(filepath.c_str(), data.data());
 }
 
@@ -37,13 +38,14 @@ void editor::load_tilemap_data() {
     string filepath =
         "editor/level-projects/" + file_input->get_input() + ".lvproj";
     char* data = LoadFileText(filepath.data());
-    editor::tilemap_->load_from_data(data);
+    txt_input->set_input(editor::tilemap_->load_from_data(data));
     UnloadFileText(data);
 }
 
 void editor::export_tilemap_data() {
     if (file_input->get_input().empty()) return;
-    string data = data_exporter::get_export_text(editor::tilemap_->get_cells());
+    string data = data_exporter::get_export_text(editor::tilemap_->get_cells(),
+                                                 txt_input->get_input());
     string filepath = "assets/scenes/" + file_input->get_input() + ".dat";
     SaveFileText(filepath.c_str(), data.data());
 }
@@ -117,6 +119,11 @@ void editor::initialize() {
     file_input->label = "level name";
     file_input->rect =
         (Rectangle){364, EDITOR_WINDOW_SIZE_Y - 40, 400, 32}; // NOLINT
+
+    txt_input = new text_input();
+    txt_input->label = "level text";
+    txt_input->rect =
+        (Rectangle){448, TILESET_ORIGIN_Y - 40, 600, 32}; // NOLINT
 }
 
 void editor::tick() {
@@ -145,6 +152,7 @@ void editor::tick() {
     load_btn->tick();
     export_btn->tick();
     file_input->tick();
+    txt_input->tick();
 
     // Popups ignore mouse disabled feature because they themselves disable it
     if (editor::mouse_disabled) {

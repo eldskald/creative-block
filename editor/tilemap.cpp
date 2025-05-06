@@ -11,6 +11,7 @@
 using namespace std;
 
 const int CONVERT_TO_DATA_CONST = 50;
+const int TEXT_TILE_ID = 31;
 
 tilemap::tilemap() {
     for (auto set : TILESETS) {
@@ -25,6 +26,18 @@ tilemap::tilemap() {
 }
 
 void tilemap::set_tile(tileset set, int x, int y, int tile_id) {
+    if (set == tileset::interact && tile_id == -1 &&
+        this->cells_.at(set).at(x).at(y) == TEXT_TILE_ID) {
+        this->text_x_ = -1;
+        this->text_y_ = -1;
+    }
+    if (set == tileset::interact && tile_id == TEXT_TILE_ID) {
+        if (this->text_x_ != -1 && this->text_y_ != -1) {
+            this->cells_.at(set).at(this->text_x_).at(this->text_y_) = -1;
+        }
+        this->text_x_ = x;
+        this->text_y_ = y;
+    }
     this->cells_.at(set).at(x).at(y) = tile_id;
 }
 
@@ -42,9 +55,9 @@ unordered_map<tileset, map> tilemap::get_cells() {
     return res;
 }
 
-string tilemap::convert_to_data() {
+string tilemap::convert_to_data(string level_text) {
     string data = "";
-    data.reserve(TILEMAP_SIZE_X * TILEMAP_SIZE_Y * 3);
+    // data.reserve(TILEMAP_SIZE_X * TILEMAP_SIZE_Y * 3);
     for (tileset set : TILESETS) {
         for (int i = 0; i < TILEMAP_SIZE_X; i++) {
             for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
@@ -53,10 +66,11 @@ string tilemap::convert_to_data() {
             }
         }
     }
+    data += level_text;
     return data;
 }
 
-void tilemap::load_from_data(string data) {
+string tilemap::load_from_data(string data) {
     for (tileset set : TILESETS) {
         for (int i = 0; i < TILEMAP_SIZE_X; i++) {
             for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
@@ -67,6 +81,7 @@ void tilemap::load_from_data(string data) {
             }
         }
     }
+    return data.substr(TILEMAP_SIZE_X * TILEMAP_SIZE_Y * 3);
 }
 
 void tilemap::highlight_hovered_cell_(int x, int y) {

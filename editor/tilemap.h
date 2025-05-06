@@ -3,6 +3,7 @@
 #include <array>
 #include <string>
 #include <unordered_map>
+#include <raylib.h>
 
 using namespace std;
 
@@ -14,12 +15,14 @@ public:
 
     void set_tile(tileset set, int x, int y, int tile_id);
     unordered_map<tileset, map> get_cells();
-    string convert_to_data();
-    void load_from_data(string data);
+    string convert_to_data(string level_text);
+    string load_from_data(string data);
     void tick();
 
 private:
     unordered_map<tileset, map> cells_;
+    int text_x_{-1};
+    int text_y_{-1};
 
     void highlight_hovered_cell_(int x, int y);
     void render_cell_(int x, int y);

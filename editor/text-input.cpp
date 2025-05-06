@@ -8,6 +8,10 @@ string text_input::get_input() {
     return this->input_text_;
 }
 
+void text_input::set_input(string text) {
+    this->input_text_ = text;
+}
+
 bool text_input::is_being_hovered_() {
     bool x_check = (GetMouseX() >= (int)this->rect.x) &&
                    (GetMouseX() <= (int)this->rect.x + (int)this->rect.width);

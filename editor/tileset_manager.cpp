@@ -154,6 +154,7 @@ void tileset_manager::initialize() {
     int_tiles.push_back((tile){(Vector2){6, 4}, tile_type::button3});
     int_tiles.push_back((tile){(Vector2){6, 5}, tile_type::gate3});
     int_tiles.push_back((tile){(Vector2){6, 6}, tile_type::gate3});
+    int_tiles.push_back((tile){(Vector2){10, 12}, tile_type::text}); // id 31
 
     tileset_manager::tiles_ = {{tileset::blocks, block_tiles},
                                {tileset::background, bg_tiles},

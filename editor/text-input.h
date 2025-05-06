@@ -11,6 +11,7 @@ public:
     string label{""};
 
     string get_input();
+    void set_input(string text);
     void tick();
 
 private:

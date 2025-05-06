@@ -102,6 +102,7 @@ enum tile_type {
     gate1,
     gate2,
     gate3,
+    text,
 };
 
 #define TILESETS {blocks, background, interact}
