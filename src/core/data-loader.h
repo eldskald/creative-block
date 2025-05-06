@@ -2,6 +2,7 @@
 #include "engine/game-element.h"
 #include "engine/physics-body.h"
 #include "engine/sprite.h"
+#include "engine/text.h"
 #include "core/player.h"
 #include <list>
 #include <string>
@@ -35,6 +36,7 @@ private:
     static physics_body::body_type string_to_body_type(string str);
     static keyframe string_to_keyframe(string str);
     static animation string_to_animation(string str);
+    static string string_to_string(string str);
 
     static void add_parent(game_element* element, string id);
 
@@ -43,5 +45,6 @@ private:
     static void parse_physics_body_property_line(physics_body* body,
                                                  string line);
     static void parse_sprite_property_line(sprite* sprite, string line);
+    static void parse_text_property_line(text* text, string line);
     static void parse_player_property_line(player* player, string line);
 };

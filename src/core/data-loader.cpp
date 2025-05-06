@@ -7,6 +7,7 @@
 #include "engine/game-element.h"
 #include "engine/physics-body.h"
 #include "engine/sprite.h"
+#include "engine/text.h"
 #include <cctype>
 #include <exception>
 #include <iostream>
@@ -210,6 +211,14 @@ animation data_loader::string_to_animation(string str) {
     return anim;
 }
 
+string data_loader::string_to_string(string str) {
+    string r = "";
+    for (char i : str) {
+        r += i == '@' ? ' ' : i;
+    }
+    return r;
+}
+
 void data_loader::add_parent(game_element* element, string id) {
     if (data_loader::id_map_.count(id) == 0)
         throw invalid_argument("invalid parent id");
@@ -287,6 +296,24 @@ void data_loader::parse_sprite_property_line(sprite* sprite, string line) {
         throw invalid_argument("invalid property name");
 }
 
+void data_loader::parse_text_property_line(text* text, string line) {
+    if (line.find('=') == line.npos)
+        throw invalid_argument("property line has no '=' sign");
+
+    string prop_name = line.substr(0, line.find('='));
+    string prop_value  =
+        line.substr(line.find('=') + 1, line.size() - line.find('=') - 1);
+    if (prop_name == "id") {
+        data_loader::id_map_[prop_value] = text;
+    } else if (prop_name == "parent") {
+        data_loader::add_parent(text, prop_value);
+    } else if (prop_name == "pos") {
+        text->pos = data_loader::string_to_vector(prop_value);
+    } else if (prop_name == "content") {
+        text->content = data_loader::string_to_string(prop_value);
+    }
+}
+
 void data_loader::parse_player_property_line(player* player, string line) {
     if (line.find('=') == line.npos)
         throw invalid_argument("property line has no '=' sign");
@@ -324,6 +351,13 @@ game_element* data_loader::get_element_from_block(element_block block) {
             data_loader::parse_sprite_property_line(img, line);
         }
         return img;
+    }
+    if (block.type == "text") {
+        auto* txt = new text();
+        for (auto& line : block.properties) {
+            data_loader::parse_text_property_line(txt, line);
+        }
+        return txt;
     }
     if (block.type == "player") {
         auto* player_element = new player();

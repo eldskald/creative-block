@@ -1,6 +1,7 @@
 #include "renderer.h"
 #include "physics-body.h"
 #include "sprite.h"
+#include "text.h"
 #include <array>
 #include <raylib.h>
 #include <string>
@@ -255,6 +256,7 @@ void renderer::render_base_() {
     BeginTextureMode(renderer::base_tex_1_);
     ClearBackground(BLANK);
     sprite::render_sprites_();
+    text::render_texts_();
 #ifdef DEV
     string fps = to_string(GetFPS()) + " FPS";
     DrawText(fps.data(), 4, 4, 8, DEBUG_COLOR_1); // NOLINT

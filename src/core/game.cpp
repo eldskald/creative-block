@@ -6,6 +6,7 @@
 #include "engine/sfx.h"
 #include "engine/sprite.h"
 #include "engine/renderer.h"
+#include "engine/text.h"
 #include <raylib.h>
 
 game_element* game::root_ = nullptr;
@@ -15,6 +16,7 @@ void game::on_start() {
     renderer::initialize();
     sprite::initialize();
     sfx::initialize();
+    text::initialize();
     scene_manager::initialize();
     inputs::initialize();
 }
@@ -23,6 +25,7 @@ void game::on_close() {
     renderer::unload();
     sprite::unload();
     sfx::unload();
+    text::unload();
 }
 
 void game::do_game_loop() {
