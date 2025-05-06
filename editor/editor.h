@@ -1,6 +1,6 @@
 #pragma once
 #include "tilemap.h"
-#include "tileset_manager.h"
+#include "tileset-manager.h"
 #include <raylib.h>
 
 class editor {

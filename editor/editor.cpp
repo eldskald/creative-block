@@ -1,12 +1,13 @@
 #include "editor.h"
 #include "button.h"
+#include "cursor-manager.h"
 #include "data-exporter.h"
 #include "defs.h"
 #include "popup.h"
 #include "spritesheet.h"
 #include "text-input.h"
 #include "tilemap.h"
-#include "tileset_manager.h"
+#include "tileset-manager.h"
 #include <raylib.h>
 
 using namespace std;
@@ -129,9 +130,6 @@ void editor::initialize() {
 void editor::tick() {
     ClearBackground(BG_COLOR);
 
-    // Reset mouse cursor
-    SetMouseCursor(MOUSE_CURSOR_ARROW);
-
     // Draw the blue rectangle around the tilemap
     DrawRectangleLinesEx((Rectangle){TILEMAP_ORIGIN_X - 1,
                                      TILEMAP_ORIGIN_Y - 1,
@@ -162,4 +160,7 @@ void editor::tick() {
     } else {
         popup::tick();
     }
+
+    // Sets the mouse cursor
+    cursor_manager::tick();
 }

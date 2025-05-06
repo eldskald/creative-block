@@ -1,4 +1,4 @@
-#include "tileset_manager.h"
+#include "tileset-manager.h"
 #include "defs.h"
 #include "editor.h"
 #include "spritesheet.h"

@@ -1,4 +1,5 @@
 #include "button.h"
+#include "cursor-manager.h"
 #include "defs.h"
 #include "editor.h"
 #include <raylib.h>
@@ -76,7 +77,7 @@ void button::render_() {
 
     // Set mouse cursor when being hovered
     if (this->is_being_hovered_() && !editor::mouse_disabled) {
-        SetMouseCursor(MOUSE_CURSOR_POINTING_HAND);
+        cursor_manager::change_mouse_cursor(MOUSE_CURSOR_POINTING_HAND);
     };
 }
 

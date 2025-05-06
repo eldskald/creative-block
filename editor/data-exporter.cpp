@@ -1,7 +1,7 @@
 #include "data-exporter.h"
 #include "defs.h"
 #include "tilemap.h"
-#include "tileset_manager.h"
+#include "tileset-manager.h"
 #include <array>
 #include <raylib.h>
 #include <string>

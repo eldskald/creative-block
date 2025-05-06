@@ -2,7 +2,7 @@
 #include "defs.h"
 #include "editor.h"
 #include "spritesheet.h"
-#include "tileset_manager.h"
+#include "tileset-manager.h"
 #include <array>
 #include <raylib.h>
 #include <string>
