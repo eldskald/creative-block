@@ -102,7 +102,9 @@ enum tile_type {
     gate1,
     gate2,
     gate3,
-    text,
+    text1,
+    text2,
+    text3,
 };
 
 #define TILESETS {blocks, background, interact}
@@ -112,6 +114,9 @@ enum tile_type {
      goal,      spike_t,   spike_b,   spike_l,   spike_r,   spike_v_t,         \
      spike_v_m, spike_v_b, spike_h_l, spike_h_m, spike_h_r, button1,           \
      gate1,     button2,   gate2,     button3,   gate3}
+
+#define EXPORT_SPACE_CHAR '@'
+#define PROJ_TEXT_SEPARATOR '@'
 
 using tile = struct tile {
     Vector2 spritesheet_coords;

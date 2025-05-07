@@ -9,7 +9,9 @@ using namespace std;
 class data_exporter {
 public:
     static string get_export_text(unordered_map<tileset, map> cells,
-                                  string level_text);
+                                  string level_text_1,
+                                  string level_text_2,
+                                  string level_text_3);
 
 private:
     static int current_id_count_;
@@ -27,5 +29,7 @@ private:
     static string get_bg_puffs_text_(map* cells);
     static string get_player_text_(map* cells);
     static string get_spikes_text_(map* cells);
-    static string get_level_text_text_(map* cells, string level_text);
+    static string get_level_text_1_text_(map* cells, string level_text);
+    static string get_level_text_2_text_(map* cells, string level_text);
+    static string get_level_text_3_text_(map* cells, string level_text);
 };

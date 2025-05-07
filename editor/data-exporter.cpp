@@ -314,7 +314,7 @@ string data_exporter::get_player_text_(map* cells) {
     return text;
 }
 
-string data_exporter::get_level_text_text_(map* cells, string level_text) {
+string data_exporter::get_level_text_1_text_(map* cells, string level_text) {
     string text = "";
     for (int i = 0; i < TILEMAP_SIZE_X; i++) {
         for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
@@ -322,15 +322,61 @@ string data_exporter::get_level_text_text_(map* cells, string level_text) {
             if (cell_id == -1) continue;
             tile data =
                 tileset_manager::get_tile_data(tileset::interact, cell_id);
-            if (data.type != tile_type::text) continue;
+            if (data.type != tile_type::text1) continue;
             text += "[text]\n";
             text += "pos = (" + to_string(i * SPRITESHEET_CELL_X) + "," +
                     to_string(j * SPRITESHEET_CELL_Y) + ")\n";
             string content = "";
             for (char i : level_text) {
-                content += i == ' ' ? '@' : i;
+                content += i == ' ' ? EXPORT_SPACE_CHAR : i;
             }
-            text += "content = " + content;
+            text += "content = " + content + "\n";
+            text += "\n";
+        }
+    }
+    return text;
+}
+
+string data_exporter::get_level_text_2_text_(map* cells, string level_text) {
+    string text = "";
+    for (int i = 0; i < TILEMAP_SIZE_X; i++) {
+        for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
+            int cell_id = cells->at(i).at(j);
+            if (cell_id == -1) continue;
+            tile data =
+                tileset_manager::get_tile_data(tileset::interact, cell_id);
+            if (data.type != tile_type::text2) continue;
+            text += "[text]\n";
+            text += "pos = (" + to_string(i * SPRITESHEET_CELL_X) + "," +
+                    to_string(j * SPRITESHEET_CELL_Y) + ")\n";
+            string content = "";
+            for (char i : level_text) {
+                content += i == ' ' ? EXPORT_SPACE_CHAR : i;
+            }
+            text += "content = " + content + "\n";
+            text += "\n";
+        }
+    }
+    return text;
+}
+
+string data_exporter::get_level_text_3_text_(map* cells, string level_text) {
+    string text = "";
+    for (int i = 0; i < TILEMAP_SIZE_X; i++) {
+        for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
+            int cell_id = cells->at(i).at(j);
+            if (cell_id == -1) continue;
+            tile data =
+                tileset_manager::get_tile_data(tileset::interact, cell_id);
+            if (data.type != tile_type::text3) continue;
+            text += "[text]\n";
+            text += "pos = (" + to_string(i * SPRITESHEET_CELL_X) + "," +
+                    to_string(j * SPRITESHEET_CELL_Y) + ")\n";
+            string content = "";
+            for (char i : level_text) {
+                content += i == ' ' ? EXPORT_SPACE_CHAR : i;
+            }
+            text += "content = " + content + "\n";
             text += "\n";
         }
     }
@@ -525,7 +571,9 @@ string data_exporter::get_spikes_text_(map* cells) {
 }
 
 string data_exporter::get_export_text(unordered_map<tileset, map> cells,
-                                      string level_text) {
+                                      string level_text_1,
+                                      string level_text_2,
+                                      string level_text_3) {
     data_exporter::current_id_count_ = 0;
     string data = "";
     data += data_exporter::get_bg_props_text_(&cells.at(tileset::background));
@@ -540,7 +588,12 @@ string data_exporter::get_export_text(unordered_map<tileset, map> cells,
     data += data_exporter::get_physics_bodies_text_(&cells.at(tileset::blocks));
     data += data_exporter::get_spikes_text_(&cells.at(tileset::interact));
     data += data_exporter::get_player_text_(&cells.at(tileset::interact));
-    data += data_exporter::get_level_text_text_(&cells.at(tileset::interact),
-                                                level_text);
+    data += data_exporter::get_level_text_1_text_(&cells.at(tileset::interact),
+                                                  level_text_1);
+    data += data_exporter::get_level_text_2_text_(&cells.at(tileset::interact),
+                                                  level_text_2);
+    data += data_exporter::get_level_text_3_text_(&cells.at(tileset::interact),
+                                                  level_text_3);
+
     return data;
 }
