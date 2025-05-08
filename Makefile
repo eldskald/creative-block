@@ -46,6 +46,9 @@ ifeq ($(DEV_PLATFORM), Windows)
 	DEV_LINK_FLAGS += -lgdi32 -lwinmm -lpthread -static -static-libgcc -static-libstdc++
 	EXT := .exe
 endif
+ifdef SCENE
+	DEV_COMPILE_FLAGS += -DSCENE=\"assets/scenes/$(SCENE).dat\"
+endif
 
 EDITOR_COMPILE_FLAGS = -std=c++17 -Wall -I./$(INCLUDE_DIR)
 EDITOR_LINK_FLAGS = $(DEV_LINK_FLAGS)

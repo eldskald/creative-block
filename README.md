@@ -55,7 +55,13 @@ To build and run a development build, run the following:
 make dev
 ```
 
-It will create a `build` directory, put the binary `dev-app` in there and run it. Easy for quickly compiling changes and running the game with them.
+It will create a `build` directory, put the binary `dev-app` in there and run it. Easy for quickly compiling changes and running the game with them. You can also add a `SCENE` env var to load a specific scene on `assets/scenes` by name without the `.dat`, for example:
+
+```console
+SCENE=03 make dev
+```
+
+This will run the game starting on level 3, on `assets/scenes/03.dat` file. Only works on dev mode, that is, when running `make dev`.
 
 To run the debugger, run the following:
 

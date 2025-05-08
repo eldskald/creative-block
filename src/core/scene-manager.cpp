@@ -10,7 +10,7 @@
 
 using namespace std;
 
-scene_manager::scene scene_manager::current_scene_ = scene_manager::START_MENU;
+scene_manager::scene scene_manager::current_scene_ = scene_manager::OPENING;
 Vector2 scene_manager::player_spawn_point_ = (Vector2){0};
 list<input_history> scene_manager::shadow_histories_ = {};
 list<shadow*> scene_manager::shadows_ = {};
@@ -18,7 +18,11 @@ int scene_manager::level_shadows_limit_ = 1;
 
 void scene_manager::initialize() {
     auto* root = new game_element();
-    list<game_element*> elements = data_loader::load(START_MENU_FILE);
+#ifdef SCENE
+    list<game_element*> elements = data_loader::load(SCENE);
+#else
+    list<game_element*> elements = data_loader::load(OPENING_SCENE_FILE);
+#endif
     for (auto element : elements) {
         root->add_child(element);
         auto player_element = dynamic_cast<player*>(element);
@@ -62,9 +66,9 @@ void scene_manager::new_shadow_history_(input_history history) {
 void scene_manager::change_scene(scene scene) {
     list<game_element*> elements;
     switch (scene) {
-    case START_MENU: {
-        elements = data_loader::load(START_MENU_FILE);
-        scene_manager::current_scene_ = scene_manager::START_MENU;
+    case OPENING: {
+        elements = data_loader::load(OPENING_SCENE_FILE);
+        scene_manager::current_scene_ = scene_manager::OPENING;
     }
     case LEVEL_01: {
         elements = data_loader::load(LEVEL_O1_FILE);
