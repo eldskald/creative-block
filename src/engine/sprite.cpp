@@ -1,9 +1,11 @@
 #include "sprite.h"
 #include <raylib.h>
+#include <map>
+#include <list>
 #include <cmath>
 
 Texture2D sprite::atlas_ = (Texture2D){0};
-list<sprite*> sprite::sprites_;
+map<int, list<sprite*>> sprite::sprites_;
 
 void sprite::initialize() {
     sprite::atlas_ = LoadTexture(SPRITESHEET_FILE);
@@ -16,11 +18,12 @@ void sprite::unload() {
 
 void sprite::enter_() {
     this->curr_phase_ = this->animation_starting_phase;
-    sprite::sprites_.push_back(this);
+    sprite::sprites_.try_emplace(this->z_index, list<sprite*>{});
+    sprite::sprites_[this->z_index].push_back(this);
 }
 
 void sprite::exit_() {
-    sprite::sprites_.remove(this);
+    sprite::sprites_[this->z_index].remove(this);
 }
 
 void sprite::tick_() {
@@ -36,19 +39,21 @@ void sprite::tick_() {
 }
 
 void sprite::render_sprites_() {
-    for (auto sprite : sprite::sprites_) {
-        DrawTexturePro(
-            sprite::atlas_,
-            (Rectangle){SPRITESHEET_CELL_SIZE_X * sprite->atlas_coords.x,
-                        SPRITESHEET_CELL_SIZE_Y * sprite->atlas_coords.y,
-                        SPRITESHEET_CELL_SIZE_X,
-                        SPRITESHEET_CELL_SIZE_Y},
-            (Rectangle){floor(sprite->get_global_pos().x),
-                        floor(sprite->get_global_pos().y),
-                        SPRITESHEET_CELL_SIZE_X,
-                        SPRITESHEET_CELL_SIZE_Y},
-            (Vector2){0, 0},
-            0.0f,
-            sprite->tint);
+    for (auto i : sprite::sprites_) {
+        for (auto sprite : i.second) {
+            DrawTexturePro(
+                sprite::atlas_,
+                (Rectangle){SPRITESHEET_CELL_SIZE_X * sprite->atlas_coords.x,
+                            SPRITESHEET_CELL_SIZE_Y * sprite->atlas_coords.y,
+                            SPRITESHEET_CELL_SIZE_X,
+                            SPRITESHEET_CELL_SIZE_Y},
+                (Rectangle){floor(sprite->get_global_pos().x),
+                            floor(sprite->get_global_pos().y),
+                            SPRITESHEET_CELL_SIZE_X,
+                            SPRITESHEET_CELL_SIZE_Y},
+                (Vector2){0, 0},
+                0.0f,
+                sprite->tint);
+        }
     }
 }

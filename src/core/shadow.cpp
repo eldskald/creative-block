@@ -18,6 +18,7 @@ shadow::shadow(input_history history) : history_(std::move(history)) {
     auto* shadow_sprite = new sprite();
     shadow_sprite->atlas_coords = PLAYER_ATLAS_COORDS;
     shadow_sprite->tint = SHADOW_MASK_COLOR;
+    shadow_sprite->z_index = PLAYER_SHADOW_Z_INDEX;
     this->add_child(shadow_sprite);
     this->sprite_ = shadow_sprite;
     auto* death_emitter = new death_particles();

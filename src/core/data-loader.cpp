@@ -288,6 +288,8 @@ void data_loader::parse_sprite_property_line(sprite* sprite, string line) {
         sprite->atlas_coords = data_loader::string_to_vector(prop_value);
     } else if (prop_name == "tint") {
         sprite->tint = data_loader::string_to_color(prop_value);
+    } else if (prop_name == "z_index") {
+        sprite->z_index = stoi(prop_value);
     } else if (prop_name == "animation") {
         sprite->anim = data_loader::string_to_animation(prop_value);
     } else if (prop_name == "animation_starting_phase") {

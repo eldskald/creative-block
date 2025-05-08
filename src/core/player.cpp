@@ -16,6 +16,7 @@ player::player() {
     auto* player_sprite = new sprite();
     player_sprite->atlas_coords = PLAYER_ATLAS_COORDS;
     player_sprite->tint = MAIN_MASK_COLOR;
+    player_sprite->z_index = PLAYER_Z_INDEX;
     this->add_child(player_sprite);
     this->sprite_ = player_sprite;
     auto* death_emitter = new death_particles();

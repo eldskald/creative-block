@@ -3,6 +3,7 @@
 #include <raylib.h>
 #include <vector>
 #include <list>
+#include <map>
 
 using namespace std;
 
@@ -21,6 +22,7 @@ class sprite : public game_element {
 public:
     Vector2 atlas_coords{(Vector2){0}};
     Color tint{WHITE};
+    int z_index{0};
     animation anim;
     float animation_starting_phase{0.0f};
 
@@ -37,7 +39,7 @@ private:
     float curr_phase_{0.0f};
 
     static Texture2D atlas_;
-    static list<sprite*> sprites_;
+    static map<int, list<sprite*>> sprites_;
 
     static void render_sprites_();
 };

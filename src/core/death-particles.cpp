@@ -28,6 +28,7 @@ death_particles::particle_::particle_(Vector2 pos, Vector2 vel, Color tint)
     auto* mask = new sprite();
     mask->tint = tint;
     mask->atlas_coords = PARTICLE_DEATH_ATLAS_COORDS;
+    mask->z_index = BACKGROUND_Z_INDEX;
     this->add_child(mask);
 }
 
