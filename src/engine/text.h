@@ -12,8 +12,7 @@ public:
 
     string content{""};
     text_type type{label};
-
-    Vector2 get_size();
+    bool centered{false};
 
     static void initialize();
     static void unload();

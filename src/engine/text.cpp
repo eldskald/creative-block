@@ -1,5 +1,6 @@
 #include "text.h"
 #include <raylib.h>
+#include <raymath.h>
 #include <string>
 
 Font text::title_font_ = (Font){0};
@@ -26,9 +27,14 @@ void text::exit_() {
 
 void text::render_texts_() {
     for (auto i : text::texts_) {
+        Vector2 size = MeasureTextEx(
+            i->type == label ? text::label_font_ : text::title_font_,
+            i->content.c_str(),
+            i->type == label ? LABEL_FONT_SIZE : TITLE_FONT_SIZE,
+            TEXT_SPACING);
         DrawTextEx(i->type == label ? text::label_font_ : text::title_font_,
                    i->content.c_str(),
-                   i->pos,
+                   i->centered ? Vector2Subtract(i->pos, size) : i->pos,
                    i->type == label ? LABEL_FONT_SIZE : TITLE_FONT_SIZE,
                    TEXT_SPACING,
                    MAIN_MASK_COLOR);
