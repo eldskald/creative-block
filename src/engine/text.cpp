@@ -5,6 +5,8 @@
 #include <raymath.h>
 #include <string>
 
+const float HALF = 0.5f;
+
 Font text::title_font_ = (Font){0};
 Font text::label_font_ = (Font){0};
 list<text*> text::texts_;
@@ -34,13 +36,14 @@ void text::render_texts_() {
                 text->type == label ? text::label_font_ : text::title_font_,
                 text->content.c_str(),
                 text->type == label ? LABEL_FONT_SIZE : TITLE_FONT_SIZE,
-                TEXT_SPACING);
+                text->type == label ? LABEL_FONT_SPACING : TITLE_FONT_SPACING);
+            Vector2 half = Vector2Scale(size, HALF);
             DrawTextEx(
                 text->type == label ? text::label_font_ : text::title_font_,
                 text->content.c_str(),
-                text->centered ? Vector2Subtract(text->pos, size) : text->pos,
+                text->centered ? Vector2Subtract(text->pos, half) : text->pos,
                 text->type == label ? LABEL_FONT_SIZE : TITLE_FONT_SIZE,
-                TEXT_SPACING,
+                text->type == label ? LABEL_FONT_SPACING : TITLE_FONT_SPACING,
                 MAIN_MASK_COLOR);
         }
     }

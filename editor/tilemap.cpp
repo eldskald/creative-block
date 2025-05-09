@@ -14,6 +14,7 @@ const int CONVERT_TO_DATA_CONST = 50;
 const int TEXT_1_TILE_ID = 32;
 const int TEXT_2_TILE_ID = 33;
 const int TEXT_3_TILE_ID = 34;
+const int OPENING_TILE_ID = 31;
 
 tilemap::tilemap() {
     for (auto set : TILESETS) {
@@ -68,6 +69,20 @@ void tilemap::set_tile(tileset set, int x, int y, int tile_id) {
         }
         this->text_3_x_ = x;
         this->text_3_y_ = y;
+    }
+
+    // There can only be one opening type tile on the map
+    if (set == tileset::interact && tile_id == -1 &&
+        this->cells_.at(set).at(x).at(y) == OPENING_TILE_ID) {
+        this->opening_x_ = -1;
+        this->opening_y_ = -1;
+    }
+    if (set == tileset::interact && tile_id == OPENING_TILE_ID) {
+        if (this->opening_x_ != -1 && this->opening_y_ != -1) {
+            this->cells_.at(set).at(this->opening_x_).at(this->opening_y_) = -1;
+        }
+        this->opening_x_ = x;
+        this->opening_y_ = y;
     }
 
     this->cells_.at(set).at(x).at(y) = tile_id;

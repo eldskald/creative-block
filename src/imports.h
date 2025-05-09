@@ -1,6 +1,6 @@
 #pragma once
 
-#define OPENING_SCENE_FILE "assets/scenes/start_menu.dat"
+#define OPENING_SCENE_FILE "assets/scenes/opening-scene.dat"
 #define LEVEL_O1_FILE "assets/scenes/01.dat"
 
 #define SPRITESHEET_FILE "assets/textures/spritesheet.png"
@@ -17,5 +17,4 @@
 #define SFX_2 "assets/sfx/sfx-2.wav"
 
 #define FONT_TITLE "assets/fonts/nordine/Nordine.otf"
-#define FONT_LABEL                                                             \
-    "assets/fonts/pixelify_sans/fonts/otf/PixelifySans_Regular.otf"
+#define FONT_LABEL "assets/fonts/medodica/MedodicaRegular.otf"

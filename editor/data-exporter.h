@@ -32,4 +32,5 @@ private:
     static string get_level_text_1_text_(map* cells, string level_text);
     static string get_level_text_2_text_(map* cells, string level_text);
     static string get_level_text_3_text_(map* cells, string level_text);
+    static string get_opening_obj_text_(map* cells);
 };

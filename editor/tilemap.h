@@ -33,6 +33,8 @@ private:
     int text_2_y_{-1};
     int text_3_x_{-1};
     int text_3_y_{-1};
+    int opening_x_{-1};
+    int opening_y_{-1};
 
     void highlight_hovered_cell_(int x, int y);
     void render_cell_(int x, int y);

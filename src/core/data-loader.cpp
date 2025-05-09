@@ -1,6 +1,7 @@
 #include "core/data-loader.h"
 #include "core/falling-leaves.h"
 #include "core/killbox.h"
+#include "core/opening.h"
 #include "core/player.h"
 #include "core/puff.h"
 #include "core/water-drip.h"
@@ -395,6 +396,9 @@ game_element* data_loader::get_element_from_block(element_block block) {
             data_loader::parse_physics_body_property_line(killer, line);
         }
         return killer;
+    }
+    if (block.type == "opening") {
+        return new opening();
     }
     throw invalid_argument("invalid block type");
 }

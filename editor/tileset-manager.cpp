@@ -154,10 +154,10 @@ void tileset_manager::initialize() {
     int_tiles.push_back((tile){(Vector2){6, 4}, tile_type::button3});
     int_tiles.push_back((tile){(Vector2){6, 5}, tile_type::gate3});
     int_tiles.push_back((tile){(Vector2){6, 6}, tile_type::gate3});
-    int_tiles.push_back((tile){(Vector2){10, 11}, tile_type::null});
-    int_tiles.push_back((tile){(Vector2){10, 12}, tile_type::text1}); // id 32
-    int_tiles.push_back((tile){(Vector2){10, 13}, tile_type::text2}); // id 33
-    int_tiles.push_back((tile){(Vector2){10, 14}, tile_type::text3}); // id 34
+    int_tiles.push_back((tile){(Vector2){10, 15}, tile_type::opening}); // id 31
+    int_tiles.push_back((tile){(Vector2){10, 12}, tile_type::text1});   // id 32
+    int_tiles.push_back((tile){(Vector2){10, 13}, tile_type::text2});   // id 33
+    int_tiles.push_back((tile){(Vector2){10, 14}, tile_type::text3});   // id 34
 
     tileset_manager::tiles_ = {{tileset::blocks, block_tiles},
                                {tileset::background, bg_tiles},
