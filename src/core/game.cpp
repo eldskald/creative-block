@@ -1,11 +1,11 @@
 #include "core/game.h"
+#include "core/scene-manager.h"
 #include "engine/game-element.h"
 #include "engine/inputs.h"
 #include "engine/physics-body.h"
-#include "core/scene-manager.h"
+#include "engine/renderer.h"
 #include "engine/sfx.h"
 #include "engine/sprite.h"
-#include "engine/renderer.h"
 #include "engine/text.h"
 #include <raylib.h>
 

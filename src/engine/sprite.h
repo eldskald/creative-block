@@ -1,9 +1,9 @@
 #pragma once
-#include "game-element.h"
-#include <raylib.h>
-#include <vector>
+#include "engine/game-element.h"
 #include <list>
 #include <map>
+#include <raylib.h>
+#include <vector>
 
 using namespace std;
 
@@ -25,6 +25,7 @@ public:
     int z_index{0};
     animation anim;
     float animation_starting_phase{0.0f};
+    bool hidden{false};
 
     static void initialize();
     static void unload();

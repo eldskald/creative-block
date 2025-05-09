@@ -1,9 +1,9 @@
 #pragma once
+#include "core/base-unit.h"
 #include "core/player.h"
 #include "core/shadow.h"
-#include "core/base-unit.h"
-#include <raylib.h>
 #include <list>
+#include <raylib.h>
 
 class scene_manager {
 public:

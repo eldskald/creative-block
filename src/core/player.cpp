@@ -5,6 +5,7 @@
 #include "core/scene-manager.h"
 #include "engine/inputs.h"
 #include "engine/sprite.h"
+#include "imports.h"
 #include <raylib.h>
 
 player::player() {

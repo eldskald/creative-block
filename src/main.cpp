@@ -1,4 +1,5 @@
 #include "core/game.h"
+#include "defs.h"
 #include <raylib.h>
 #include <raymath.h>
 

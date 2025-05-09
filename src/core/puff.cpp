@@ -1,8 +1,10 @@
 #include "core/puff.h"
 #include "core/game.h"
+#include "defs.h"
 #include "engine/game-element.h"
 #include "engine/physics-body.h"
 #include "engine/sprite.h"
+#include "imports.h"
 #include <cmath>
 #include <raylib.h>
 

@@ -1,7 +1,9 @@
 #include "core/water-drip.h"
 #include "core/game.h"
+#include "defs.h"
 #include "engine/physics-body.h"
 #include "engine/sprite.h"
+#include "imports.h"
 #include <raylib.h>
 #include <raymath.h>
 

@@ -1,5 +1,6 @@
 #include "core/base-unit.h"
 #include "core/game.h"
+#include "defs.h"
 #include <algorithm>
 #include <cmath>
 #include <raylib.h>
@@ -108,12 +109,12 @@ void base_unit::tick_() {
             // pos to eliminate fraction values because they were accumulating
             // and would cause the body to fall off its parent when it moved
             // down, usually after a jump for example.
-            else this->pos.y = -this->collision_box.height;
+            else
+                this->pos.y = -this->collision_box.height;
             break;
         }
     }
     if (!is_carried && this->get_parent() != game::get_root()) {
         this->reparent(game::get_root());
     }
-
 }

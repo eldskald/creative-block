@@ -1,7 +1,7 @@
 #pragma once
-#include "game-element.h"
-#include <raylib.h>
+#include "engine/game-element.h"
 #include <list>
+#include <raylib.h>
 #include <string>
 
 class text : public game_element {
@@ -13,6 +13,7 @@ public:
     string content{""};
     text_type type{label};
     bool centered{false};
+    bool hidden{false};
 
     static void initialize();
     static void unload();

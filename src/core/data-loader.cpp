@@ -303,7 +303,7 @@ void data_loader::parse_text_property_line(text* text, string line) {
         throw invalid_argument("property line has no '=' sign");
 
     string prop_name = line.substr(0, line.find('='));
-    string prop_value  =
+    string prop_value =
         line.substr(line.find('=') + 1, line.size() - line.find('=') - 1);
     if (prop_name == "id") {
         data_loader::id_map_[prop_value] = text;

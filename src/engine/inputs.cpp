@@ -1,11 +1,14 @@
-#include "inputs.h"
+#include "engine/inputs.h"
+#include "defs.h"
 #include <raylib.h>
 #include <raymath.h>
 #include <unordered_map>
 #include <vector>
 
-unordered_map<inputs::action, vector<int>> inputs::action_keys_ = CONTROLS_KEYBOARD;
-unordered_map<inputs::action, vector<int>> inputs::action_buttons_ = CONTROLS_GAMEPAD;
+unordered_map<inputs::action, vector<int>> inputs::action_keys_ =
+    CONTROLS_KEYBOARD;
+unordered_map<inputs::action, vector<int>> inputs::action_buttons_ =
+    CONTROLS_GAMEPAD;
 unordered_map<inputs::action, bool> inputs::action_down_ = {};
 unordered_map<inputs::action, bool> inputs::action_pressed_ = {};
 unordered_map<inputs::action, bool> inputs::action_released_ = {};

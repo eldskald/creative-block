@@ -2,7 +2,9 @@
 #include "core/base-unit.h"
 #include "core/death-particles.h"
 #include "core/respawn-particles.h"
+#include "defs.h"
 #include "engine/sprite.h"
+#include "imports.h"
 #include <algorithm>
 #include <raylib.h>
 #include <utility>

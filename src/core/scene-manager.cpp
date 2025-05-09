@@ -5,6 +5,7 @@
 #include "core/player.h"
 #include "core/shadow.h"
 #include "engine/game-element.h"
+#include "imports.h"
 #include <list>
 #include <raylib.h>
 

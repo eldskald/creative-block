@@ -1,8 +1,8 @@
 #pragma once
-#include "engine/sprite.h"
 #include "core/base-unit.h"
 #include "core/death-particles.h"
 #include "core/respawn-particles.h"
+#include "engine/sprite.h"
 #include <raylib.h>
 
 class player : public base_unit {

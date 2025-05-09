@@ -1,9 +1,9 @@
 #pragma once
+#include "core/player.h"
 #include "engine/game-element.h"
 #include "engine/physics-body.h"
 #include "engine/sprite.h"
 #include "engine/text.h"
-#include "core/player.h"
 #include <list>
 #include <string>
 #include <unordered_map>

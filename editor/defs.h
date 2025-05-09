@@ -42,34 +42,13 @@
 #define POPUP_BUTTON_WIDTH 100.0f
 #define POPUP_BUTTON_HEIGHT 32.0f
 
-#define FG_COLOR                                                               \
-    (Color) {                                                                  \
-        192, 202, 245, 255                                                     \
-    } // #c0caf5
-#define BG_COLOR                                                               \
-    (Color) {                                                                  \
-        26, 27, 38, 255                                                        \
-    } // #1a1b26
-#define PRIMARY_COLOR                                                          \
-    (Color) {                                                                  \
-        65, 166, 181, 255                                                      \
-    } // #41a6b5
-#define HOVERED_COLOR                                                          \
-    (Color) {                                                                  \
-        115, 218, 202, 255                                                     \
-    } // #73daca
-#define FOCUSED_COLOR                                                          \
-    (Color) {                                                                  \
-        187, 154, 247, 255                                                     \
-    } // #bb9af7
-#define CELL_HIGHLIGHT_COLOR                                                   \
-    (Color) {                                                                  \
-        255, 255, 255, 32                                                      \
-    }
-#define POPUP_BACKGROUND_SCREEN                                                \
-    (Color) {                                                                  \
-        0, 0, 0, 128                                                           \
-    }
+#define FG_COLOR (Color){192, 202, 245, 255}      // #c0caf5
+#define BG_COLOR (Color){26, 27, 38, 255}         // #1a1b26
+#define PRIMARY_COLOR (Color){65, 166, 181, 255}  // #41a6b5
+#define HOVERED_COLOR (Color){115, 218, 202, 255} // #73daca
+#define FOCUSED_COLOR (Color){187, 154, 247, 255} // #bb9af7
+#define CELL_HIGHLIGHT_COLOR (Color){255, 255, 255, 32}
+#define POPUP_BACKGROUND_SCREEN (Color){0, 0, 0, 128}
 
 enum tileset { blocks, background, interact };
 enum tile_type {

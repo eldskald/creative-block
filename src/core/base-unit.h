@@ -1,8 +1,8 @@
 #pragma once
-#include "engine/physics-body.h"
 #include "engine/inputs.h"
-#include <raylib.h>
+#include "engine/physics-body.h"
 #include <list>
+#include <raylib.h>
 
 using input = struct input {
     inputs::action action;

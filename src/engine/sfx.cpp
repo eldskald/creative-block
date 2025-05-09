@@ -1,4 +1,5 @@
-#include "sfx.h"
+#include "engine/sfx.h"
+#include "imports.h"
 #include <raylib.h>
 
 Wave sfx::sfx_1 = (Wave){0};

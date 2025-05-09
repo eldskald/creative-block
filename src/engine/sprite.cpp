@@ -1,8 +1,9 @@
-#include "sprite.h"
-#include <raylib.h>
-#include <map>
-#include <list>
+#include "engine/sprite.h"
+#include "imports.h"
 #include <cmath>
+#include <list>
+#include <map>
+#include <raylib.h>
 
 Texture2D sprite::atlas_ = (Texture2D){0};
 map<int, list<sprite*>> sprite::sprites_;
@@ -41,19 +42,22 @@ void sprite::tick_() {
 void sprite::render_sprites_() {
     for (auto i : sprite::sprites_) {
         for (auto sprite : i.second) {
-            DrawTexturePro(
-                sprite::atlas_,
-                (Rectangle){SPRITESHEET_CELL_SIZE_X * sprite->atlas_coords.x,
-                            SPRITESHEET_CELL_SIZE_Y * sprite->atlas_coords.y,
-                            SPRITESHEET_CELL_SIZE_X,
-                            SPRITESHEET_CELL_SIZE_Y},
-                (Rectangle){floor(sprite->get_global_pos().x),
-                            floor(sprite->get_global_pos().y),
-                            SPRITESHEET_CELL_SIZE_X,
-                            SPRITESHEET_CELL_SIZE_Y},
-                (Vector2){0, 0},
-                0.0f,
-                sprite->tint);
+            if (!sprite->hidden) {
+                DrawTexturePro(
+                    sprite::atlas_,
+                    (Rectangle){
+                        SPRITESHEET_CELL_SIZE_X * sprite->atlas_coords.x,
+                        SPRITESHEET_CELL_SIZE_Y * sprite->atlas_coords.y,
+                        SPRITESHEET_CELL_SIZE_X,
+                        SPRITESHEET_CELL_SIZE_Y},
+                    (Rectangle){floor(sprite->get_global_pos().x),
+                                floor(sprite->get_global_pos().y),
+                                SPRITESHEET_CELL_SIZE_X,
+                                SPRITESHEET_CELL_SIZE_Y},
+                    (Vector2){0, 0},
+                    0.0f,
+                    sprite->tint);
+            }
         }
     }
 }
