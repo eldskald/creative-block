@@ -28,7 +28,7 @@
 
 #define FONT_SIZE 20
 #define TEXT_SPACING 2
-#define INPUT_MAX_LENGTH 20
+#define INPUT_MAX_LENGTH 50
 #define INPUT_MARGIN 4
 #define INPUT_UNDERLINE_DIST 2
 #define INPUT_HOLD_KEY_START 0.5f
@@ -85,6 +85,7 @@ enum tile_type {
     text2,
     text3,
     opening,
+    credits,
 };
 
 #define TILESETS {blocks, background, interact}
@@ -95,7 +96,7 @@ enum tile_type {
         goal,      spike_t,   spike_b,   spike_l,   spike_r,   spike_v_t,      \
         spike_v_m, spike_v_b, spike_h_l, spike_h_m, spike_h_r, button1,        \
         gate1,     button2,   gate2,     button3,   gate3,     text1,          \
-        text2,     text3,     opening}
+        text2,     text3,     opening,   credits}
 
 #define EXPORT_SPACE_CHAR '@'
 #define PROJ_TEXT_SEPARATOR '@'

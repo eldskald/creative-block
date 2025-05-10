@@ -1,4 +1,5 @@
 #include "core/data-loader.h"
+#include "core/credits.h"
 #include "core/falling-leaves.h"
 #include "core/killbox.h"
 #include "core/opening.h"
@@ -410,6 +411,9 @@ game_element* data_loader::get_element_from_block(element_block block) {
     }
     if (block.type == "opening") {
         return new opening();
+    }
+    if (block.type == "credits") {
+        return new credits();
     }
     throw invalid_argument("invalid block type");
 }

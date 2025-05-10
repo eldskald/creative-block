@@ -383,21 +383,6 @@ string data_exporter::get_level_text_3_text_(map* cells, string level_text) {
     return text;
 }
 
-string data_exporter::get_opening_obj_text_(map* cells) {
-    string text = "";
-    for (int i = 0; i < TILEMAP_SIZE_X; i++) {
-        for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
-            int cell_id = cells->at(i).at(j);
-            if (cell_id == -1) continue;
-            tile data =
-                tileset_manager::get_tile_data(tileset::interact, cell_id);
-            if (data.type != tile_type::opening) continue;
-            text += "[opening]\n\n";
-        }
-    }
-    return text;
-}
-
 string data_exporter::get_spikes_text_(map* cells) {
     string text = "";
     for (int i = 0; i < TILEMAP_SIZE_X; i++) {
@@ -585,6 +570,36 @@ string data_exporter::get_spikes_text_(map* cells) {
     return text;
 }
 
+string data_exporter::get_opening_obj_text_(map* cells) {
+    string text = "";
+    for (int i = 0; i < TILEMAP_SIZE_X; i++) {
+        for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
+            int cell_id = cells->at(i).at(j);
+            if (cell_id == -1) continue;
+            tile data =
+                tileset_manager::get_tile_data(tileset::interact, cell_id);
+            if (data.type != tile_type::opening) continue;
+            text += "[opening]\n\n";
+        }
+    }
+    return text;
+}
+
+string data_exporter::get_credits_obj_text_(map* cells) {
+    string text = "";
+    for (int i = 0; i < TILEMAP_SIZE_X; i++) {
+        for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
+            int cell_id = cells->at(i).at(j);
+            if (cell_id == -1) continue;
+            tile data =
+                tileset_manager::get_tile_data(tileset::interact, cell_id);
+            if (data.type != tile_type::credits) continue;
+            text += "[credits]\n\n";
+        }
+    }
+    return text;
+}
+
 string data_exporter::get_level_shadow_totals_(string level_shadows) {
     string text = "[shadows_limit]\n";
     text += level_shadows.empty() ? "0" : level_shadows;
@@ -618,6 +633,7 @@ string data_exporter::get_export_text(unordered_map<tileset, map> cells,
     data += data_exporter::get_level_text_3_text_(&cells.at(tileset::interact),
                                                   level_text_3);
     data += data_exporter::get_opening_obj_text_(&cells.at(tileset::interact));
+    data += data_exporter::get_credits_obj_text_(&cells.at(tileset::interact));
     data += data_exporter::get_level_shadow_totals_(level_shadows);
 
     return data;

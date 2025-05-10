@@ -8,9 +8,14 @@
 #include "imports.h"
 #include <list>
 #include <raylib.h>
+#include <unordered_map>
 
 using namespace std;
 
+unordered_map<scene_manager::scene, const char*> scene_manager::scenes_map_ =
+    SCENES_MAP;
+unordered_map<scene_manager::scene, scene_manager::scene>
+    scene_manager::next_scenes_ = SCENES_ORDER;
 scene_manager::scene scene_manager::current_scene_ = scene_manager::OPENING;
 Vector2 scene_manager::player_spawn_point_ = (Vector2){0};
 list<input_history> scene_manager::shadow_histories_ = {};
@@ -22,7 +27,8 @@ void scene_manager::initialize() {
 #ifdef SCENE
     list<game_element*> elements = data_loader::load(SCENE);
 #else
-    list<game_element*> elements = data_loader::load(OPENING_SCENE_FILE);
+    list<game_element*> elements =
+        data_loader::load(scene_manager::scenes_map_[OPENING]);
 #endif
     for (auto element : elements) {
         root->add_child(element);
@@ -68,18 +74,11 @@ void scene_manager::new_shadow_history_(input_history history) {
     }
 }
 
-void scene_manager::change_scene(scene scene) {
-    list<game_element*> elements;
-    switch (scene) {
-    case OPENING: {
-        elements = data_loader::load(OPENING_SCENE_FILE);
-        scene_manager::current_scene_ = scene_manager::OPENING;
-    }
-    case LEVEL_01: {
-        elements = data_loader::load(LEVEL_O1_FILE);
-        scene_manager::current_scene_ = scene_manager::LEVEL_01;
-    }
-    }
+void scene_manager::next_scene() {
+    scene_manager::scene next_level =
+        scene_manager::next_scenes_[scene_manager::current_scene_];
+    const char* path = scene_manager::scenes_map_[next_level];
+    list<game_element*> elements = data_loader::load(path);
     game::get_root()->mark_for_deletion();
     auto* new_root = new game_element();
     for (game_element* element : elements) {

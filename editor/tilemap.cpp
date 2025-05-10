@@ -2,7 +2,6 @@
 #include "defs.h"
 #include "editor.h"
 #include "spritesheet.h"
-#include "text-input.h"
 #include "tileset-manager.h"
 #include <array>
 #include <raylib.h>
@@ -12,10 +11,11 @@
 using namespace std;
 
 const int CONVERT_TO_DATA_CONST = 50;
-const int TEXT_1_TILE_ID = 32;
-const int TEXT_2_TILE_ID = 33;
-const int TEXT_3_TILE_ID = 34;
 const int OPENING_TILE_ID = 31;
+const int CREDITS_TILE_ID = 32;
+const int TEXT_1_TILE_ID = 33;
+const int TEXT_2_TILE_ID = 34;
+const int TEXT_3_TILE_ID = 35;
 
 tilemap::tilemap() {
     for (auto set : TILESETS) {
@@ -86,6 +86,20 @@ void tilemap::set_tile(tileset set, int x, int y, int tile_id) {
         this->opening_y_ = y;
     }
 
+    // There can only be one credits type tile on the map
+    if (set == tileset::interact && tile_id == -1 &&
+        this->cells_.at(set).at(x).at(y) == CREDITS_TILE_ID) {
+        this->opening_x_ = -1;
+        this->opening_y_ = -1;
+    }
+    if (set == tileset::interact && tile_id == CREDITS_TILE_ID) {
+        if (this->credits_x_ != -1 && this->credits_y_ != -1) {
+            this->cells_.at(set).at(this->credits_x_).at(this->credits_y_) = -1;
+        }
+        this->credits_x_ = x;
+        this->credits_y_ = y;
+    }
+
     this->cells_.at(set).at(x).at(y) = tile_id;
 }
 
@@ -120,10 +134,27 @@ void tilemap::load_from_data(string data) {
     for (tileset set : TILESETS) {
         for (int i = 0; i < TILEMAP_SIZE_X; i++) {
             for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
-                this->cells_.at(set).at(i).at(j) =
+                int tile_code =
                     (int)(data.at((int)set * TILEMAP_SIZE_X * TILEMAP_SIZE_Y +
                                   TILEMAP_SIZE_Y * i + j) -
                           CONVERT_TO_DATA_CONST);
+                this->cells_.at(set).at(i).at(j) = tile_code;
+                if (tile_code == OPENING_TILE_ID) {
+                    this->opening_x_ = i;
+                    this->opening_y_ = j;
+                } else if (tile_code == CREDITS_TILE_ID) {
+                    this->credits_x_ = i;
+                    this->credits_y_ = j;
+                } else if (tile_code == TEXT_1_TILE_ID) {
+                    this->text_1_x_ = i;
+                    this->text_1_y_ = j;
+                } else if (tile_code == TEXT_2_TILE_ID) {
+                    this->text_2_x_ = i;
+                    this->text_2_y_ = j;
+                } else if (tile_code == TEXT_3_TILE_ID) {
+                    this->text_3_x_ = i;
+                    this->text_3_y_ = j;
+                }
             }
         }
     }
@@ -150,7 +181,7 @@ void tilemap::render_cell_(int x, int y) {
     }
 }
 
-void tilemap::click_tile(int x, int y) {
+void tilemap::click_tile_(int x, int y) {
     if (x == -1 && y == -1) return;
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
         this->set_tile(
@@ -193,5 +224,5 @@ void tilemap::tick() {
     }
 
     this->highlight_hovered_cell_(mouse_x, mouse_y);
-    this->click_tile(mouse_x, mouse_y);
+    this->click_tile_(mouse_x, mouse_y);
 }

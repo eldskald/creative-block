@@ -1,7 +1,16 @@
 #pragma once
 
-#define OPENING_SCENE_FILE "assets/scenes/opening-scene.dat"
-#define LEVEL_O1_FILE "assets/scenes/01.dat"
+#define SCENES_ENUM {OPENING, CREDITS, LEVEL_01}
+#define SCENES_MAP                                                             \
+    {{OPENING, "assets/scenes/opening.dat"},                                   \
+     {CREDITS, "assets/scenes/credits.dat"},                                   \
+     {LEVEL_01, "assets/scenes/01.dat"}}
+#define SCENES_ORDER                                                           \
+    {                                                                          \
+        {OPENING, LEVEL_01}, {LEVEL_01, CREDITS}, {                            \
+            CREDITS, OPENING                                                   \
+        }                                                                      \
+    }
 
 #define SPRITESHEET_FILE "assets/textures/spritesheet.png"
 #define SPRITESHEET_CELL_SIZE_X 8.0f

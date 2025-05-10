@@ -499,3 +499,5 @@ collision_layer = 00000100
 
 [opening]
 
+[shadows_limit]
+0
