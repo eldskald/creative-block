@@ -115,8 +115,10 @@ void game_element::delete_marked_() {
     if (game_element::marked_for_deletion_.empty()) return;
     for (auto element : game_element::marked_for_deletion_) {
         if (element->is_on_tree_) element->exit_();
-        if (!element->parent_->is_marked_for_deletion_) {
-            element->parent_->children_.remove(element);
+        if (element->parent_) {
+            if (!element->parent_->is_marked_for_deletion_) {
+                element->parent_->children_.remove(element);
+            }
         }
         delete element;
     }
