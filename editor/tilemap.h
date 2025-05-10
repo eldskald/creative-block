@@ -1,6 +1,5 @@
 #pragma once
 #include "defs.h"
-#include "text-input.h"
 #include <array>
 #include <raylib.h>
 #include <string>
@@ -16,13 +15,8 @@ public:
 
     void set_tile(tileset set, int x, int y, int tile_id);
     unordered_map<tileset, map> get_cells();
-    string convert_to_data(string level_text_1,
-                           string level_text_2,
-                           string level_text_3);
-    void load_from_data(string data,
-                        text_input* input_1,
-                        text_input* input_2,
-                        text_input* input_3);
+    string convert_to_data();
+    void load_from_data(string data);
     void tick();
 
 private:

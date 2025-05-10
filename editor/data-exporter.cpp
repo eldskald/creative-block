@@ -585,10 +585,18 @@ string data_exporter::get_spikes_text_(map* cells) {
     return text;
 }
 
+string data_exporter::get_level_shadow_totals_(string level_shadows) {
+    string text = "[shadows_limit]\n";
+    text += level_shadows.empty() ? "0" : level_shadows;
+    text += "\n";
+    return text;
+}
+
 string data_exporter::get_export_text(unordered_map<tileset, map> cells,
                                       string level_text_1,
                                       string level_text_2,
-                                      string level_text_3) {
+                                      string level_text_3,
+                                      string level_shadows) {
     data_exporter::current_id_count_ = 0;
     string data = "";
     data += data_exporter::get_bg_props_text_(&cells.at(tileset::background));
@@ -610,6 +618,7 @@ string data_exporter::get_export_text(unordered_map<tileset, map> cells,
     data += data_exporter::get_level_text_3_text_(&cells.at(tileset::interact),
                                                   level_text_3);
     data += data_exporter::get_opening_obj_text_(&cells.at(tileset::interact));
+    data += data_exporter::get_level_shadow_totals_(level_shadows);
 
     return data;
 }

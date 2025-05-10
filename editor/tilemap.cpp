@@ -2,6 +2,7 @@
 #include "defs.h"
 #include "editor.h"
 #include "spritesheet.h"
+#include "text-input.h"
 #include "tileset-manager.h"
 #include <array>
 #include <raylib.h>
@@ -102,9 +103,7 @@ unordered_map<tileset, map> tilemap::get_cells() {
     return res;
 }
 
-string tilemap::convert_to_data(string level_text_1,
-                                string level_text_2,
-                                string level_text_3) {
+string tilemap::convert_to_data() {
     string data = "";
     for (tileset set : TILESETS) {
         for (int i = 0; i < TILEMAP_SIZE_X; i++) {
@@ -114,16 +113,10 @@ string tilemap::convert_to_data(string level_text_1,
             }
         }
     }
-    data += level_text_1 + PROJ_TEXT_SEPARATOR;
-    data += level_text_2 + PROJ_TEXT_SEPARATOR;
-    data += level_text_3;
     return data;
 }
 
-void tilemap::load_from_data(string data,
-                             text_input* input_1,
-                             text_input* input_2,
-                             text_input* input_3) {
+void tilemap::load_from_data(string data) {
     for (tileset set : TILESETS) {
         for (int i = 0; i < TILEMAP_SIZE_X; i++) {
             for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
@@ -134,24 +127,6 @@ void tilemap::load_from_data(string data,
             }
         }
     }
-    string texts = data.substr(TILEMAP_SIZE_X * TILEMAP_SIZE_Y * 3);
-    int first = -1;
-    int sec = -1;
-    for (int i = 0; i < (int)texts.length(); i++) {
-        if (texts.at(i) == PROJ_TEXT_SEPARATOR) {
-            if (first == -1) {
-                first = i;
-                continue;
-            }
-            if (first != -1 && sec == -1) {
-                sec = i;
-                break;
-            }
-        }
-    }
-    input_1->set_input(texts.substr(0, first));
-    input_2->set_input(texts.substr(first + 1, sec - first - 1));
-    input_3->set_input(texts.substr(sec + 1));
 }
 
 void tilemap::highlight_hovered_cell_(int x, int y) {

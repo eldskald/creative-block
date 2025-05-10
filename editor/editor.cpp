@@ -22,6 +22,7 @@ button* interact_btn = nullptr;
 button* save_btn = nullptr;
 button* load_btn = nullptr;
 button* export_btn = nullptr;
+text_input* shadows_input = nullptr;
 text_input* file_input = nullptr;
 text_input* txt_1_input = nullptr;
 text_input* txt_2_input = nullptr;
@@ -32,9 +33,13 @@ void editor::save_tilemap_data() {
     if (file_input->get_input().empty()) return;
     string filepath =
         "editor/level-projects/" + file_input->get_input() + ".lvproj";
-    string data = editor::tilemap_->convert_to_data(txt_1_input->get_input(),
-                                                    txt_2_input->get_input(),
-                                                    txt_3_input->get_input());
+    string data = editor::tilemap_->convert_to_data();
+
+    data += shadows_input->get_input() + PROJ_TEXT_SEPARATOR;
+    data += txt_1_input->get_input() + PROJ_TEXT_SEPARATOR;
+    data += txt_2_input->get_input() + PROJ_TEXT_SEPARATOR;
+    data += txt_3_input->get_input();
+
     SaveFileText(filepath.c_str(), data.data());
 }
 
@@ -43,8 +48,33 @@ void editor::load_tilemap_data() {
     string filepath =
         "editor/level-projects/" + file_input->get_input() + ".lvproj";
     char* data = LoadFileText(filepath.data());
-    editor::tilemap_->load_from_data(
-        data, txt_1_input, txt_2_input, txt_3_input);
+    editor::tilemap_->load_from_data(data);
+
+    string texts = ((string)data).substr(TILEMAP_SIZE_X * TILEMAP_SIZE_Y * 3);
+    int first = -1;
+    int sec = -1;
+    int third = -1;
+    for (int i = 0; i < (int)texts.length(); i++) {
+        if (texts.at(i) == PROJ_TEXT_SEPARATOR) {
+            if (first == -1) {
+                first = i;
+                continue;
+            }
+            if (first != -1 && sec == -1) {
+                sec = i;
+                continue;
+            }
+            if (first != -1 && sec != -1 && third == -1) {
+                third = i;
+                break;
+            }
+        }
+    }
+    shadows_input->set_input(texts.substr(0, first));
+    txt_1_input->set_input(texts.substr(first + 1, sec - first - 1));
+    txt_2_input->set_input(texts.substr(sec + 1, third - sec - 1));
+    txt_3_input->set_input(texts.substr(third + 1));
+
     UnloadFileText(data);
 }
 
@@ -53,7 +83,8 @@ void editor::export_tilemap_data() {
     string data = data_exporter::get_export_text(editor::tilemap_->get_cells(),
                                                  txt_1_input->get_input(),
                                                  txt_2_input->get_input(),
-                                                 txt_3_input->get_input());
+                                                 txt_3_input->get_input(),
+                                                 shadows_input->get_input());
     string filepath = "assets/scenes/" + file_input->get_input() + ".dat";
     SaveFileText(filepath.c_str(), data.data());
 }
@@ -141,6 +172,12 @@ void editor::initialize() {
     txt_3_input->label = "level text 3";
     txt_3_input->rect =
         (Rectangle){624, TILESET_ORIGIN_Y + 80, 600, 32}; // NOLINT
+
+    shadows_input = new text_input();
+    shadows_input->label = "level shadows";
+    shadows_input->number_input = true;
+    shadows_input->rect =
+        (Rectangle){448, TILESET_ORIGIN_Y - 40, 300, 32}; // NOLINT
 }
 
 void editor::tick() {
@@ -166,6 +203,7 @@ void editor::tick() {
     load_btn->tick();
     export_btn->tick();
     file_input->tick();
+    shadows_input->tick();
     txt_1_input->tick();
     txt_2_input->tick();
     txt_3_input->tick();

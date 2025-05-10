@@ -38,6 +38,10 @@ scene_manager::scene scene_manager::get_current_scene() {
     return scene_manager::current_scene_;
 }
 
+void scene_manager::set_shadows_limit(int total) {
+    scene_manager::level_shadows_limit_ = total;
+}
+
 void scene_manager::respawn_player() {
     auto* new_player = new player();
     new_player->pos = scene_manager::player_spawn_point_;

@@ -10,7 +10,11 @@ string text_input::get_input() {
 }
 
 void text_input::set_input(string text) {
-    this->input_text_ = text;
+    this->input_codepoints_.clear();
+    for (char c : text) {
+        this->input_codepoints_.push_back((int)c);
+    }
+    this->update_inputs_();
 }
 
 bool text_input::is_being_hovered_() {
@@ -98,6 +102,12 @@ void text_input::get_user_input_() {
 
     // Typing logic
     int input = GetCharPressed();
+    if (this->number_input && (input < (int)'0' || input > (int)'9')) {
+        input = 0;
+    }
+    if (this->number_input && input == (int)'0' && this->cursor_pos_ == 0) {
+        input = 0;
+    }
     if (input) {
         if (this->input_codepoints_.size() < INPUT_MAX_LENGTH) {
             this->input_codepoints_.insert(

@@ -4,6 +4,7 @@
 #include "core/opening.h"
 #include "core/player.h"
 #include "core/puff.h"
+#include "core/scene-manager.h"
 #include "core/water-drip.h"
 #include "engine/game-element.h"
 #include "engine/physics-body.h"
@@ -333,6 +334,10 @@ void data_loader::parse_player_property_line(player* player, string line) {
     }
 }
 
+void data_loader::parse_level_shadows_limit_line(string line) {
+    scene_manager::set_shadows_limit(stoi(line));
+}
+
 game_element* data_loader::get_element_from_block(element_block block) {
     if (block.type == "game_element") {
         auto* obj = new game_element();
@@ -397,6 +402,12 @@ game_element* data_loader::get_element_from_block(element_block block) {
         }
         return killer;
     }
+    if (block.type == "shadows_limit") {
+        for (auto& line : block.properties) {
+            data_loader::parse_level_shadows_limit_line(line);
+        }
+        return nullptr;
+    }
     if (block.type == "opening") {
         return new opening();
     }
@@ -416,7 +427,8 @@ list<game_element*> data_loader::load(const char* file) {
             blocks.push_back(block);
         }
         for (auto block : blocks) {
-            elements.push_back(data_loader::get_element_from_block(block));
+            game_element* element = data_loader::get_element_from_block(block);
+            if (element) elements.push_back(element);
         }
     } catch (invalid_argument& e) {
         cout << e.what() << endl;

@@ -9,6 +9,7 @@ class text_input {
 public:
     Rectangle rect{(Rectangle){0}};
     string label{""};
+    bool number_input{false};
 
     string get_input();
     void set_input(string text);
