@@ -37,6 +37,7 @@ void game::do_game_loop() {
     renderer::render();
     game_element::reparent_elements_();
     game_element::delete_marked_();
+    scene_manager::load_new_scene_();
 }
 
 void game::set_root(game_element* new_root) {

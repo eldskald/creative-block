@@ -21,6 +21,10 @@ public:
 
 private:
     unordered_map<tileset, map> cells_;
+    int player_x_{-1};
+    int player_y_{-1};
+    int goal_x_{-1};
+    int goal_y_{-1};
     int text_1_x_{-1};
     int text_1_y_{-1};
     int text_2_x_{-1};

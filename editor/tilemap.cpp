@@ -11,6 +11,8 @@
 using namespace std;
 
 const int CONVERT_TO_DATA_CONST = 50;
+const int PLAYER_TILE_ID = 0;
+const int GOAL_TILE_ID = 1;
 const int OPENING_TILE_ID = 31;
 const int CREDITS_TILE_ID = 32;
 const int TEXT_1_TILE_ID = 33;
@@ -30,6 +32,34 @@ tilemap::tilemap() {
 }
 
 void tilemap::set_tile(tileset set, int x, int y, int tile_id) {
+    // There can only be one player type tile on the map
+    if (set == tileset::interact && tile_id == -1 &&
+        this->cells_.at(set).at(x).at(y) == PLAYER_TILE_ID) {
+        this->player_x_ = -1;
+        this->player_y_ = -1;
+    }
+    if (set == tileset::interact && tile_id == PLAYER_TILE_ID) {
+        if (this->player_x_ != -1 && this->player_y_ != -1) {
+            this->cells_.at(set).at(this->player_x_).at(this->player_y_) = -1;
+        }
+        this->player_x_ = x;
+        this->player_y_ = y;
+    }
+
+    // There can only be one goal type tile on the map
+    if (set == tileset::interact && tile_id == -1 &&
+        this->cells_.at(set).at(x).at(y) == GOAL_TILE_ID) {
+        this->goal_x_ = -1;
+        this->goal_y_ = -1;
+    }
+    if (set == tileset::interact && tile_id == GOAL_TILE_ID) {
+        if (this->goal_x_ != -1 && this->goal_y_ != -1) {
+            this->cells_.at(set).at(this->goal_x_).at(this->goal_y_) = -1;
+        }
+        this->goal_x_ = x;
+        this->goal_y_ = y;
+    }
+
     // There can only be one text1 type tile on the map
     if (set == tileset::interact && tile_id == -1 &&
         this->cells_.at(set).at(x).at(y) == TEXT_1_TILE_ID) {
@@ -139,7 +169,13 @@ void tilemap::load_from_data(string data) {
                                   TILEMAP_SIZE_Y * i + j) -
                           CONVERT_TO_DATA_CONST);
                 this->cells_.at(set).at(i).at(j) = tile_code;
-                if (tile_code == OPENING_TILE_ID) {
+                if (tile_code == PLAYER_TILE_ID) {
+                    this->player_x_ = i;
+                    this->player_y_ = j;
+                } else if (tile_code == GOAL_TILE_ID) {
+                    this->goal_x_ = i;
+                    this->goal_y_ = j;
+                } else if (tile_code == OPENING_TILE_ID) {
                     this->opening_x_ = i;
                     this->opening_y_ = j;
                 } else if (tile_code == CREDITS_TILE_ID) {

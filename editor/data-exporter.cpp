@@ -258,6 +258,42 @@ string data_exporter::get_bg_waterfall_text_(map* cells) {
     return text;
 }
 
+string data_exporter::get_goal_text_(map* cells) {
+    string text = "";
+    for (int i = 0; i < TILEMAP_SIZE_X; i++) {
+        for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
+            int cell_id = cells->at(i).at(j);
+            if (cell_id == -1) continue;
+            tile data =
+                tileset_manager::get_tile_data(tileset::interact, cell_id);
+            if (data.type != tile_type::goal) continue;
+            int id = data_exporter::current_id_count_++;
+            text += "[goal]\n";
+            text += "id = " + to_string(id) + "\n";
+            text += "pos = (" + to_string(i * SPRITESHEET_CELL_X) + "," +
+                    to_string(j * SPRITESHEET_CELL_Y) + ")\n";
+            text += "collision_box = (0,0," + to_string(SPRITESHEET_CELL_X) +
+                    "," + to_string(SPRITESHEET_CELL_Y) + ")\n";
+            text += "collision_mask = 00000011\n";
+            text += "[sprite]\n";
+            text += "parent = " + to_string(id) + "\n";
+            text += "atlas_coords = (0,4)\n";
+            text += "tint = (255,0,0,255)\n";
+            text += "animation = ";
+            text += "((0,4),0.08);";
+            text += "((0,5),0.08);";
+            text += "((0,6),0.08);";
+            text += "((1,6),0.08);";
+            text += "((2,6),0.08);";
+            text += "((2,5),0.08);";
+            text += "((2,4),0.08);";
+            text += "((1,4),0.08)\n";
+            text += "\n";
+        }
+    }
+    return text;
+}
+
 string data_exporter::get_bg_stars_text_(map* cells) {
     string text = "";
     for (int i = 0; i < TILEMAP_SIZE_X; i++) {
@@ -626,6 +662,7 @@ string data_exporter::get_export_text(unordered_map<tileset, map> cells,
     data += data_exporter::get_physics_bodies_text_(&cells.at(tileset::blocks));
     data += data_exporter::get_spikes_text_(&cells.at(tileset::interact));
     data += data_exporter::get_player_text_(&cells.at(tileset::interact));
+    data += data_exporter::get_goal_text_(&cells.at(tileset::interact));
     data += data_exporter::get_level_text_1_text_(&cells.at(tileset::interact),
                                                   level_text_1);
     data += data_exporter::get_level_text_2_text_(&cells.at(tileset::interact),

@@ -121,8 +121,8 @@ void tileset_manager::initialize() {
     }
 
     vector<tile> int_tiles;
-    int_tiles.push_back((tile){(Vector2){1, 5}, tile_type::player});
-    int_tiles.push_back((tile){(Vector2){0, 4}, tile_type::goal});
+    int_tiles.push_back((tile){(Vector2){1, 5}, tile_type::player}); // id 0
+    int_tiles.push_back((tile){(Vector2){0, 4}, tile_type::goal});   // id 1
     int_tiles.push_back((tile){(Vector2){7, 6}, tile_type::water});
     int_tiles.push_back((tile){(Vector2){10, 11}, tile_type::null});
     // spikes and platforms

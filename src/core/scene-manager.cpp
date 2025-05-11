@@ -21,6 +21,7 @@ Vector2 scene_manager::player_spawn_point_ = (Vector2){0};
 list<input_history> scene_manager::shadow_histories_ = {};
 list<shadow*> scene_manager::shadows_ = {};
 int scene_manager::level_shadows_limit_ = 1;
+bool scene_manager::next_scene_called_ = false;
 
 void scene_manager::initialize() {
     auto* root = new game_element();
@@ -75,20 +76,28 @@ void scene_manager::new_shadow_history_(input_history history) {
 }
 
 void scene_manager::next_scene() {
+    scene_manager::next_scene_called_ = true;
+    for (game_element* element : game::get_root()->get_children()) {
+        element->mark_for_deletion();
+    }
+}
+
+void scene_manager::load_new_scene_() {
+    if (!scene_manager::next_scene_called_) return;
+
     scene_manager::scene next_level =
         scene_manager::next_scenes_[scene_manager::current_scene_];
-    const char* path = scene_manager::scenes_map_[next_level];
-    list<game_element*> elements = data_loader::load(path);
-    game::get_root()->mark_for_deletion();
-    auto* new_root = new game_element();
+    list<game_element*> elements =
+        data_loader::load(scene_manager::scenes_map_[next_level]);
     for (game_element* element : elements) {
-        new_root->add_child(element);
+        game::get_root()->add_child(element);
         auto* player_element = dynamic_cast<player*>(element);
         if (player_element) {
             scene_manager::player_spawn_point_ = player_element->pos;
         }
     }
-    game::set_root(new_root);
+    scene_manager::current_scene_ = next_level;
+    scene_manager::next_scene_called_ = false;
 }
 
 void scene_manager::spawn_shadows_() {

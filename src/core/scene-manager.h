@@ -7,7 +7,11 @@
 #include <raylib.h>
 #include <unordered_map>
 
+class game;
+
 class scene_manager {
+    friend class game;
+
 public:
     enum scene SCENES_ENUM;
 
@@ -26,8 +30,10 @@ private:
     static list<input_history> shadow_histories_;
     static int level_shadows_limit_;
     static list<shadow*> shadows_;
+    static bool next_scene_called_;
 
     static void reset_player_pos_(player* player);
     static void new_shadow_history_(input_history history);
     static void spawn_shadows_();
+    static void load_new_scene_();
 };
