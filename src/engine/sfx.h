@@ -1,25 +1,28 @@
 #pragma once
-#include "engine/game-element.h"
+#include "imports.h"
 #include <raylib.h>
+#include <unordered_map>
 
-class sfx : public game_element {
+using namespace std;
+
+class game;
+
+class sfx {
+    friend class game;
+
 public:
-    sfx(Wave sound);
-    sfx(const sfx&) = default;
-    sfx(sfx&&) = delete;
-    sfx& operator=(const sfx&) = default;
-    sfx& operator=(sfx&&) = delete;
-    ~sfx() override;
-
-    void play();
-    void stop();
-
-    static Wave sfx_1;
-    static Wave sfx_2;
+    enum sound SFX_DEF_ENUM;
 
     static void initialize();
     static void unload();
 
+    static void play(sound sound);
+    static void stop(sound sound);
+
 private:
-    Sound sound_{(Sound){{nullptr}}};
+    static unordered_map<sound, Sound> sounds_;
+    static unordered_map<sound, const char*> paths_;
+    static unordered_map<sound, float> limit_timers_;
+
+    static void tick_();
 };

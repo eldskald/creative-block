@@ -4,6 +4,7 @@
 #include "core/respawn-particles.h"
 #include "core/scene-manager.h"
 #include "engine/inputs.h"
+#include "engine/sfx.h"
 #include "engine/sprite.h"
 #include "imports.h"
 #include <raylib.h>
@@ -46,6 +47,7 @@ void player::kill() {
     this->sprite_->mark_for_deletion();
     this->sprite_ = nullptr;
     this->death_particles_emitter_->emit();
+    sfx::play(sfx::death);
 }
 
 Vector2 player::get_dir_input_() {
@@ -58,7 +60,9 @@ Vector2 player::get_dir_input_() {
 void player::move_tick_() {
     this->change_dir(player::get_dir_input_());
 
-    if (inputs::is_action_pressed(inputs::action::jump)) this->press_jump();
+    if (inputs::is_action_pressed(inputs::action::jump)) {
+        if (this->press_jump()) sfx::play(sfx::jump);
+    }
     if (inputs::is_action_released(inputs::action::jump)) this->release_jump();
 
     this->base_unit::tick_();

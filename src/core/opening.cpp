@@ -2,6 +2,7 @@
 #include "core/scene-manager.h"
 #include "defs.h"
 #include "engine/inputs.h"
+#include "engine/sfx.h"
 #include "engine/text.h"
 #include <raylib.h>
 
@@ -30,6 +31,7 @@ void opening::tick_() {
         this->time_ = 0.0f;
     }
     if (inputs::is_action_pressed(inputs::action::start)) {
+        sfx::play(sfx::select);
         scene_manager::next_scene();
     }
 }

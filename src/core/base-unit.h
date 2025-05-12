@@ -15,7 +15,7 @@ using input_history = list<input>;
 class base_unit : public physics_body {
 public:
     void change_dir(Vector2 dir);
-    void press_jump();
+    bool press_jump();
     void release_jump();
 
     Vector2 get_dir();

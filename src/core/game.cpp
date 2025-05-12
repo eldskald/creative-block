@@ -35,6 +35,7 @@ void game::do_game_loop() {
     physics_body::update_areas_();
     game_element::trigger_tick_(game::root_);
     renderer::render();
+    sfx::tick_();
     game_element::reparent_elements_();
     game_element::delete_marked_();
     scene_manager::load_new_scene_();

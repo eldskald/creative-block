@@ -12,14 +12,16 @@ void base_unit::change_dir(Vector2 dir) {
     this->dir_ = dir;
 }
 
-void base_unit::press_jump() {
+bool base_unit::press_jump() {
     if (this->jump_buffer_timer_ <= PLAYER_JUMP_BUFFER && !this->is_jumping_) {
         this->vel.y = -PLAYER_JUMP_SPEED;
         this->is_jumping_ = true;
         this->is_pre_buffering_jump_ = false;
+        return true;
     } else {
         this->is_pre_buffering_jump_ = true;
         this->jump_buffer_timer_ = 0.0f;
+        return false;
     }
 }
 

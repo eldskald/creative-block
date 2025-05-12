@@ -1,32 +1,45 @@
 #include "engine/sfx.h"
+#include "defs.h"
 #include "imports.h"
 #include <raylib.h>
+#include <unordered_map>
 
-Wave sfx::sfx_1 = (Wave){0};
-Wave sfx::sfx_2 = (Wave){0};
+unordered_map<sfx::sound, const char*> sfx::paths_ = SFX_PATHS;
+unordered_map<sfx::sound, Sound> sfx::sounds_;
+unordered_map<sfx::sound, float> sfx::limit_timers_;
 
 void sfx::initialize() {
-    sfx::sfx_1 = LoadWave(SFX_1);
-    sfx::sfx_2 = LoadWave(SFX_2);
+    for (sfx::sound sound : SFX_ENUMS) {
+        Wave wave = LoadWave(sfx::paths_[sound]);
+        sfx::sounds_[sound] = LoadSoundFromWave(wave);
+        sfx::limit_timers_[sound] = SFX_LIMIT_TIMER * 2;
+        UnloadWave(wave);
+    }
 }
 
 void sfx::unload() {
-    UnloadWave(sfx::sfx_1);
-    UnloadWave(sfx::sfx_2);
+    for (sfx::sound sound : SFX_ENUMS) {
+        UnloadSound(sfx::sounds_[sound]);
+    }
 }
 
-sfx::sfx(Wave sound) {
-    this->sound_ = LoadSoundFromWave(sound);
+void sfx::play(sfx::sound sound) {
+    if (sfx::limit_timers_[sound] > SFX_LIMIT_TIMER) {
+        StopSound(sfx::sounds_[sound]);
+        PlaySound(sfx::sounds_[sound]);
+        sfx::limit_timers_[sound] = 0.0f;
+    }
 }
 
-sfx::~sfx() {
-    UnloadSound(this->sound_);
+void sfx::stop(sfx::sound sound) {
+    StopSound(sfx::sounds_[sound]);
+    sfx::limit_timers_[sound] = 0.0f;
 }
 
-void sfx::play() {
-    PlaySound(this->sound_);
-}
-
-void sfx::stop() {
-    StopSound(this->sound_);
+void sfx::tick_() {
+    for (sfx::sound sound : SFX_ENUMS) {
+        if (sfx::limit_timers_[sound] <= SFX_LIMIT_TIMER) {
+            sfx::limit_timers_[sound] += GetFrameTime();
+        }
+    }
 }
