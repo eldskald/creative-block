@@ -31,6 +31,7 @@ private:
     static string get_player_text_(map* cells);
     static string get_goal_text_(map* cells);
     static string get_spikes_text_(map* cells);
+    static string get_water_text_(map* cells);
     static string get_level_text_1_text_(map* cells, string level_text);
     static string get_level_text_2_text_(map* cells, string level_text);
     static string get_level_text_3_text_(map* cells, string level_text);
