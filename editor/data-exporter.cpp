@@ -106,19 +106,93 @@ string data_exporter::get_blocks_sprites_text_(map* cells) {
     string text = "";
     for (int i = 0; i < TILEMAP_SIZE_X; i++) {
         for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
-            if (cells->at(i).at(j) == -1) {
-                continue;
-            } else {
-                Vector2 coords = tileset_manager::get_tile_sprite_coords(
-                    tileset::blocks, cells->at(i).at(j));
-                text += "[sprite]\n";
-                text += "pos = (" + to_string(i * SPRITESHEET_CELL_X) + "," +
-                        to_string(j * SPRITESHEET_CELL_Y) + ")\n";
-                text += "atlas_coords = (" + to_string((int)coords.x) + "," +
-                        to_string((int)coords.y) + ")\n";
-                text += "tint = (255,0,0,255)\n";
-                text += "\n";
-            }
+            if (cells->at(i).at(j) == -1) continue;
+            Vector2 coords = tileset_manager::get_tile_sprite_coords(
+                tileset::blocks, cells->at(i).at(j));
+            text += "[sprite]\n";
+            text += "pos = (" + to_string(i * SPRITESHEET_CELL_X) + "," +
+                    to_string(j * SPRITESHEET_CELL_Y) + ")\n";
+            text += "atlas_coords = (" + to_string((int)coords.x) + "," +
+                    to_string((int)coords.y) + ")\n";
+            text += "tint = (255,0,0,255)\n";
+            text += "\n";
+        }
+    }
+    return text;
+}
+
+Vector2* data_exporter::find_next_platform_start_(map* cells) {
+    for (int i = 0; i < TILEMAP_SIZE_X; i++) {
+        for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
+            int cell_id = cells->at(i).at(j);
+            if (cell_id == -1) continue;
+            tile data =
+                tileset_manager::get_tile_data(tileset::interact, cell_id);
+            if (data.type != tile_type::platform) continue;
+            auto start = new Vector2();
+            start->x = (float)i;
+            start->y = (float)j;
+            return start;
+        }
+    }
+    return nullptr;
+}
+
+string data_exporter::get_platform_from_map_(Vector2 start, map* cells) {
+    int length = 0;
+    int coords_x = (int)start.x;
+    while (true) {
+        int cell_id = cells->at(coords_x).at((int)start.y);
+        if (cell_id == -1) break;
+        tile data = tileset_manager::get_tile_data(tileset::interact, cell_id);
+        if (data.type != tile_type::platform) break;
+        cells->at(coords_x).at((int)start.y) = -1;
+        length++;
+        coords_x++;
+        if (coords_x == TILEMAP_SIZE_X) break;
+    }
+    string str = "[physics_body]\n";
+    str += "pos = (" + to_string((int)start.x * SPRITESHEET_CELL_X) + "," +
+           to_string((int)start.y * SPRITESHEET_CELL_Y) + ")\n";
+    str += "type = fixed\n";
+    str += "one_way = true\n";
+    str += "collision_box = (0,0," + to_string(length * SPRITESHEET_CELL_X) +
+           "," + to_string(SPRITESHEET_CELL_Y / 2) + ")\n";
+    str += "collision_layer = 00001000\n";
+    return str;
+}
+
+string data_exporter::get_platform_bodies_text_(map* cells) {
+    string text = "";
+    Vector2* start = data_exporter::find_next_platform_start_(cells);
+    while (start) {
+        text += data_exporter::get_platform_from_map_(*start, cells);
+        text += "\n";
+        delete start;
+        start = data_exporter::find_next_platform_start_(cells);
+    }
+    return text;
+}
+
+string data_exporter::get_platform_sprites_text_(map* cells) {
+    string text = "";
+    for (int i = 0; i < TILEMAP_SIZE_X; i++) {
+        for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
+            int cell_id = cells->at(i).at(j);
+            if (cell_id == -1) continue;
+            tile data =
+                tileset_manager::get_tile_data(tileset::interact, cell_id);
+            if (data.type != tile_type::platform) continue;
+
+            Vector2 coords = tileset_manager::get_tile_sprite_coords(
+                tileset::interact, cell_id);
+            text += "[sprite]\n";
+            text += "pos = (" + to_string(i * SPRITESHEET_CELL_X) + "," +
+                    to_string(j * SPRITESHEET_CELL_Y) + ")\n";
+            text += "atlas_coords = (" + to_string((int)coords.x) + "," +
+                    to_string((int)coords.y) + ")\n";
+            text += "tint = (255,0,0,255)\n";
+            text += "\n";
         }
     }
     return text;
@@ -739,6 +813,10 @@ string data_exporter::get_export_text(unordered_map<tileset, map> cells,
                                                   level_text_3);
     data += data_exporter::get_opening_obj_text_(&cells.at(tileset::interact));
     data += data_exporter::get_credits_obj_text_(&cells.at(tileset::interact));
+    data +=
+        data_exporter::get_platform_sprites_text_(&cells.at(tileset::interact));
+    data +=
+        data_exporter::get_platform_bodies_text_(&cells.at(tileset::interact));
     data += data_exporter::get_level_shadow_totals_(level_shadows);
 
     return data;
