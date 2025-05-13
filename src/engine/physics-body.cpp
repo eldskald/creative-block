@@ -46,8 +46,7 @@ list<physics_body*> physics_body::get_bodies_touching_top() {
         floor(this->collision_box.width),
         1.0f};
     auto bodies = physics_body::get_colliders(rect,
-                                              this->collision_mask |
-                                                  this->v_collision_mask,
+                                              this->collision_mask,
                                               this->collision_layer);
 
     // Only count bodies that aren't overlapping
@@ -89,8 +88,7 @@ list<physics_body*> physics_body::get_bodies_touching_bottom() {
                     floor(this->collision_box.width),
                     1.0f};
     auto bodies = physics_body::get_colliders(rect,
-                                              this->collision_mask |
-                                                  this->v_collision_mask,
+                                              this->collision_mask,
                                               this->collision_layer);
 
     // Only count bodies that aren't overlapping
@@ -240,7 +238,7 @@ float physics_body::compute_v_movement_(float delta_d, bool ignore_children) {
     // Iterate through all bodies found on the trail.
     list<physics_body*> colliders = physics_body::get_colliders(
         target_rec,
-        this->collision_mask | this->v_collision_mask,
+        this->collision_mask,
         this->collision_layer);
     for (auto collider : colliders) {
 

@@ -14,7 +14,7 @@ player::player() {
         (Rectangle){0, 0, SPRITESHEET_CELL_SIZE_X, SPRITESHEET_CELL_SIZE_Y};
     this->collision_layer = COL_LAYER_PLAYER;
     this->collision_mask = COL_MASK_PLAYER;
-    this->v_collision_mask = COL_V_MASK_PLAYER_SHADOW;
+    this->one_way = true;
     auto* player_sprite = new sprite();
     player_sprite->atlas_coords = PLAYER_ATLAS_COORDS;
     player_sprite->tint = MAIN_MASK_COLOR;
@@ -42,7 +42,6 @@ void player::kill() {
     this->killed_ = true;
     this->collision_layer = 0b00000000;
     this->collision_mask = 0b00000000;
-    this->v_collision_mask = 0b00000000;
     this->time_ = 0.0f;
     this->sprite_->mark_for_deletion();
     this->sprite_ = nullptr;

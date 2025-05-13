@@ -28,7 +28,6 @@ public:
     bool one_way{false};
     bitset<COLLISION_LAYERS> collision_layer{0b00000000};
     bitset<COLLISION_LAYERS> collision_mask{0b00000000};
-    bitset<COLLISION_LAYERS> v_collision_mask{0b00000000};
 
     list<physics_body*> get_bodies_touching_top();
     list<physics_body*> get_bodies_touching_left();
