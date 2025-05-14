@@ -35,6 +35,7 @@ player::player() {
 
 void player::emit_respawn_particles() {
     this->respawn_particles_emitter_->emit();
+    sfx::play(sfx::respawn);
 }
 
 void player::kill() {
