@@ -7,6 +7,7 @@
 #include <array>
 #include <raylib.h>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -20,6 +21,7 @@ Shader renderer::blur_shader_1_ = (Shader){0};
 Shader renderer::blur_shader_2_ = (Shader){0};
 Vector2 renderer::stretched_tex_size_ = (Vector2){0};
 Vector2 renderer::window_size_ = (Vector2){0};
+vector<array<float, 4>> renderer::water_waves_;
 #ifdef DEV
 bool renderer::showing_areas_ = false;
 bool renderer::showing_fixed_bodies_ = false;
@@ -111,12 +113,16 @@ void renderer::initialize() {
                                    "debug4",
                                    &debug_4_value,
                                    SHADER_UNIFORM_VEC4);
-
-    // Two blur shaders for the two passes. The first one blurs with intensity
-    // taken into account, and takes the base_tex_1_ so the shader knows where
-    // background pixels are to intensify them even more.
-    renderer::blur_shader_1_ = LoadShader(BASE_VERT_SHADER, FIRST_BLUR_SHADER);
     array<float, 2> tex_size = {MAIN_TEX_SIZE, MAIN_TEX_SIZE};
+    renderer::set_shader_property_(renderer::base_screen_shader_,
+                                   "textureSize",
+                                   &tex_size,
+                                   SHADER_UNIFORM_VEC2);
+
+    // Two blur shaders for the two passes. The first one blurs with
+    // intensity taken into account, and takes the base_tex_1_ so the shader
+    // knows where background pixels are to intensify them even more.
+    renderer::blur_shader_1_ = LoadShader(BASE_VERT_SHADER, FIRST_BLUR_SHADER);
     renderer::set_shader_property_(renderer::blur_shader_1_,
                                    "textureSize",
                                    &tex_size,
@@ -140,6 +146,7 @@ void renderer::unload() {
 }
 
 void renderer::render() {
+    renderer::update_water_waves_();
     renderer::update_window_size_();
     renderer::update_tex_sizes_();
     renderer::render_base_();
@@ -222,6 +229,49 @@ void renderer::render() {
         renderer::texture_rendered_ = base_2;
     }
 #endif
+}
+
+void renderer::set_water(bool active, float water_level) {
+    auto water = (float)active;
+    float level = water_level;
+    renderer::set_shader_property_(
+        renderer::base_screen_shader_, "water", &water, SHADER_UNIFORM_FLOAT);
+    renderer::set_shader_property_(renderer::base_screen_shader_,
+                                   "waterLevel",
+                                   &level,
+                                   SHADER_UNIFORM_FLOAT);
+}
+
+void renderer::add_water_wave(float amplitude, float origin, float width) {
+    renderer::water_waves_.push_back(
+        (array<float, 4>){amplitude, origin, 0.0f, width});
+    if (renderer::water_waves_.size() > WATER_MAX_WAVES)
+        renderer::water_waves_.erase(renderer::water_waves_.begin());
+}
+
+void renderer::update_water_waves_() {
+    float delta = GetFrameTime();
+    for (int i = 0; i < (int)renderer::water_waves_.size(); i++) {
+        auto wave = &renderer::water_waves_.at(i);
+        wave->at(0) -= delta * WATER_WAVE_DECAY;
+        wave->at(2) += delta * WATER_WAVE_SPEED;
+        if (wave->at(0) > 0.0f) {
+            renderer::set_shader_property_(renderer::base_screen_shader_,
+                                           "wave" + to_string(i),
+                                           wave,
+                                           SHADER_UNIFORM_VEC4);
+        } else {
+            renderer::water_waves_.erase(renderer::water_waves_.begin() + i);
+            i--;
+        }
+    }
+    for (int i = (int)renderer::water_waves_.size(); i < WATER_MAX_WAVES; i++) {
+        array<float, 4> zero = {0.0f};
+        renderer::set_shader_property_(renderer::base_screen_shader_,
+                                       "wave" + to_string(i),
+                                       &zero,
+                                       SHADER_UNIFORM_VEC4);
+    }
 }
 
 void renderer::update_window_size_() {

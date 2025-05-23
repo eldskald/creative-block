@@ -44,6 +44,7 @@ falling_leaves::particle_::particle_(Vector2 init_pos, falling_leaves* emitter)
     this->type = physics_body::body_type::area;
     this->collision_mask = PARTICLE_LEAF_COLLISION_MASK;
     this->collision_box = PARTICLE_LEAF_COLLISION_BOX;
+    this->collision_layer = COL_LAYER_PARTICLES;
     auto* mask = new sprite();
     mask->atlas_coords = PARTICLE_LEAF_ATLAS_COORDS;
     mask->tint = BG_MASK_COLOR;

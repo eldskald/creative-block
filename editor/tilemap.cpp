@@ -13,6 +13,7 @@ using namespace std;
 const int CONVERT_TO_DATA_CONST = 50;
 const int PLAYER_TILE_ID = 0;
 const int GOAL_TILE_ID = 1;
+const int WATER_TILE_ID = 2;
 const int OPENING_TILE_ID = 31;
 const int CREDITS_TILE_ID = 32;
 const int TEXT_1_TILE_ID = 33;
@@ -58,6 +59,20 @@ void tilemap::set_tile(tileset set, int x, int y, int tile_id) {
         }
         this->goal_x_ = x;
         this->goal_y_ = y;
+    }
+
+    // There can only be one water type tile on the map
+    if (set == tileset::interact && tile_id == -1 &&
+        this->cells_.at(set).at(x).at(y) == WATER_TILE_ID) {
+        this->water_x_ = -1;
+        this->water_y_ = -1;
+    }
+    if (set == tileset::interact && tile_id == WATER_TILE_ID) {
+        if (this->water_x_ != -1 && this->water_y_ != -1) {
+            this->cells_.at(set).at(this->water_x_).at(this->water_y_) = -1;
+        }
+        this->water_x_ = x;
+        this->water_y_ = y;
     }
 
     // There can only be one text1 type tile on the map
@@ -175,6 +190,9 @@ void tilemap::load_from_data(string data) {
                 } else if (tile_code == GOAL_TILE_ID) {
                     this->goal_x_ = i;
                     this->goal_y_ = j;
+                } else if (tile_code == WATER_TILE_ID) {
+                    this->water_x_ = i;
+                    this->water_y_ = j;
                 } else if (tile_code == OPENING_TILE_ID) {
                     this->opening_x_ = i;
                     this->opening_y_ = j;

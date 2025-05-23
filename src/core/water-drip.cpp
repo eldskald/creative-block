@@ -1,11 +1,13 @@
 #include "core/water-drip.h"
 #include "core/game.h"
+#include "core/water.h"
 #include "defs.h"
 #include "engine/physics-body.h"
 #include "engine/sprite.h"
 #include "imports.h"
 #include <raylib.h>
 #include <raymath.h>
+#include <iostream>
 
 using namespace std;
 
@@ -41,6 +43,7 @@ water_drip::particle_::particle_(Vector2 pos) {
     this->type = physics_body::body_type::area;
     this->collision_box = PARTICLE_DRIP_PARTICLE_COLLISION_BOX;
     this->collision_mask = PARTICLE_DRIP_COLLISION_MASK;
+    this->collision_layer = COL_LAYER_PARTICLES;
     this->pos = pos;
     auto* drop_sprite = new sprite();
     drop_sprite->atlas_coords = PARTICLE_DRIP_PARTICLE_ATLAS_COORDS;
@@ -53,6 +56,7 @@ water_drip::sub_particle_::sub_particle_(Vector2 pos, Vector2 vel) {
     this->type = physics_body::body_type::area;
     this->collision_box = PARTICLE_DRIP_SUB_PARTICLE_COLLISION_BOX;
     this->collision_mask = PARTICLE_DRIP_COLLISION_MASK;
+    this->collision_layer = COL_LAYER_PARTICLES;
     this->pos = pos;
     this->vel = vel;
     auto* drop_sprite = new sprite();
@@ -64,9 +68,18 @@ water_drip::sub_particle_::sub_particle_(Vector2 pos, Vector2 vel) {
 
 void water_drip::particle_::tick_() {
     if (!this->get_detected_bodies().empty()) {
-        this->spawn_sub_particles_();
         this->mark_for_deletion();
+        this->spawn_sub_particles_();
         return;
+    }
+    if (!this->get_detected_areas().empty()) {
+        for (auto body : this->get_detected_bodies()) {
+            auto* water_body = dynamic_cast<water*>(body);
+            if (water_body) {
+                this->mark_for_deletion();
+                return;
+            }
+        }
     }
     this->vel.y += PARTICLE_DRIP_GRAVITY * GetFrameTime();
     if (this->vel.y > PARTICLE_DRIP_MAX_FALLING_SPEED) {
@@ -75,7 +88,8 @@ void water_drip::particle_::tick_() {
 }
 
 void water_drip::sub_particle_::tick_() {
-    if (!this->get_detected_bodies().empty()) {
+    if (!this->get_detected_bodies().empty() ||
+        !this->get_detected_areas().empty()) {
         this->mark_for_deletion();
         return;
     }

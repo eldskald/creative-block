@@ -8,6 +8,7 @@
 #include "core/puff.h"
 #include "core/scene-manager.h"
 #include "core/water-drip.h"
+#include "core/water.h"
 #include "engine/game-element.h"
 #include "engine/physics-body.h"
 #include "engine/sprite.h"
@@ -336,6 +337,18 @@ void data_loader::parse_player_property_line(player* player, string line) {
     }
 }
 
+void data_loader::parse_water_property_line(water* water, string line) {
+    if (line.find('=') == line.npos)
+        throw invalid_argument("property line has no '=' sign");
+
+    string prop_name = line.substr(0, line.find('='));
+    string prop_value =
+        line.substr(line.find('=') + 1, line.size() - line.find('=') - 1);
+    if (prop_name == "water_level") {
+        water->water_level = stof(prop_value);
+    }
+}
+
 void data_loader::parse_level_shadows_limit_line(string line) {
     scene_manager::set_shadows_limit(stoi(line));
 }
@@ -382,6 +395,13 @@ game_element* data_loader::get_element_from_block(element_block block) {
             data_loader::parse_physics_body_property_line(goal_element, line);
         }
         return goal_element;
+    }
+    if (block.type == "water") {
+        auto* water_element = new water();
+        for (auto& line : block.properties) {
+            data_loader::parse_water_property_line(water_element, line);
+        }
+        return water_element;
     }
     if (block.type == "falling_leaves") {
         auto* emitter = new falling_leaves();

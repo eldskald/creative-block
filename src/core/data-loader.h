@@ -1,5 +1,6 @@
 #pragma once
 #include "core/player.h"
+#include "core/water.h"
 #include "engine/game-element.h"
 #include "engine/physics-body.h"
 #include "engine/sprite.h"
@@ -47,5 +48,6 @@ private:
     static void parse_sprite_property_line(sprite* sprite, string line);
     static void parse_text_property_line(text* text, string line);
     static void parse_player_property_line(player* player, string line);
+    static void parse_water_property_line(water* water, string line);
     static void parse_level_shadows_limit_line(string line);
 };

@@ -502,58 +502,8 @@ string data_exporter::get_water_text_(map* cells) {
             tile data =
                 tileset_manager::get_tile_data(tileset::interact, cell_id);
             if (data.type != tile_type::water) continue;
-            int id = data_exporter::current_id_count_++;
-            text += "[killbox]\n";
-            text += "id = " + to_string(id) + "\n";
-            text += "pos = (" + to_string(i * SPRITESHEET_CELL_X) + "," +
-                    to_string(j * SPRITESHEET_CELL_Y) + ")\n";
-            text += "collision_box = (0,0," + to_string(SPRITESHEET_CELL_X) +
-                    "," + to_string(SPRITESHEET_CELL_Y / 2) + ")\n";
-            text += "collision_mask = 00000011\n";
-            text += "[sprite]\n";
-            text += "parent = " + to_string(id) + "\n";
-            text += "tint = (255,0,0,255)\n";
-            text += "atlas_coords = (7,4)\n";
-            const float frame_time = 0.1f;
-            const int frame_total = 32;
-            const float x_frame_diff = 8.0f;
-            text += "animation = ";
-            text += "((7,4)," + to_string(frame_time) + ");";
-            text += "((7,5)," + to_string(frame_time) + ");";
-            text += "((7,6)," + to_string(frame_time) + ");";
-            text += "((7,7)," + to_string(frame_time) + ");";
-            text += "((8,4)," + to_string(frame_time) + ");";
-            text += "((8,5)," + to_string(frame_time) + ");";
-            text += "((8,6)," + to_string(frame_time) + ");";
-            text += "((8,7)," + to_string(frame_time) + ");";
-            text += "((9,4)," + to_string(frame_time) + ");";
-            text += "((9,5)," + to_string(frame_time) + ");";
-            text += "((9,6)," + to_string(frame_time) + ");";
-            text += "((9,7)," + to_string(frame_time) + ");";
-            text += "((10,4)," + to_string(frame_time) + ");";
-            text += "((10,5)," + to_string(frame_time) + ");";
-            text += "((10,6)," + to_string(frame_time) + ");";
-            text += "((10,7)," + to_string(frame_time) + ");";
-            text += "((11,4)," + to_string(frame_time) + ");";
-            text += "((11,5)," + to_string(frame_time) + ");";
-            text += "((11,6)," + to_string(frame_time) + ");";
-            text += "((11,7)," + to_string(frame_time) + ");";
-            text += "((12,4)," + to_string(frame_time) + ");";
-            text += "((12,5)," + to_string(frame_time) + ");";
-            text += "((12,6)," + to_string(frame_time) + ");";
-            text += "((12,7)," + to_string(frame_time) + ");";
-            text += "((13,4)," + to_string(frame_time) + ");";
-            text += "((13,5)," + to_string(frame_time) + ");";
-            text += "((13,6)," + to_string(frame_time) + ");";
-            text += "((13,7)," + to_string(frame_time) + ");";
-            text += "((14,4)," + to_string(frame_time) + ");";
-            text += "((14,5)," + to_string(frame_time) + ");";
-            text += "((14,6)," + to_string(frame_time) + ");";
-            text += "((14,7)," + to_string(frame_time) + ")\n";
-            text += "animation_starting_phase = " +
-                    to_string((float)(i % frame_total) * frame_time *
-                              x_frame_diff) +
-                    "\n";
+            text += "[water]\n";
+            text += "water_level = " + to_string(j * SPRITESHEET_CELL_Y) + "\n";
             text += "\n";
         }
     }

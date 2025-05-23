@@ -25,6 +25,8 @@ private:
     int player_y_{-1};
     int goal_x_{-1};
     int goal_y_{-1};
+    int water_x_{-1};
+    int water_y_{-1};
     int text_1_x_{-1};
     int text_1_y_{-1};
     int text_2_x_{-1};

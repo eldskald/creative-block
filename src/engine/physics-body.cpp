@@ -45,9 +45,8 @@ list<physics_body*> physics_body::get_bodies_touching_top() {
         floor(this->get_global_pos().y + this->collision_box.y - 1.0f),
         floor(this->collision_box.width),
         1.0f};
-    auto bodies = physics_body::get_colliders(rect,
-                                              this->collision_mask,
-                                              this->collision_layer);
+    auto bodies = physics_body::get_colliders(
+        rect, this->collision_mask, this->collision_layer);
 
     // Only count bodies that aren't overlapping
     list<physics_body*> touching_bodies;
@@ -87,9 +86,8 @@ list<physics_body*> physics_body::get_bodies_touching_bottom() {
                           this->collision_box.height),
                     floor(this->collision_box.width),
                     1.0f};
-    auto bodies = physics_body::get_colliders(rect,
-                                              this->collision_mask,
-                                              this->collision_layer);
+    auto bodies = physics_body::get_colliders(
+        rect, this->collision_mask, this->collision_layer);
 
     // Only count bodies that aren't overlapping
     list<physics_body*> touching_bodies;
@@ -131,6 +129,14 @@ list<physics_body*> physics_body::get_detected_bodies() {
     return clone;
 }
 
+list<physics_body*> physics_body::get_detected_areas() {
+    list<physics_body*> clone;
+    for (auto body : this->detected_areas_) {
+        clone.push_back(body);
+    }
+    return clone;
+}
+
 bool physics_body::collision_detected() {
     if (!this->get_bodies_touching_top().empty()) return true;
     if (!this->get_bodies_touching_left().empty()) return true;
@@ -145,6 +151,24 @@ physics_body::get_colliders(Rectangle collision_box,
                             bitset<COLLISION_LAYERS> layer) {
     list<physics_body*> colliders;
     for (auto body : physics_body::bodies_) {
+        bitset<COLLISION_LAYERS> mask_check = mask;
+        mask_check &= body->collision_layer;
+        bitset<COLLISION_LAYERS> layer_check = layer;
+        layer_check &= body->collision_mask;
+        if (CheckCollisionRecs(collision_box, body->get_collision_rect_()) &&
+            (mask_check != 0b00000000 || layer_check != 0b00000000)) {
+            colliders.push_back(body);
+        }
+    }
+    return colliders;
+}
+
+list<physics_body*>
+physics_body::get_intersecting_areas(Rectangle collision_box,
+                                     bitset<COLLISION_LAYERS> mask,
+                                     bitset<COLLISION_LAYERS> layer) {
+    list<physics_body*> colliders;
+    for (auto body : physics_body::areas_) {
         bitset<COLLISION_LAYERS> mask_check = mask;
         mask_check &= body->collision_layer;
         bitset<COLLISION_LAYERS> layer_check = layer;
@@ -237,9 +261,7 @@ float physics_body::compute_v_movement_(float delta_d, bool ignore_children) {
 
     // Iterate through all bodies found on the trail.
     list<physics_body*> colliders = physics_body::get_colliders(
-        target_rec,
-        this->collision_mask,
-        this->collision_layer);
+        target_rec, this->collision_mask, this->collision_layer);
     for (auto collider : colliders) {
 
         // Ignore the body if it is among the following:
@@ -450,6 +472,63 @@ list<physics_body*> physics_body::find_exiting_bodies_() {
     return found_bodies;
 }
 
+list<physics_body*> physics_body::find_entering_areas_() {
+    list<physics_body*> found_areas;
+
+    list<physics_body*> intersectors =
+        physics_body::get_intersecting_areas(this->get_collision_rect_(),
+                                             this->collision_mask,
+                                             this->collision_layer);
+    for (auto intersector : intersectors) {
+        if (intersector == this) continue;
+        bool found = true;
+        for (auto area : this->detected_areas_) {
+            if (area == intersector) {
+                found = false;
+                break;
+            }
+        }
+        if (found) found_areas.push_back(intersector);
+    }
+
+    for (auto area : found_areas) {
+        this->detected_areas_.push_back(area);
+    }
+
+    return found_areas;
+}
+
+list<physics_body*> physics_body::find_exiting_areas_() {
+    list<physics_body*> found_areas;
+    list<list<physics_body*>::iterator> iterators;
+
+    list<physics_body*> intersectors =
+        physics_body::get_intersecting_areas(this->get_collision_rect_(),
+                                             this->collision_mask,
+                                             this->collision_layer);
+    for (auto i = this->detected_areas_.begin();
+         i != this->detected_areas_.end();
+         ++i) {
+        bool found = true;
+        for (auto intersector : intersectors) {
+            if (intersector == *i) {
+                found = false;
+                break;
+            }
+        }
+        if (found) {
+            found_areas.push_back(*i);
+            iterators.push_back(i);
+        }
+    }
+
+    for (auto iterator : iterators) {
+        this->detected_areas_.erase(iterator);
+    }
+
+    return found_areas;
+}
+
 void physics_body::update_areas_() {
     for (auto area : physics_body::areas_) {
         list<physics_body*> entering_bodies = area->find_entering_bodies_();
@@ -461,6 +540,16 @@ void physics_body::update_areas_() {
         for (auto body : exiting_bodies) {
             area->body_exited_(body);
         }
+
+        list<physics_body*> entering_areas = area->find_entering_areas_();
+        list<physics_body*> exiting_areas = area->find_exiting_areas_();
+
+        for (auto body : entering_areas) {
+            area->area_entered_(body);
+        }
+        for (auto body : exiting_areas) {
+            area->area_exited_(body);
+        }
     }
 }
 
@@ -468,4 +557,10 @@ void physics_body::body_entered_(physics_body* body) {
 }
 
 void physics_body::body_exited_(physics_body* body) {
+}
+
+void physics_body::area_entered_(physics_body* area) {
+}
+
+void physics_body::area_exited_(physics_body* area) {
 }

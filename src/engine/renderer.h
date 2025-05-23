@@ -1,6 +1,8 @@
 #pragma once
 #include <raylib.h>
 #include <string>
+#include <vector>
+#include <array>
 
 using namespace std;
 
@@ -9,6 +11,8 @@ public:
     static void initialize();
     static void unload();
     static void render();
+    static void set_water(bool active, float water_level);
+    static void add_water_wave(float origin, float amplitude, float width);
 
 private:
     static RenderTexture2D base_tex_1_;
@@ -21,6 +25,9 @@ private:
     static Shader base_screen_shader_;
     static Shader blur_shader_1_;
     static Shader blur_shader_2_;
+    static bool water_active_;
+    static float water_level_;
+    static vector<array<float, 4>> water_waves_;
 #ifdef DEV
     static bool showing_areas_;
     static bool showing_fixed_bodies_;
@@ -38,4 +45,5 @@ private:
     static void update_window_size_();
     static void render_base_();
     static void post_process_();
+    static void update_water_waves_();
 };
