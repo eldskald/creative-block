@@ -33,4 +33,3 @@
 #define SECOND_BLUR_SHADER "assets/shaders/gaussian-range-4.frag"
 
 #define FONT_TITLE "assets/fonts/nordine/Nordine.otf"
-#define FONT_LABEL "assets/fonts/medodica/MedodicaRegular.otf"

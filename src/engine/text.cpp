@@ -13,7 +13,7 @@ list<text*> text::texts_;
 
 void text::initialize() {
     text::title_font_ = LoadFont(FONT_TITLE);
-    text::label_font_ = LoadFont(FONT_LABEL);
+    text::label_font_ = GetFontDefault();
 }
 
 void text::unload() {

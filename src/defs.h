@@ -28,8 +28,8 @@
 
 #define TITLE_FONT_SIZE 32
 #define TITLE_FONT_SPACING -2
-#define LABEL_FONT_SIZE 16
-#define LABEL_FONT_SPACING 0
+#define LABEL_FONT_SIZE 10
+#define LABEL_FONT_SPACING 1
 
 #define GAME_TITLE "CREATIVE BLOCK"
 
@@ -39,7 +39,7 @@
 #define OPENING_SCREEN_MSG_CYCLE_TIME 3.0f
 
 #define CREDITS_SCREEN_TITLE_Y 24
-#define CREDITS_SCREEN_MSG "Press enter to return"
+#define CREDITS_SCREEN_MSG "Press enter to restart"
 #define CREDITS_SCREEN_MSG_Y 160
 #define CREDITS_SCREEN_MSG_CYCLE_TIME 3.0f
 
