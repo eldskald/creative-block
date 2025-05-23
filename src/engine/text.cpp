@@ -1,11 +1,10 @@
 #include "engine/text.h"
 #include "defs.h"
 #include "imports.h"
+#include <cmath>
 #include <raylib.h>
 #include <raymath.h>
 #include <string>
-
-const float HALF = 0.5f;
 
 Font text::title_font_ = (Font){0};
 Font text::label_font_ = (Font){0};
@@ -37,11 +36,12 @@ void text::render_texts_() {
                 text->content.c_str(),
                 text->type == label ? LABEL_FONT_SIZE : TITLE_FONT_SIZE,
                 text->type == label ? LABEL_FONT_SPACING : TITLE_FONT_SPACING);
-            Vector2 half = Vector2Scale(size, HALF);
+            Vector2 centered_pos = (Vector2){floor(text->pos.x - size.x / 2),
+                                            floor(text->pos.y - size.y / 2)};
             DrawTextEx(
                 text->type == label ? text::label_font_ : text::title_font_,
                 text->content.c_str(),
-                text->centered ? Vector2Subtract(text->pos, half) : text->pos,
+                text->centered ? centered_pos : text->pos,
                 text->type == label ? LABEL_FONT_SIZE : TITLE_FONT_SIZE,
                 text->type == label ? LABEL_FONT_SPACING : TITLE_FONT_SPACING,
                 MAIN_MASK_COLOR);
