@@ -12,16 +12,15 @@ void base_unit::change_dir(Vector2 dir) {
     this->dir_ = dir;
 }
 
-bool base_unit::press_jump() {
+void base_unit::press_jump() {
     if (this->jump_buffer_timer_ <= PLAYER_JUMP_BUFFER && !this->is_jumping_) {
         this->vel.y = -PLAYER_JUMP_SPEED;
         this->is_jumping_ = true;
         this->is_pre_buffering_jump_ = false;
-        return true;
+        this->jumped_();
     } else {
         this->is_pre_buffering_jump_ = true;
         this->jump_buffer_timer_ = 0.0f;
-        return false;
     }
 }
 
@@ -80,6 +79,7 @@ void base_unit::tick_() {
         this->vel.y = -PLAYER_JUMP_SPEED;
         this->is_jumping_ = true;
         this->is_pre_buffering_jump_ = false;
+        this->jumped_();
     }
     if (this->is_grounded()) {
         this->jump_buffer_timer_ = 0.0f;
@@ -119,4 +119,8 @@ void base_unit::tick_() {
     if (!is_carried && this->get_parent() != game::get_root()) {
         this->reparent(game::get_root());
     }
+}
+
+void base_unit::jumped_() {
+    return;
 }

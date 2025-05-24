@@ -60,9 +60,7 @@ Vector2 player::get_dir_input_() {
 void player::move_tick_() {
     this->change_dir(player::get_dir_input_());
 
-    if (inputs::is_action_pressed(inputs::action::jump)) {
-        if (this->press_jump()) sfx::play(sfx::jump);
-    }
+    if (inputs::is_action_pressed(inputs::action::jump)) this->press_jump();
     if (inputs::is_action_released(inputs::action::jump)) this->release_jump();
 
     this->base_unit::tick_();
@@ -103,4 +101,8 @@ void player::tick_() {
         this->history_tick_();
         this->shadow_tick_();
     }
+}
+
+void player::jumped_() {
+    sfx::play(sfx::jump);
 }
