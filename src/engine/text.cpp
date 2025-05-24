@@ -37,7 +37,7 @@ void text::render_texts_() {
                 text->type == label ? LABEL_FONT_SIZE : TITLE_FONT_SIZE,
                 text->type == label ? LABEL_FONT_SPACING : TITLE_FONT_SPACING);
             Vector2 centered_pos = (Vector2){floor(text->pos.x - size.x / 2),
-                                            floor(text->pos.y - size.y / 2)};
+                                             floor(text->pos.y - size.y / 2)};
             DrawTextEx(
                 text->type == label ? text::label_font_ : text::title_font_,
                 text->content.c_str(),

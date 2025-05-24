@@ -1,8 +1,8 @@
 #pragma once
+#include <array>
 #include <raylib.h>
 #include <string>
 #include <vector>
-#include <array>
 
 using namespace std;
 

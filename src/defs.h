@@ -51,11 +51,11 @@
 #define PLAYER_SPEED 80.0f
 #define PLAYER_ACCELERATION 200.0f
 #define PLAYER_FRICTION 400.0f
-#define PLAYER_JUMP_SPEED 300.0f
+#define PLAYER_JUMP_SPEED 250.0f
 #define PLAYER_GRAVITY 800.0f
 #define PLAYER_MAX_FALL_SPEED 300.0f
 #define PLAYER_JUMP_SPEED_CUT 0.5f
-#define PLAYER_JUMP_BUFFER 0.15f
+#define PLAYER_JUMP_BUFFER 0.1f
 #define PLAYER_RESPAWN_TIME 1.0f
 
 #define CONTROLS_ACTIONS {left, right, up, down, jump, shadow, reset, start}
