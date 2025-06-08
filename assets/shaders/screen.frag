@@ -65,9 +65,6 @@ void main() {
     col += step(dot(smp - shadowMask, smp - shadowMask), 0.05) * initShadowColor * notWater;
     col += step(dot(smp - bgMask, smp - bgMask), 0.05) * initBgColor * notWater;
 
-    // Drawing the water surface
-    col += (initMainColor - col) * waterSurface * water;
-
     // Drawing the water reflections
     float wLvNorm = 1.0 - waterLevel / textureSize.y;
     vec2 modUV = vec2(uv.x, 2.0 * wLvNorm - uv.y);
@@ -107,6 +104,9 @@ void main() {
     col += step(dot(smp - mainMask, smp - mainMask), 0.05) * (initMainColor - col) * waterReflection * water;
     col += step(dot(smp - shadowMask, smp - shadowMask), 0.05) * (initShadowColor - col) * waterReflection * water;
     col += step(dot(smp - bgMask, smp - bgMask), 0.05) * (initBgColor - col) * waterReflection * water;
+
+    // Drawing the water surface
+    col += (initMainColor - col) * waterSurface * water;
 
     // Drawing the debugs
     smp = texture2D(texture0, uv);
