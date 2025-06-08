@@ -49,6 +49,10 @@ void scene_manager::set_shadows_limit(int total) {
     scene_manager::level_shadows_limit_ = total;
 }
 
+int scene_manager::get_shadows_limit() {
+    return scene_manager::level_shadows_limit_;
+}
+
 void scene_manager::respawn_player() {
     auto* new_player = new player();
     new_player->pos = scene_manager::player_spawn_point_;
@@ -57,6 +61,7 @@ void scene_manager::respawn_player() {
 }
 
 void scene_manager::shadow_pressed(input_history history, player* player) {
+    if (scene_manager::level_shadows_limit_ == 0) return;
     scene_manager::new_shadow_history_(history);
     scene_manager::reset_player_pos_(player);
     scene_manager::spawn_shadows_();

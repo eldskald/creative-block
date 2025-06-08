@@ -18,6 +18,7 @@ public:
     static void initialize();
     static scene get_current_scene();
     static void set_shadows_limit(int total);
+    static int get_shadows_limit();
     static void respawn_player();
     static void next_scene();
     static void shadow_pressed(input_history history, player* player);
