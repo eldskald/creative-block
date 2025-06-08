@@ -50,33 +50,63 @@ void renderer::initialize() {
     // Base screen shader
     renderer::base_screen_shader_ = LoadShader(BASE_VERT_SHADER, SCREEN_SHADER);
     const float normalize_const = 255.0f;
-    Color main = MAIN_MASK_COLOR;
-    array<float, 4> main_mask_value = {(float)main.r / normalize_const,
-                                       (float)main.g / normalize_const,
-                                       (float)main.b / normalize_const,
+    Color mask_main = MASK_MAIN_COLOR;
+    array<float, 4> maks_main_value = {(float)mask_main.r / normalize_const,
+                                       (float)mask_main.g / normalize_const,
+                                       (float)mask_main.b / normalize_const,
                                        1.0f};
     renderer::set_shader_property_(renderer::base_screen_shader_,
-                                   "mainMask",
-                                   &main_mask_value,
+                                   "maskMain",
+                                   &maks_main_value,
                                    SHADER_UNIFORM_VEC4);
-    Color shadow = SHADOW_MASK_COLOR;
-    array<float, 4> shadow_mask_value = {(float)shadow.r / normalize_const,
-                                         (float)shadow.g / normalize_const,
-                                         (float)shadow.b / normalize_const,
+    Color init_main = INIT_MAIN_COLOR;
+    array<float, 4> init_main_value = {(float)init_main.r / normalize_const,
+                                       (float)init_main.g / normalize_const,
+                                       (float)init_main.b / normalize_const,
+                                       1.0f};
+    renderer::set_shader_property_(renderer::base_screen_shader_,
+                                   "initMain",
+                                   &init_main_value,
+                                   SHADER_UNIFORM_VEC4);
+
+    Color mask_shadow = MASK_SHADOW_COLOR;
+    array<float, 4> mask_shadow_color = {(float)mask_shadow.r / normalize_const,
+                                         (float)mask_shadow.g / normalize_const,
+                                         (float)mask_shadow.b / normalize_const,
                                          1.0f};
     renderer::set_shader_property_(renderer::base_screen_shader_,
-                                   "shadowMask",
-                                   &shadow_mask_value,
+                                   "maskShadow",
+                                   &mask_shadow_color,
                                    SHADER_UNIFORM_VEC4);
-    Color bg = BG_MASK_COLOR;
-    array<float, 4> bg_mask_value = {(float)bg.r / normalize_const,
-                                     (float)bg.g / normalize_const,
-                                     (float)bg.b / normalize_const,
+    Color init_shadow = INIT_SHADOW_COLOR;
+    array<float, 4> init_shadow_color = {(float)init_shadow.r / normalize_const,
+                                         (float)init_shadow.g / normalize_const,
+                                         (float)init_shadow.b / normalize_const,
+                                         1.0f};
+    renderer::set_shader_property_(renderer::base_screen_shader_,
+                                   "initShadow",
+                                   &init_shadow_color,
+                                   SHADER_UNIFORM_VEC4);
+
+    Color mask_bg = MASK_BG_COLOR;
+    array<float, 4> mask_bg_color = {(float)mask_bg.r / normalize_const,
+                                     (float)mask_bg.g / normalize_const,
+                                     (float)mask_bg.b / normalize_const,
                                      1.0f};
     renderer::set_shader_property_(renderer::base_screen_shader_,
-                                   "bgMask",
-                                   &bg_mask_value,
+                                   "maskBg",
+                                   &mask_bg_color,
                                    SHADER_UNIFORM_VEC4);
+    Color init_bg = INIT_BG_COLOR;
+    array<float, 4> init_bg_color = {(float)init_bg.r / normalize_const,
+                                     (float)init_bg.g / normalize_const,
+                                     (float)init_bg.b / normalize_const,
+                                     1.0f};
+    renderer::set_shader_property_(renderer::base_screen_shader_,
+                                   "initBg",
+                                   &init_bg_color,
+                                   SHADER_UNIFORM_VEC4);
+
     Color debug_1 = DEBUG_COLOR_1;
     array<float, 4> debug_1_value = {(float)debug_1.r / normalize_const,
                                      (float)debug_1.g / normalize_const,

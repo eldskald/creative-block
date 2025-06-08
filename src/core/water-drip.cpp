@@ -18,7 +18,7 @@ water_drip::water_drip()
     : to_next_particle_(
           (float)GetRandomValue(ITEN, PARTICLE_DRIP_SPAWN_TIME * ITEN) / FTEN) {
     this->atlas_coords = PARTICLE_DRIP_FRAME_1_ATLAS_COORDS;
-    this->tint = BG_MASK_COLOR;
+    this->tint = MASK_BG_COLOR;
 }
 
 void water_drip::tick_() {
@@ -47,7 +47,7 @@ water_drip::particle_::particle_(Vector2 pos) {
     this->pos = pos;
     auto* drop_sprite = new sprite();
     drop_sprite->atlas_coords = PARTICLE_DRIP_PARTICLE_ATLAS_COORDS;
-    drop_sprite->tint = BG_MASK_COLOR;
+    drop_sprite->tint = MASK_BG_COLOR;
     drop_sprite->z_index = BACKGROUND_Z_INDEX;
     this->add_child(drop_sprite);
 }
@@ -61,7 +61,7 @@ water_drip::sub_particle_::sub_particle_(Vector2 pos, Vector2 vel) {
     this->vel = vel;
     auto* drop_sprite = new sprite();
     drop_sprite->atlas_coords = PARTICLE_DRIP_SUB_PARTICLE_ATLAS_COORDS;
-    drop_sprite->tint = BG_MASK_COLOR;
+    drop_sprite->tint = MASK_BG_COLOR;
     drop_sprite->z_index = BACKGROUND_Z_INDEX;
     this->add_child(drop_sprite);
 }

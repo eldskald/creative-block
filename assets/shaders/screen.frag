@@ -13,17 +13,18 @@ uniform sampler2D texture0;
 uniform vec2 textureSize;
 uniform float time;
 
-uniform vec4 mainMask;
-uniform vec4 shadowMask;
-uniform vec4 bgMask;
+uniform vec4 maskMain;
+uniform vec4 maskShadow;
+uniform vec4 maskBg;
+
+uniform vec4 initMain;
+uniform vec4 initShadow;
+uniform vec4 initBg;
+
 uniform vec4 debug1;
 uniform vec4 debug2;
 uniform vec4 debug3;
 uniform vec4 debug4;
-
-const vec4 initMainColor = vec4(0.6, 1.0, 1.0, 1.0);
-const vec4 initShadowColor = vec4(0.8, 0.0, 1.0, 1.0);
-const vec4 initBgColor = vec4(0.3, 0.5, 0.5, 1.0);
 
 uniform float water;
 uniform float waterLevel;
@@ -61,9 +62,9 @@ void main() {
 
     // Drawing the above water
     smp = texture2D(texture0, uv);
-    col += step(dot(smp - mainMask, smp - mainMask), 0.05) * initMainColor * notWater;
-    col += step(dot(smp - shadowMask, smp - shadowMask), 0.05) * initShadowColor * notWater;
-    col += step(dot(smp - bgMask, smp - bgMask), 0.05) * initBgColor * notWater;
+    col += step(dot(smp - maskMain, smp - maskMain), 0.05) * initMain * notWater;
+    col += step(dot(smp - maskShadow, smp - maskShadow), 0.05) * initShadow * notWater;
+    col += step(dot(smp - maskBg, smp - maskBg), 0.05) * initBg * notWater;
 
     // Drawing the water reflections
     float wLvNorm = 1.0 - waterLevel / textureSize.y;
@@ -101,12 +102,12 @@ void main() {
     modUV += wave6Offset * normalize(vec2(wave6Dist.x, -wave6Dist.y));
     modUV += wave7Offset * normalize(vec2(wave7Dist.x, -wave7Dist.y));
     smp = texture2D(texture0, modUV);
-    col += step(dot(smp - mainMask, smp - mainMask), 0.05) * (initMainColor - col) * waterReflection * water;
-    col += step(dot(smp - shadowMask, smp - shadowMask), 0.05) * (initShadowColor - col) * waterReflection * water;
-    col += step(dot(smp - bgMask, smp - bgMask), 0.05) * (initBgColor - col) * waterReflection * water;
+    col += step(dot(smp - maskMain, smp - maskMain), 0.05) * (initMain - col) * waterReflection * water;
+    col += step(dot(smp - maskShadow, smp - maskShadow), 0.05) * (initShadow - col) * waterReflection * water;
+    col += step(dot(smp - maskBg, smp - maskBg), 0.05) * (initBg - col) * waterReflection * water;
 
     // Drawing the water surface
-    col += (initMainColor - col) * waterSurface * water;
+    col += (initMain - col) * waterSurface * water;
 
     // Drawing the debugs
     smp = texture2D(texture0, uv);

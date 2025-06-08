@@ -50,7 +50,7 @@ puff::particle_::particle_(Vector2 init_pos, puff* emitter)
     this->collision_box = PARTICLE_PUFF_COLLISION_BOX;
     auto* mask = new sprite();
     mask->atlas_coords = PARTICLE_PUFF_ATLAS_COORDS;
-    mask->tint = BG_MASK_COLOR;
+    mask->tint = MASK_BG_COLOR;
     mask->z_index = BACKGROUND_Z_INDEX;
     this->add_child(mask);
 }

@@ -44,7 +44,7 @@ void text::render_texts_() {
                 text->centered ? centered_pos : text->pos,
                 text->type == label ? LABEL_FONT_SIZE : TITLE_FONT_SIZE,
                 text->type == label ? LABEL_FONT_SPACING : TITLE_FONT_SPACING,
-                MAIN_MASK_COLOR);
+                MASK_MAIN_COLOR);
         }
     }
 }

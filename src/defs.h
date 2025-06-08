@@ -8,9 +8,13 @@
 #define MAIN_TEX_SIZE 512
 #define TARGET_FPS 60
 
-#define MAIN_MASK_COLOR (Color){255, 0, 0, 255}
-#define SHADOW_MASK_COLOR (Color){0, 0, 255, 255}
-#define BG_MASK_COLOR (Color){0, 255, 0, 255}
+#define MASK_MAIN_COLOR (Color){255, 0, 0, 255}
+#define MASK_SHADOW_COLOR (Color){0, 0, 255, 255}
+#define MASK_BG_COLOR (Color){0, 255, 0, 255}
+
+#define INIT_MAIN_COLOR (Color){153, 255, 255, 255}
+#define INIT_SHADOW_COLOR (Color){204, 0, 255, 255}
+#define INIT_BG_COLOR (Color){51, 85, 85, 255}
 
 #define DEBUG_COLOR_1 (Color){255, 255, 255, 255}
 #define DEBUG_COLOR_2 (Color){128, 128, 255, 255}
