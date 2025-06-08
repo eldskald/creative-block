@@ -5,6 +5,7 @@
 #include "core/player.h"
 #include "core/shadow.h"
 #include "engine/game-element.h"
+#include "engine/renderer.h"
 #include "imports.h"
 #include <list>
 #include <raylib.h>
@@ -82,6 +83,7 @@ void scene_manager::new_shadow_history_(input_history history) {
 
 void scene_manager::next_scene() {
     scene_manager::next_scene_called_ = true;
+    renderer::reset_water_waves();
     for (game_element* element : game::get_root()->get_children()) {
         element->mark_for_deletion();
     }

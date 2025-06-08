@@ -13,6 +13,7 @@ public:
     static void render();
     static void set_water(bool active, float water_level);
     static void add_water_wave(float origin, float amplitude, float width);
+    static void reset_water_waves();
 
 private:
     static RenderTexture2D base_tex_1_;

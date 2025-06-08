@@ -249,6 +249,10 @@ void renderer::add_water_wave(float amplitude, float origin, float width) {
         renderer::water_waves_.erase(renderer::water_waves_.begin());
 }
 
+void renderer::reset_water_waves() {
+    renderer::water_waves_.clear();
+}
+
 void renderer::update_water_waves_() {
     float delta = GetFrameTime();
     for (int i = 0; i < (int)renderer::water_waves_.size(); i++) {
