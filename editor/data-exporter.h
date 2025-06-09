@@ -10,8 +10,11 @@ class data_exporter {
 public:
     static string get_export_text(unordered_map<tileset, map> cells,
                                   string level_text_1,
+                                  string text_1_hidden_for,
                                   string level_text_2,
+                                  string text_2_hidden_for,
                                   string level_text_3,
+                                  string text_3_hidden_for,
                                   string level_shadows);
 
 private:
@@ -36,9 +39,12 @@ private:
     static string get_goal_text_(map* cells);
     static string get_spikes_text_(map* cells);
     static string get_water_text_(map* cells);
-    static string get_level_text_1_text_(map* cells, string level_text);
-    static string get_level_text_2_text_(map* cells, string level_text);
-    static string get_level_text_3_text_(map* cells, string level_text);
+    static string
+    get_level_text_1_text_(map* cells, string level_text, string hidden_for);
+    static string
+    get_level_text_2_text_(map* cells, string level_text, string hidden_for);
+    static string
+    get_level_text_3_text_(map* cells, string level_text, string hidden_for);
     static string get_opening_obj_text_(map* cells);
     static string get_credits_obj_text_(map* cells);
     static string get_level_shadow_totals_(string level_shadows);

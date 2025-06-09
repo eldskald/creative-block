@@ -27,6 +27,9 @@ text_input* file_input = nullptr;
 text_input* txt_1_input = nullptr;
 text_input* txt_2_input = nullptr;
 text_input* txt_3_input = nullptr;
+text_input* txt_1_hf_input = nullptr;
+text_input* txt_2_hf_input = nullptr;
+text_input* txt_3_hf_input = nullptr;
 button* open_test_popup_btn = nullptr;
 
 void editor::save_tilemap_data() {
@@ -38,7 +41,10 @@ void editor::save_tilemap_data() {
     data += shadows_input->get_input() + PROJ_TEXT_SEPARATOR;
     data += txt_1_input->get_input() + PROJ_TEXT_SEPARATOR;
     data += txt_2_input->get_input() + PROJ_TEXT_SEPARATOR;
-    data += txt_3_input->get_input();
+    data += txt_3_input->get_input() + PROJ_TEXT_SEPARATOR;
+    data += txt_1_hf_input->get_input() + PROJ_TEXT_SEPARATOR;
+    data += txt_2_hf_input->get_input() + PROJ_TEXT_SEPARATOR;
+    data += txt_3_hf_input->get_input();
 
     SaveFileText(filepath.c_str(), data.data());
 }
@@ -54,6 +60,10 @@ void editor::load_tilemap_data() {
     int first = -1;
     int sec = -1;
     int third = -1;
+    int fourth = -1;
+    int fifth = -1;
+    int sixth = -1;
+
     for (int i = 0; i < (int)texts.length(); i++) {
         if (texts.at(i) == PROJ_TEXT_SEPARATOR) {
             if (first == -1) {
@@ -66,6 +76,20 @@ void editor::load_tilemap_data() {
             }
             if (first != -1 && sec != -1 && third == -1) {
                 third = i;
+                continue;
+            }
+            if (first != -1 && sec != -1 && third != -1 && fourth == -1) {
+                fourth = i;
+                continue;
+            }
+            if (first != -1 && sec != -1 && third != -1 && fourth != -1 &&
+                fifth == -1) {
+                fifth = i;
+                continue;
+            }
+            if (first != -1 && sec != -1 && third != -1 && fourth != -1 &&
+                fifth != -1 && sixth == -1) {
+                sixth = i;
                 break;
             }
         }
@@ -73,7 +97,10 @@ void editor::load_tilemap_data() {
     shadows_input->set_input(texts.substr(0, first));
     txt_1_input->set_input(texts.substr(first + 1, sec - first - 1));
     txt_2_input->set_input(texts.substr(sec + 1, third - sec - 1));
-    txt_3_input->set_input(texts.substr(third + 1));
+    txt_3_input->set_input(texts.substr(third + 1, fourth - third - 1));
+    txt_1_hf_input->set_input(texts.substr(fourth + 1, fifth - fourth - 1));
+    txt_2_hf_input->set_input(texts.substr(fifth + 1, sixth - fifth - 1));
+    txt_3_hf_input->set_input(texts.substr(sixth + 1));
 
     UnloadFileText(data);
 }
@@ -82,8 +109,11 @@ void editor::export_tilemap_data() {
     if (file_input->get_input().empty()) return;
     string data = data_exporter::get_export_text(editor::tilemap_->get_cells(),
                                                  txt_1_input->get_input(),
+                                                 txt_1_hf_input->get_input(),
                                                  txt_2_input->get_input(),
+                                                 txt_2_hf_input->get_input(),
                                                  txt_3_input->get_input(),
+                                                 txt_3_hf_input->get_input(),
                                                  shadows_input->get_input());
     string filepath = "assets/scenes/" + file_input->get_input() + ".dat";
     SaveFileText(filepath.c_str(), data.data());
@@ -177,7 +207,25 @@ void editor::initialize() {
     shadows_input->label = "level shadows";
     shadows_input->number_input = true;
     shadows_input->rect =
-        (Rectangle){448, TILESET_ORIGIN_Y - 40, 300, 32}; // NOLINT
+        (Rectangle){448, TILESET_ORIGIN_Y - 40, 200, 32}; // NOLINT
+
+    txt_1_hf_input = new text_input();
+    txt_1_hf_input->label = "text 1 hf";
+    txt_1_hf_input->number_input = true;
+    txt_1_hf_input->rect =
+        (Rectangle){672, TILESET_ORIGIN_Y - 40, 160, 32}; // NOLINT
+
+    txt_2_hf_input = new text_input();
+    txt_2_hf_input->label = "text 2 hf";
+    txt_2_hf_input->number_input = true;
+    txt_2_hf_input->rect =
+        (Rectangle){848, TILESET_ORIGIN_Y - 40, 160, 32}; // NOLINT
+
+    txt_3_hf_input = new text_input();
+    txt_3_hf_input->label = "text 3 hf";
+    txt_3_hf_input->number_input = true;
+    txt_3_hf_input->rect =
+        (Rectangle){1024, TILESET_ORIGIN_Y - 40, 160, 32}; // NOLINT
 }
 
 void editor::tick() {
@@ -207,6 +255,9 @@ void editor::tick() {
     txt_1_input->tick();
     txt_2_input->tick();
     txt_3_input->tick();
+    txt_1_hf_input->tick();
+    txt_2_hf_input->tick();
+    txt_3_hf_input->tick();
 
     // Popups ignore mouse disabled feature because they themselves disable it
     if (editor::mouse_disabled) {

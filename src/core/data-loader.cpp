@@ -318,6 +318,8 @@ void data_loader::parse_text_property_line(text* text, string line) {
         text->pos = data_loader::string_to_vector(prop_value);
     } else if (prop_name == "content") {
         text->content = data_loader::string_to_string(prop_value);
+    } else if (prop_name == "hidden_for") {
+        text->hidden_for = stof(prop_value);
     }
 }
 

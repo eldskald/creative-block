@@ -424,7 +424,9 @@ string data_exporter::get_player_text_(map* cells) {
     return text;
 }
 
-string data_exporter::get_level_text_1_text_(map* cells, string level_text) {
+string data_exporter::get_level_text_1_text_(map* cells,
+                                             string level_text,
+                                             string hidden_for) {
     string text = "";
     for (int i = 0; i < TILEMAP_SIZE_X; i++) {
         for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
@@ -441,13 +443,16 @@ string data_exporter::get_level_text_1_text_(map* cells, string level_text) {
                 content += i == ' ' ? EXPORT_SPACE_CHAR : i;
             }
             text += "content = " + content + "\n";
+            if (!hidden_for.empty()) text += "hidden_for = " + hidden_for + "\n";
             text += "\n";
         }
     }
     return text;
 }
 
-string data_exporter::get_level_text_2_text_(map* cells, string level_text) {
+string data_exporter::get_level_text_2_text_(map* cells,
+                                             string level_text,
+                                             string hidden_for) {
     string text = "";
     for (int i = 0; i < TILEMAP_SIZE_X; i++) {
         for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
@@ -464,13 +469,16 @@ string data_exporter::get_level_text_2_text_(map* cells, string level_text) {
                 content += i == ' ' ? EXPORT_SPACE_CHAR : i;
             }
             text += "content = " + content + "\n";
+            text += "hidden_for = " + hidden_for + "\n";
             text += "\n";
         }
     }
     return text;
 }
 
-string data_exporter::get_level_text_3_text_(map* cells, string level_text) {
+string data_exporter::get_level_text_3_text_(map* cells,
+                                             string level_text,
+                                             string hidden_for) {
     string text = "";
     for (int i = 0; i < TILEMAP_SIZE_X; i++) {
         for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
@@ -487,6 +495,7 @@ string data_exporter::get_level_text_3_text_(map* cells, string level_text) {
                 content += i == ' ' ? EXPORT_SPACE_CHAR : i;
             }
             text += "content = " + content + "\n";
+            text += "hidden_for = " + hidden_for + "\n";
             text += "\n";
         }
     }
@@ -736,8 +745,11 @@ string data_exporter::get_level_shadow_totals_(string level_shadows) {
 
 string data_exporter::get_export_text(unordered_map<tileset, map> cells,
                                       string level_text_1,
+                                      string text_1_hidden_for,
                                       string level_text_2,
+                                      string text_2_hidden_for,
                                       string level_text_3,
+                                      string text_3_hidden_for,
                                       string level_shadows) {
     data_exporter::current_id_count_ = 0;
     string data = "";
@@ -755,12 +767,12 @@ string data_exporter::get_export_text(unordered_map<tileset, map> cells,
     data += data_exporter::get_water_text_(&cells.at(tileset::interact));
     data += data_exporter::get_player_text_(&cells.at(tileset::interact));
     data += data_exporter::get_goal_text_(&cells.at(tileset::interact));
-    data += data_exporter::get_level_text_1_text_(&cells.at(tileset::interact),
-                                                  level_text_1);
-    data += data_exporter::get_level_text_2_text_(&cells.at(tileset::interact),
-                                                  level_text_2);
-    data += data_exporter::get_level_text_3_text_(&cells.at(tileset::interact),
-                                                  level_text_3);
+    data += data_exporter::get_level_text_1_text_(
+        &cells.at(tileset::interact), level_text_1, text_1_hidden_for);
+    data += data_exporter::get_level_text_2_text_(
+        &cells.at(tileset::interact), level_text_2, text_2_hidden_for);
+    data += data_exporter::get_level_text_3_text_(
+        &cells.at(tileset::interact), level_text_3, text_3_hidden_for);
     data += data_exporter::get_opening_obj_text_(&cells.at(tileset::interact));
     data += data_exporter::get_credits_obj_text_(&cells.at(tileset::interact));
     data +=

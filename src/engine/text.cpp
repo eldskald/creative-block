@@ -28,6 +28,13 @@ void text::exit_() {
     text::texts_.remove(this);
 }
 
+void text::tick_() {
+    if (this->hidden_for > 0.0f) {
+        this->hidden_for -= GetFrameTime();
+        this->hidden = this->hidden_for > 0.0f;
+    }
+}
+
 void text::render_texts_() {
     for (auto text : text::texts_) {
         if (!text->hidden) {

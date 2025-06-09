@@ -11,6 +11,7 @@ public:
     enum text_type { label, title };
 
     string content{""};
+    float hidden_for{0.0f};
     text_type type{label};
     bool centered{false};
     bool hidden{false};
@@ -21,6 +22,7 @@ public:
 protected:
     void enter_() override;
     void exit_() override;
+    void tick_() override;
 
 private:
     static Font title_font_;
