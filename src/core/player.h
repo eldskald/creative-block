@@ -15,6 +15,7 @@ public:
 
 protected:
     void tick_() override;
+    void enter_() override;
     void jumped_() override;
 
 private:

@@ -3,6 +3,7 @@
 #include "core/death-particles.h"
 #include "core/respawn-particles.h"
 #include "core/scene-manager.h"
+#include "engine/physics-body.h"
 #include "engine/inputs.h"
 #include "engine/sfx.h"
 #include "engine/sprite.h"
@@ -82,12 +83,22 @@ void player::history_tick_() {
 }
 
 void player::shadow_tick_() {
-    if (inputs::is_action_pressed(inputs::action::shadow) && scene_manager::get_shadows_limit()) {
+    if (inputs::is_action_pressed(inputs::action::shadow) &&
+        scene_manager::get_shadows_limit()) {
         this->history_.push_back(
             (input){inputs::action::shadow, true, this->time_});
         scene_manager::shadow_pressed(this->history_, this);
         this->history_.clear();
         this->time_ = 0.0f;
+        for (auto action : {inputs::action::left,
+                            inputs::action::right,
+                            inputs::action::down,
+                            inputs::action::up,
+                            inputs::action::jump}) {
+            if (inputs::is_action_down(action)) {
+                this->history_.push_back((input){action, true, this->time_});
+            }
+        }
     }
 }
 
@@ -100,6 +111,19 @@ void player::tick_() {
         this->move_tick_();
         this->history_tick_();
         this->shadow_tick_();
+    }
+}
+
+void player::enter_() {
+    physics_body::enter_();
+    for (auto action : {inputs::action::left,
+                        inputs::action::right,
+                        inputs::action::down,
+                        inputs::action::up,
+                        inputs::action::jump}) {
+        if (inputs::is_action_down(action)) {
+            this->history_.push_back((input){action, true, this->time_});
+        }
     }
 }
 
