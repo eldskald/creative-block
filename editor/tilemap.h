@@ -17,6 +17,7 @@ public:
     unordered_map<tileset, map> get_cells();
     string convert_to_data();
     void load_from_data(string data);
+    void clear();
     void tick();
 
 private:

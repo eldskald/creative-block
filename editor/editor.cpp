@@ -22,6 +22,7 @@ button* interact_btn = nullptr;
 button* save_btn = nullptr;
 button* load_btn = nullptr;
 button* export_btn = nullptr;
+button* clear_btn = nullptr;
 text_input* shadows_input = nullptr;
 text_input* file_input = nullptr;
 text_input* txt_1_input = nullptr;
@@ -119,6 +120,17 @@ void editor::export_tilemap_data() {
     SaveFileText(filepath.c_str(), data.data());
 }
 
+void editor::clear_tilemap() {
+    tilemap_->clear();
+    shadows_input->set_input("");
+    txt_1_input->set_input("");
+    txt_1_hf_input->set_input("");
+    txt_2_input->set_input("");
+    txt_2_hf_input->set_input("");
+    txt_3_input->set_input("");
+    txt_3_hf_input->set_input("");
+}
+
 void editor::change_to_blocks_tileset() {
     tileset_manager::selected_set = tileset::blocks;
     blocks_btn->set_toggle(true);
@@ -184,10 +196,16 @@ void editor::initialize() {
         (Rectangle){248, EDITOR_WINDOW_SIZE_Y - 40, 100, 32}; // NOLINT
     export_btn->on_click = editor::export_tilemap_data;
 
+    clear_btn = new button();
+    clear_btn->label = "clear";
+    clear_btn->rect =
+        (Rectangle){364, EDITOR_WINDOW_SIZE_Y - 40, 100, 32}; // NOLINT
+    clear_btn->on_click = editor::clear_tilemap;
+
     file_input = new text_input();
     file_input->label = "level name";
     file_input->rect =
-        (Rectangle){364, EDITOR_WINDOW_SIZE_Y - 40, 400, 32}; // NOLINT
+        (Rectangle){480, EDITOR_WINDOW_SIZE_Y - 40, 400, 32}; // NOLINT
 
     txt_1_input = new text_input();
     txt_1_input->label = "level text 1";
@@ -250,6 +268,7 @@ void editor::tick() {
     save_btn->tick();
     load_btn->tick();
     export_btn->tick();
+    clear_btn->tick();
     file_input->tick();
     shadows_input->tick();
     txt_1_input->tick();

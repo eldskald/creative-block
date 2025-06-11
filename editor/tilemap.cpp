@@ -251,6 +251,16 @@ void tilemap::click_tile_(int x, int y) {
     }
 }
 
+void tilemap::clear() {
+    for (int i = 0; i < TILEMAP_SIZE_X; i++) {
+        for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
+            this->set_tile(tileset::blocks, i, j, -1);
+            this->set_tile(tileset::background, i, j, -1);
+            this->set_tile(tileset::interact, i, j, -1);
+        }
+    }
+}
+
 void tilemap::tick() {
 
     // Render tiles
