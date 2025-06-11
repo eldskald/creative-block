@@ -443,7 +443,8 @@ string data_exporter::get_level_text_1_text_(map* cells,
                 content += i == ' ' ? EXPORT_SPACE_CHAR : i;
             }
             text += "content = " + content + "\n";
-            if (!hidden_for.empty()) text += "hidden_for = " + hidden_for + "\n";
+            if (!hidden_for.empty())
+                text += "hidden_for = " + hidden_for + "\n";
             text += "\n";
         }
     }

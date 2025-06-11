@@ -1,17 +1,28 @@
 #pragma once
 
-#define SCENES_ENUM {opening, credits, level_01, level_02, level_03, level_04}
+#define SCENES_ENUM                                                            \
+    {opening,                                                                  \
+     credits,                                                                  \
+     level_01,                                                                 \
+     level_02,                                                                 \
+     level_03,                                                                 \
+     level_04,                                                                 \
+     level_05,                                                                 \
+     level_06}
 #define SCENES_PATHS                                                           \
     {{opening, "assets/scenes/opening.dat"},                                   \
      {credits, "assets/scenes/credits.dat"},                                   \
      {level_01, "assets/scenes/01.dat"},                                       \
      {level_02, "assets/scenes/02.dat"},                                       \
      {level_03, "assets/scenes/03.dat"},                                       \
-     {level_04, "assets/scenes/04.dat"}}
+     {level_04, "assets/scenes/04.dat"},                                       \
+     {level_05, "assets/scenes/05.dat"},                                       \
+     {level_06, "assets/scenes/06.dat"}}
 #define SCENES_ORDER                                                           \
     {                                                                          \
         {opening, level_01}, {level_01, level_02}, {level_02, level_03},       \
-            {level_03, level_04}, {level_04, credits}, {                       \
+            {level_03, level_04}, {level_04, level_05}, {level_05, level_06},  \
+            {level_06, credits}, {                                             \
             credits, opening                                                   \
         }                                                                      \
     }
