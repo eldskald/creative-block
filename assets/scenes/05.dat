@@ -1,3 +1,27 @@
+[physics_body]
+pos = (-8,0)
+type = fixed
+collision_box = (0,0,8,180)
+collision_layer = 00000100
+
+[physics_body]
+pos = (0,-8)
+type = fixed
+collision_box = (0,0,320,8)
+collision_layer = 00000100
+
+[physics_body]
+pos = (320,0)
+type = fixed
+collision_box = (0,0,8,180)
+collision_layer = 00000100
+
+[physics_body]
+pos = (0,180)
+type = fixed
+collision_box = (0,0,320,8)
+collision_layer = 00000100
+
 [sprite]
 pos = (40,16)
 atlas_coords = (8,10)

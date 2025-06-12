@@ -20,6 +20,7 @@ public:
 private:
     static int current_id_count_;
 
+    static string get_out_of_bounds_walls_();
     static Vector2* find_next_block_start_(map* cells);
     static string get_block_from_map_(Vector2 start, map* cells);
     static string get_physics_bodies_text_(map* cells);

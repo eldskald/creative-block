@@ -7,7 +7,37 @@
 #include <string>
 #include <unordered_map>
 
+using namespace std;
+
 int data_exporter::current_id_count_ = 0;
+
+string data_exporter::get_out_of_bounds_walls_() {
+    string r = "[physics_body]\n";
+    r += "pos = (-" + to_string(SPRITESHEET_CELL_X) + ",0)\n";
+    r += "type = fixed\n";
+    r += "collision_box = (0,0," + to_string(SPRITESHEET_CELL_X) + "," +
+         to_string(GAME_SIZE_Y) + ")\n";
+    r += "collision_layer = 00000100\n\n";
+    r += "[physics_body]\n";
+    r += "pos = (0,-" + to_string(SPRITESHEET_CELL_Y) + ")\n";
+    r += "type = fixed\n";
+    r += "collision_box = (0,0," + to_string(GAME_SIZE_X) + "," +
+         to_string(SPRITESHEET_CELL_Y) + ")\n";
+    r += "collision_layer = 00000100\n\n";
+    r += "[physics_body]\n";
+    r += "pos = (" + to_string(GAME_SIZE_X) + ",0)\n";
+    r += "type = fixed\n";
+    r += "collision_box = (0,0," + to_string(SPRITESHEET_CELL_X) + "," +
+         to_string(GAME_SIZE_Y) + ")\n";
+    r += "collision_layer = 00000100\n\n";
+    r += "[physics_body]\n";
+    r += "pos = (0," + to_string(GAME_SIZE_Y) + ")\n";
+    r += "type = fixed\n";
+    r += "collision_box = (0,0," + to_string(GAME_SIZE_X) + "," +
+         to_string(SPRITESHEET_CELL_Y) + ")\n";
+    r += "collision_layer = 00000100\n\n";
+    return r;
+}
 
 Vector2* data_exporter::find_next_block_start_(map* cells) {
     for (int i = 0; i < TILEMAP_SIZE_X; i++) {
@@ -470,7 +500,8 @@ string data_exporter::get_level_text_2_text_(map* cells,
                 content += i == ' ' ? EXPORT_SPACE_CHAR : i;
             }
             text += "content = " + content + "\n";
-            text += "hidden_for = " + hidden_for + "\n";
+            if (!hidden_for.empty())
+                text += "hidden_for = " + hidden_for + "\n";
             text += "\n";
         }
     }
@@ -496,7 +527,8 @@ string data_exporter::get_level_text_3_text_(map* cells,
                 content += i == ' ' ? EXPORT_SPACE_CHAR : i;
             }
             text += "content = " + content + "\n";
-            text += "hidden_for = " + hidden_for + "\n";
+            if (!hidden_for.empty())
+                text += "hidden_for = " + hidden_for + "\n";
             text += "\n";
         }
     }
@@ -754,6 +786,7 @@ string data_exporter::get_export_text(unordered_map<tileset, map> cells,
                                       string level_shadows) {
     data_exporter::current_id_count_ = 0;
     string data = "";
+    data += data_exporter::get_out_of_bounds_walls_();
     data += data_exporter::get_bg_props_text_(&cells.at(tileset::background));
     data += data_exporter::get_bg_grass_text_(&cells.at(tileset::background));
     data +=

@@ -4,6 +4,8 @@
 #define EDITOR_FPS 60
 #define LEVEL_SIZE_X 1280
 #define LEVEL_SIZE_Y 704
+#define GAME_SIZE_X 320
+#define GAME_SIZE_Y 180
 #define EDITOR_WINDOW_SIZE_X (LEVEL_SIZE_X + 8)
 #define EDITOR_WINDOW_SIZE_Y (LEVEL_SIZE_Y + 232)
 #define EDITOR_WINDOW_TITLE "Level Editor"
