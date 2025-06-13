@@ -5,9 +5,11 @@
 using namespace std;
 
 class game;
+class scene_manager;
 
 class game_element {
     friend class game;
+    friend class scene_manager;
 
 public:
     Vector2 pos{(Vector2){0}};
@@ -33,6 +35,8 @@ protected:
     virtual void enter_();
     virtual void exit_();
     virtual void tick_();
+    virtual void on_player_death_();
+    virtual void on_player_shadow_();
 
 private:
     game_element* parent_{nullptr};
@@ -47,6 +51,8 @@ private:
     static void trigger_enter_(game_element* element);
     static void trigger_exit_(game_element* element);
     static void trigger_tick_(game_element* element);
+    static void trigger_on_player_death_(game_element* element);
+    static void trigger_on_player_shadow_(game_element* element);
     static void rec_mark_for_deletion_(game_element* element);
     static void delete_marked_();
     static void reparent_elements_();

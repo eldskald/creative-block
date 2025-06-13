@@ -79,6 +79,14 @@ void game_element::tick_() {
     return;
 }
 
+void game_element::on_player_death_() {
+    return;
+}
+
+void game_element::on_player_shadow_() {
+    return;
+}
+
 void game_element::trigger_enter_(game_element* element) {
     element->is_on_tree_ = true;
     element->enter_();
@@ -100,6 +108,20 @@ void game_element::trigger_tick_(game_element* element) {
         game_element::trigger_tick_(child);
     }
     element->tick_();
+}
+
+void game_element::trigger_on_player_death_(game_element* element) {
+    for (auto child : element->children_) {
+        game_element::trigger_on_player_death_(child);
+    }
+    element->on_player_death_();
+}
+
+void game_element::trigger_on_player_shadow_(game_element* element) {
+    for (auto child : element->children_) {
+        game_element::trigger_on_player_shadow_(child);
+    }
+    element->on_player_shadow_();
 }
 
 void game_element::rec_mark_for_deletion_(game_element* element) {

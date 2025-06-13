@@ -58,7 +58,7 @@ void scene_manager::respawn_player() {
     auto* new_player = new player();
     new_player->pos = scene_manager::player_spawn_point_;
     game::get_root()->add_child(new_player);
-    new_player->emit_respawn_particles();
+    game_element::trigger_on_player_death_(game::get_root());
 }
 
 void scene_manager::shadow_pressed(input_history history, player* player) {
@@ -108,6 +108,7 @@ void scene_manager::load_new_scene_() {
 }
 
 void scene_manager::spawn_shadows_() {
+    game_element::trigger_on_player_shadow_(game::get_root());
     while (!scene_manager::shadows_.empty()) {
         scene_manager::shadows_.front()->mark_for_deletion();
         scene_manager::shadows_.pop_front();

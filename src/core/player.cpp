@@ -34,11 +34,6 @@ player::player() {
     this->respawn_particles_emitter_ = respawn_emitter;
 }
 
-void player::emit_respawn_particles() {
-    this->respawn_particles_emitter_->emit();
-    sfx::play(sfx::respawn);
-}
-
 void player::kill() {
     if (this->killed_) return;
     this->killed_ = true;
@@ -112,6 +107,11 @@ void player::tick_() {
         this->history_tick_();
         this->shadow_tick_();
     }
+}
+
+void player::on_player_death_() {
+    this->respawn_particles_emitter_->emit();
+    sfx::play(sfx::respawn);
 }
 
 void player::enter_() {

@@ -9,13 +9,12 @@ class player : public base_unit {
 public:
     player();
 
-    void emit_respawn_particles();
-
     void kill() override;
 
 protected:
     void tick_() override;
     void enter_() override;
+    void on_player_death_() override;
     void jumped_() override;
 
 private:
