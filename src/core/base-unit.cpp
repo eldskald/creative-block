@@ -64,12 +64,6 @@ void base_unit::tick_() {
                         -PLAYER_SPEED,
                         PLAYER_SPEED);
 
-    // Gravity. Can't clamp because there's no max vertical rising speed
-    this->vel.y += PLAYER_GRAVITY * GetFrameTime();
-    if (this->vel.y > PLAYER_MAX_FALL_SPEED) {
-        this->vel.y = PLAYER_MAX_FALL_SPEED;
-    }
-
     // Jump buffer. It's supposed to let you pressed jump just before touching
     // the ground and still let you jump, as well as let you press jump right
     // after just running off an edge and still jump.
@@ -97,6 +91,12 @@ void base_unit::tick_() {
     // The code that cause the jump is on the press_jump() function, and the
     // code that causes a jump to end when you release the button is on the
     // release_jump() function.
+
+    // Gravity. Can't clamp because there's no max vertical rising speed
+    this->vel.y += PLAYER_GRAVITY * GetFrameTime();
+    if (this->vel.y > PLAYER_MAX_FALL_SPEED) {
+        this->vel.y = PLAYER_MAX_FALL_SPEED;
+    }
 
     // Checks if it is on top of another base_unit to see if it gets carried
     bool is_carried = false;
