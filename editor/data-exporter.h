@@ -40,6 +40,7 @@ private:
     static string get_goal_text_(map* cells);
     static string get_spikes_text_(map* cells);
     static string get_water_text_(map* cells);
+    static string get_key_gate_text_(map* cells);
     static string
     get_level_text_1_text_(map* cells, string level_text, string hidden_for);
     static string

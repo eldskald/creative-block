@@ -2,6 +2,7 @@
 #include "core/credits.h"
 #include "core/falling-leaves.h"
 #include "core/goal.h"
+#include "core/key-gate.h"
 #include "core/killbox.h"
 #include "core/opening.h"
 #include "core/player.h"
@@ -351,6 +352,25 @@ void data_loader::parse_water_property_line(water* water, string line) {
     }
 }
 
+void data_loader::parse_key_gate_property_line(key_gate* gate, string line) {
+    if (line.find('=') == line.npos)
+        throw invalid_argument("property line has no '=' sign");
+
+    string prop_name = line.substr(0, line.find('='));
+    string prop_value =
+        line.substr(line.find('=') + 1, line.size() - line.find('=') - 1);
+    if (prop_name == "pos") {
+        gate->pos = data_loader::string_to_vector(prop_value);
+    } else if (prop_name == "height") {
+        gate->height = stof(prop_value);
+    } else if (prop_name == "key_positions") {
+        for (string str_value : data_loader::string_to_array(prop_value)) {
+            gate->key_positions.push_back(
+                data_loader::string_to_vector(str_value));
+        }
+    }
+}
+
 void data_loader::parse_level_shadows_limit_line(string line) {
     scene_manager::set_shadows_limit(stoi(line));
 }
@@ -432,6 +452,13 @@ game_element* data_loader::get_element_from_block(element_block block) {
             data_loader::parse_physics_body_property_line(killer, line);
         }
         return killer;
+    }
+    if (block.type == "key_gate") {
+        auto* gate = new key_gate();
+        for (auto& line : block.properties) {
+            data_loader::parse_key_gate_property_line(gate, line);
+        }
+        return gate;
     }
     if (block.type == "shadows_limit") {
         for (auto& line : block.properties) {

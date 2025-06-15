@@ -19,6 +19,7 @@ const int CREDITS_TILE_ID = 32;
 const int TEXT_1_TILE_ID = 33;
 const int TEXT_2_TILE_ID = 34;
 const int TEXT_3_TILE_ID = 35;
+const int KEY_GATE_TOP_ID = 20;
 
 tilemap::tilemap() {
     for (auto set : TILESETS) {
@@ -143,6 +144,22 @@ void tilemap::set_tile(tileset set, int x, int y, int tile_id) {
         }
         this->credits_x_ = x;
         this->credits_y_ = y;
+    }
+
+    // There can only be one key_gate_top type tile on the map
+    if (set == tileset::interact && tile_id == -1 &&
+        this->cells_.at(set).at(x).at(y) == KEY_GATE_TOP_ID) {
+        this->key_gate_top_x_ = -1;
+        this->key_gate_top_y_ = -1;
+    }
+    if (set == tileset::interact && tile_id == KEY_GATE_TOP_ID) {
+        if (this->key_gate_top_x_ != -1 && this->key_gate_top_y_ != -1) {
+            this->cells_.at(set)
+                .at(this->key_gate_top_x_)
+                .at(this->key_gate_top_y_) = -1;
+        }
+        this->key_gate_top_x_ = x;
+        this->key_gate_top_y_ = y;
     }
 
     this->cells_.at(set).at(x).at(y) = tile_id;

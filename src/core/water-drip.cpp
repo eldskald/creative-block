@@ -5,7 +5,6 @@
 #include "engine/physics-body.h"
 #include "engine/sprite.h"
 #include "imports.h"
-#include <iostream>
 #include <raylib.h>
 #include <raymath.h>
 

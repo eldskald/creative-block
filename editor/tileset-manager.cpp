@@ -142,6 +142,11 @@ void tileset_manager::initialize() {
     int_tiles.push_back((tile){(Vector2){1, 7}, tile_type::platform});
     int_tiles.push_back((tile){(Vector2){2, 7}, tile_type::platform});
     int_tiles.push_back((tile){(Vector2){6, 7}, tile_type::platform});
+    // key gates
+    int_tiles.push_back(
+        (tile){(Vector2){7, 5}, tile_type::key_gate_top}); // id 20
+    int_tiles.push_back((tile){(Vector2){6, 5}, tile_type::key_gate});
+    int_tiles.push_back((tile){(Vector2){8, 4}, tile_type::key});
     // gates
     int_tiles.push_back((tile){(Vector2){6, 4}, tile_type::button1});
     int_tiles.push_back((tile){(Vector2){6, 5}, tile_type::gate1});

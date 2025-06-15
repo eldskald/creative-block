@@ -38,6 +38,8 @@ private:
     int opening_y_{-1};
     int credits_x_{-1};
     int credits_y_{-1};
+    int key_gate_top_x_{-1};
+    int key_gate_top_y_{-1};
 
     void highlight_hovered_cell_(int x, int y);
     void render_cell_(int x, int y);

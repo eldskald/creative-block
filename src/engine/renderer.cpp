@@ -1,4 +1,5 @@
 #include "engine/renderer.h"
+#include "core/key-gate.h"
 #include "defs.h"
 #include "engine/physics-body.h"
 #include "engine/sprite.h"
@@ -342,6 +343,7 @@ void renderer::render_base_() {
     BeginTextureMode(renderer::base_tex_1_);
     ClearBackground(BLANK);
     sprite::render_sprites_();
+    key_gate::render_gates_();
     text::render_texts_();
 #ifdef DEV
     string fps = to_string(GetFPS()) + " FPS";

@@ -1,4 +1,5 @@
 #pragma once
+#include "core/key-gate.h"
 #include "core/player.h"
 #include "core/water.h"
 #include "engine/game-element.h"
@@ -49,5 +50,6 @@ private:
     static void parse_text_property_line(text* text, string line);
     static void parse_player_property_line(player* player, string line);
     static void parse_water_property_line(water* water, string line);
+    static void parse_key_gate_property_line(key_gate* gate, string line);
     static void parse_level_shadows_limit_line(string line);
 };

@@ -769,6 +769,51 @@ string data_exporter::get_credits_obj_text_(map* cells) {
     return text;
 }
 
+string data_exporter::get_key_gate_text_(map* cells) {
+    string text = "";
+    Vector2 key_gate_top_pos = (Vector2){-1.0f, -1.0f};
+    vector<Vector2> key_positions;
+    float key_gate_height = 0.0f;
+    for (int i = 0; i < TILEMAP_SIZE_X; i++) {
+        for (int j = 0; j < TILEMAP_SIZE_Y; j++) {
+            int cell_id = cells->at(i).at(j);
+            if (cell_id == -1) continue;
+            tile data =
+                tileset_manager::get_tile_data(tileset::interact, cell_id);
+            if (data.type == tile_type::key_gate_top) {
+                key_gate_top_pos = (Vector2){(float)i * SPRITESHEET_CELL_X,
+                                             (float)j * SPRITESHEET_CELL_Y};
+                continue;
+            }
+            if (data.type == tile_type::key) {
+                key_positions.push_back(
+                    (Vector2){(float)i * SPRITESHEET_CELL_X,
+                              (float)j * SPRITESHEET_CELL_Y});
+                continue;
+            }
+            if (data.type == tile_type::key_gate) {
+                key_gate_height += SPRITESHEET_CELL_Y;
+                continue;
+            }
+        }
+    }
+    if (key_gate_top_pos.x >= 0.0f && !key_positions.empty() &&
+        key_gate_height > 0.0f) {
+        text += "[key_gate]\n";
+        text += "pos = (" + to_string((int)key_gate_top_pos.x) + "," +
+                to_string((int)key_gate_top_pos.y) + ")\n";
+        text += "height = " + to_string((int)key_gate_height) + "\n";
+        text += "key_positions = ";
+        for (Vector2 pos : key_positions) {
+            text += "(" + to_string((int)pos.x) + "," + to_string((int)pos.y) +
+                    ");";
+        }
+        text.erase(text.length() - 1);
+        text += "\n\n";
+    }
+    return text;
+}
+
 string data_exporter::get_level_shadow_totals_(string level_shadows) {
     string text = "[shadows_limit]\n";
     text += level_shadows.empty() ? "0" : level_shadows;
@@ -799,6 +844,7 @@ string data_exporter::get_export_text(unordered_map<tileset, map> cells,
     data += data_exporter::get_physics_bodies_text_(&cells.at(tileset::blocks));
     data += data_exporter::get_spikes_text_(&cells.at(tileset::interact));
     data += data_exporter::get_water_text_(&cells.at(tileset::interact));
+    data += data_exporter::get_key_gate_text_(&cells.at(tileset::interact));
     data += data_exporter::get_player_text_(&cells.at(tileset::interact));
     data += data_exporter::get_goal_text_(&cells.at(tileset::interact));
     data += data_exporter::get_level_text_1_text_(
