@@ -29,21 +29,23 @@
         }                                                                      \
     }
 
-#define SFX_DEF_ENUM {jump, death, respawn, next_level, select, key}
+#define SFX_DEF_ENUM {jump, death, respawn, next_level, select, key, gate}
 #define SFX_ENUMS                                                              \
     {sfx::jump,                                                                \
      sfx::death,                                                               \
      sfx::respawn,                                                             \
      sfx::next_level,                                                          \
      sfx::select,                                                              \
-     sfx::key}
+     sfx::key,                                                                 \
+     sfx::gate}
 #define SFX_PATHS                                                              \
     {{sfx::jump, "assets/sfx/jump.wav"},                                       \
      {sfx::death, "assets/sfx/death.wav"},                                     \
      {sfx::respawn, "assets/sfx/respawn.wav"},                                 \
      {sfx::next_level, "assets/sfx/next-level.wav"},                           \
      {sfx::select, "assets/sfx/select.wav"},                                   \
-     {sfx::key, "assets/sfx/key.wav"}}
+     {sfx::key, "assets/sfx/key.wav"},                                         \
+     {sfx::gate, "assets/sfx/gate.wav"}}
 
 #define SPRITESHEET_FILE "assets/textures/spritesheet.png"
 #define SPRITESHEET_CELL_SIZE_X 8.0f

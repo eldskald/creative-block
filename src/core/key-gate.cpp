@@ -57,7 +57,6 @@ void key_gate::key_::body_entered_(physics_body* body) {
     this->collision_mask = 0b00000000;
     this->key_sprite_->hidden = true;
     this->particles_->emit();
-    sfx::play(sfx::key);
     this->gate_->key_gotten_();
 }
 
@@ -111,9 +110,13 @@ void key_gate::on_player_shadow_() {
 
 void key_gate::key_gotten_() {
     for (key_* key : this->keys_) {
-        if (key->is_active()) return;
+        if (key->is_active()) {
+            sfx::play(sfx::key);
+            return;
+        }
     }
     this->active_ = false;
+    sfx::play(sfx::gate);
 }
 
 void key_gate::enable_() {
