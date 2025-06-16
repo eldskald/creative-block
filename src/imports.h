@@ -9,7 +9,8 @@
      level_04,                                                                 \
      level_05,                                                                 \
      level_06,                                                                 \
-     level_07}
+     level_07,                                                                 \
+     level_08}
 #define SCENES_PATHS                                                           \
     {{opening, "assets/scenes/opening.dat"},                                   \
      {credits, "assets/scenes/credits.dat"},                                   \
@@ -19,12 +20,13 @@
      {level_04, "assets/scenes/04.dat"},                                       \
      {level_05, "assets/scenes/05.dat"},                                       \
      {level_06, "assets/scenes/06.dat"},                                       \
-     {level_07, "assets/scenes/07.dat"}}
+     {level_07, "assets/scenes/07.dat"},                                       \
+     {level_08, "assets/scenes/08.dat"}}
 #define SCENES_ORDER                                                           \
     {                                                                          \
         {opening, level_01}, {level_01, level_02}, {level_02, level_03},       \
             {level_03, level_04}, {level_04, level_05}, {level_05, level_06},  \
-            {level_06, level_07}, {level_07, credits}, {                       \
+            {level_06, level_07}, {level_07, level_08}, {level_08, credits}, { \
             credits, opening                                                   \
         }                                                                      \
     }
