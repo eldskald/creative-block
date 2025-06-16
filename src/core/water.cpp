@@ -33,6 +33,7 @@ void water::area_entered_(physics_body* area) {
     renderer::add_water_wave(WATER_PARTICLE_SPLASH_AMPLI,
                              area->pos.x / MAIN_TEX_SIZE,
                              WATER_PARTICLE_SPLASH_WIDTH);
+    area->mark_for_deletion();
 }
 
 void water::enter_() {
