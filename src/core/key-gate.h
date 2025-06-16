@@ -1,6 +1,7 @@
 #pragma once
 #include "engine/physics-body.h"
 #include "engine/sprite.h"
+#include "core/key-particles.h"
 #include <list>
 #include <raylib.h>
 
@@ -37,6 +38,7 @@ private:
     private:
         key_gate* gate_{nullptr};
         sprite* key_sprite_{nullptr};
+        key_particles* particles_{nullptr};
         bool active_{true};
 
         void enable_();

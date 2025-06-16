@@ -1,4 +1,5 @@
 #include "core/key-gate.h"
+#include "core/key-particles.h"
 #include "defs.h"
 #include "engine/physics-body.h"
 #include "engine/sprite.h"
@@ -27,7 +28,8 @@ const animation KEY_ANIM = {
 
 list<key_gate*> key_gate::key_gates_;
 
-key_gate::key_::key_(key_gate* gate) : gate_(gate), key_sprite_(new sprite()) {
+key_gate::key_::key_(key_gate* gate)
+    : gate_(gate), key_sprite_(new sprite()), particles_(new key_particles()) {
     this->key_sprite_->anim = KEY_ANIM;
     this->key_sprite_->tint = MASK_MAIN_COLOR;
     this->add_child(this->key_sprite_);
@@ -35,6 +37,8 @@ key_gate::key_::key_(key_gate* gate) : gate_(gate), key_sprite_(new sprite()) {
         (Rectangle){0, 0, SPRITESHEET_CELL_SIZE_X, SPRITESHEET_CELL_SIZE_Y};
     this->type = physics_body::area;
     this->collision_mask = KEY_GATE_KEY_COLLISION_MASK;
+    this->particles_->tint = MASK_MAIN_COLOR;
+    this->add_child(this->particles_);
 }
 
 bool key_gate::key_::is_active() {
@@ -51,6 +55,7 @@ void key_gate::key_::body_entered_(physics_body* body) {
     this->active_ = false;
     this->collision_mask = 0b00000000;
     this->key_sprite_->hidden = true;
+    this->particles_->emit();
     this->gate_->key_gotten_();
 }
 
