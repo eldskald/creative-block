@@ -3,6 +3,7 @@
 #include "defs.h"
 #include "engine/physics-body.h"
 #include "engine/sprite.h"
+#include "engine/sfx.h"
 #include "imports.h"
 #include <list>
 #include <raylib.h>
@@ -56,6 +57,7 @@ void key_gate::key_::body_entered_(physics_body* body) {
     this->collision_mask = 0b00000000;
     this->key_sprite_->hidden = true;
     this->particles_->emit();
+    sfx::play(sfx::key);
     this->gate_->key_gotten_();
 }
 
