@@ -58,7 +58,7 @@ void scene_manager::respawn_player() {
     auto* new_player = new player();
     new_player->pos = scene_manager::player_spawn_point_;
     game::get_root()->add_child(new_player);
-    game_element::trigger_on_player_death_(game::get_root());
+    game_element::trigger_on_player_respawn_(game::get_root());
 }
 
 void scene_manager::shadow_pressed(input_history history, player* player) {

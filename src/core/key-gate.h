@@ -1,7 +1,7 @@
 #pragma once
+#include "core/key-particles.h"
 #include "engine/physics-body.h"
 #include "engine/sprite.h"
-#include "core/key-particles.h"
 #include <list>
 #include <raylib.h>
 
@@ -20,7 +20,7 @@ protected:
     void enter_() override;
     void exit_() override;
     void tick_() override;
-    void on_player_death_() override;
+    void on_player_respawn_() override;
     void on_player_shadow_() override;
 
 private:
@@ -32,7 +32,7 @@ private:
 
     protected:
         void body_entered_(physics_body* body) override;
-        void on_player_death_() override;
+        void on_player_respawn_() override;
         void on_player_shadow_() override;
 
     private:

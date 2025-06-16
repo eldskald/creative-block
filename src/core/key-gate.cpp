@@ -2,8 +2,8 @@
 #include "core/key-particles.h"
 #include "defs.h"
 #include "engine/physics-body.h"
-#include "engine/sprite.h"
 #include "engine/sfx.h"
+#include "engine/sprite.h"
 #include "imports.h"
 #include <list>
 #include <raylib.h>
@@ -60,7 +60,7 @@ void key_gate::key_::body_entered_(physics_body* body) {
     this->gate_->key_gotten_();
 }
 
-void key_gate::key_::on_player_death_() {
+void key_gate::key_::on_player_respawn_() {
     this->enable_();
 }
 
@@ -100,7 +100,7 @@ void key_gate::exit_() {
     key_gate::key_gates_.remove(this);
 }
 
-void key_gate::on_player_death_() {
+void key_gate::on_player_respawn_() {
     this->enable_();
 }
 

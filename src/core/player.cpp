@@ -1,6 +1,7 @@
 #include "core/player.h"
 #include "core/base-unit.h"
 #include "core/death-particles.h"
+#include "core/game.h"
 #include "core/respawn-particles.h"
 #include "core/scene-manager.h"
 #include "engine/inputs.h"
@@ -44,6 +45,7 @@ void player::kill() {
     this->sprite_ = nullptr;
     this->death_particles_emitter_->emit();
     sfx::play(sfx::death);
+    game_element::trigger_on_player_death_(game::get_root());
 }
 
 Vector2 player::get_dir_input_() {
@@ -109,7 +111,7 @@ void player::tick_() {
     }
 }
 
-void player::on_player_death_() {
+void player::on_player_respawn_() {
     this->respawn_particles_emitter_->emit();
     sfx::play(sfx::respawn);
 }

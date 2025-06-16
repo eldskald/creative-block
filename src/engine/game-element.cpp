@@ -83,6 +83,10 @@ void game_element::on_player_death_() {
     return;
 }
 
+void game_element::on_player_respawn_() {
+    return;
+}
+
 void game_element::on_player_shadow_() {
     return;
 }
@@ -115,6 +119,13 @@ void game_element::trigger_on_player_death_(game_element* element) {
         game_element::trigger_on_player_death_(child);
     }
     element->on_player_death_();
+}
+
+void game_element::trigger_on_player_respawn_(game_element* element) {
+    for (auto child : element->children_) {
+        game_element::trigger_on_player_respawn_(child);
+    }
+    element->on_player_respawn_();
 }
 
 void game_element::trigger_on_player_shadow_(game_element* element) {

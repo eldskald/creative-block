@@ -64,6 +64,10 @@ void shadow::tick_() {
     this->base_unit::tick_();
 }
 
+void shadow::on_player_death_() {
+    this->kill();
+}
+
 void shadow::read_input_(input input) {
     if (this->inputs_ended_) return;
 

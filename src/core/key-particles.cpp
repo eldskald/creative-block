@@ -58,9 +58,9 @@ void key_particles::particle_::tick_() {
 }
 
 void key_particles::emit() {
-    Vector2 center = Vector2Add(this->get_global_pos(),
-                                (Vector2){PARTICLE_KEY_COLLISION_BOX.x,
-                                          PARTICLE_KEY_COLLISION_BOX.y});
+    Vector2 center = Vector2Add(
+        this->get_global_pos(),
+        (Vector2){PARTICLE_KEY_COLLISION_BOX.x, PARTICLE_KEY_COLLISION_BOX.y});
     for (Vector2 vel : init_velocities) {
         game::get_root()->add_child(
             new key_particles::particle_(center, vel, this->tint));

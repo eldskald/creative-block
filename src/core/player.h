@@ -14,7 +14,7 @@ public:
 protected:
     void tick_() override;
     void enter_() override;
-    void on_player_death_() override;
+    void on_player_respawn_() override;
     void jumped_() override;
 
 private:
