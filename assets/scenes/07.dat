@@ -609,6 +609,61 @@ atlas_coords = (12,3)
 tint = (255,0,0,255)
 
 [sprite]
+pos = (256,24)
+atlas_coords = (3,3)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (256,32)
+atlas_coords = (3,3)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (256,40)
+atlas_coords = (3,3)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (256,48)
+atlas_coords = (3,3)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (256,56)
+atlas_coords = (3,3)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (256,64)
+atlas_coords = (3,3)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (256,72)
+atlas_coords = (3,3)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (256,80)
+atlas_coords = (3,3)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (256,88)
+atlas_coords = (3,3)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (256,96)
+atlas_coords = (3,3)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (256,104)
+atlas_coords = (3,3)
+tint = (255,0,0,255)
+
+[sprite]
 pos = (256,152)
 atlas_coords = (1,1)
 tint = (255,0,0,255)
@@ -701,13 +756,30 @@ type = fixed
 collision_box = (0,0,8,128)
 collision_layer = 00000100
 
+[physics_body]
+pos = (256,24)
+type = fixed
+collision_box = (0,0,8,88)
+collision_layer = 00000100
+
 [key_gate]
 pos = (256,104)
 height = 40
-key_positions = (88,128);(176,128)
+key_positions = (120,88)
 
 [player]
 pos = (40,144)
 
+[goal]
+id = 0
+pos = (296,144)
+collision_box = (0,0,8,8)
+collision_mask = 00000011
+[sprite]
+parent = 0
+atlas_coords = (0,4)
+tint = (255,0,0,255)
+animation = ((0,4),0.08);((0,5),0.08);((0,6),0.08);((1,6),0.08);((2,6),0.08);((2,5),0.08);((2,4),0.08);((1,4),0.08)
+
 [shadows_limit]
-0
+1
