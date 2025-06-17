@@ -19,7 +19,8 @@
         {level_06, level_07},                                                  \
         {level_07, level_08},                                                  \
         {level_08, level_09},                                                  \
-        {level_09, credits},                                                   \
+        {level_09, level_10},                                                  \
+        {level_10, credits},                                                   \
         {credits, opening},                                                    \
     }
 
