@@ -8,6 +8,21 @@
 #define MAIN_TEX_SIZE 512
 #define TARGET_FPS 60
 
+#define SCENES_ORDER                                                           \
+    {                                                                          \
+        {opening, level_01},                                                   \
+        {level_01, level_02},                                                  \
+        {level_02, level_03},                                                  \
+        {level_03, level_04},                                                  \
+        {level_04, level_05},                                                  \
+        {level_05, level_06},                                                  \
+        {level_06, level_07},                                                  \
+        {level_07, level_08},                                                  \
+        {level_08, level_09},                                                  \
+        {level_09, credits},                                                   \
+        {credits, opening},                                                    \
+    }
+
 #define MASK_MAIN_COLOR (Color){255, 0, 0, 255}
 #define MASK_SHADOW_COLOR (Color){0, 0, 255, 255}
 #define MASK_BG_COLOR (Color){0, 255, 0, 255}
