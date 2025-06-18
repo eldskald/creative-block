@@ -69,7 +69,8 @@ void base_unit::tick_() {
     // after just running off an edge and still jump.
     this->jump_buffer_timer_ += GetFrameTime();
     if (this->is_pre_buffering_jump_ &&
-        this->jump_buffer_timer_ <= PLAYER_JUMP_BUFFER && this->is_grounded()) {
+        this->jump_buffer_timer_ <= PLAYER_JUMP_BUFFER && this->is_grounded() &&
+        !this->is_jumping_) {
         this->vel.y = -PLAYER_JUMP_SPEED;
         this->is_jumping_ = true;
         this->is_pre_buffering_jump_ = false;
