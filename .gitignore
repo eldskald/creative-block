@@ -6,6 +6,7 @@
 /.tmp
 /emsdk
 level-editor.*
+creative-block.*
 .env
 
 # ripgrep

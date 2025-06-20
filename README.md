@@ -1,12 +1,10 @@
-# WIP
+# Creative Block
 
 This project is me trying to learn C++ with [raylib](https://github.com/raysan5/raylib).
 
 ## Dependencies
 
 This project is using the GNU Toolchain for C/C++ development, in particular, the [GNU Compiler Collection](https://www.gnu.org/software/gcc), the [MinGW-w64](https://www.mingw-w64.org/) compilers and [make](https://www.gnu.org/software/make). If you want to make an HTML5 build, you need to install [emsdk](https://emscripten.org/docs/getting_started/downloads.html). See more details on below.
-
-Optionally, [gdb](https://www.sourceware.org/gdb/) to debug. You also need [git](https://git-scm.com/), of course.
 
 You'll also need basic libraries used by [raylib](https://github.com/raysan5/raylib) to do graphics and audio. More info on their [wiki](https://github.com/raysan5/raylib/wiki/Working-on-GNU-Linux).
 
@@ -55,7 +53,7 @@ To build and run a development build, run the following:
 make dev
 ```
 
-It will create a `build` directory, put the binary `dev-app` in there and run it. Easy for quickly compiling changes and running the game with them. You can also add a `SCENE` env var to load a specific scene on `assets/scenes` by name without the `.dat`, for example:
+It will create a `build` directory, put the binary `dev-app` in there and run it, deleting it after you close it. Easy for quickly compiling changes and running the game with them. You can also add a `SCENE` env var to load a specific scene on `assets/scenes` by name without the `.dat`, for example:
 
 ```console
 SCENE=03 make dev
@@ -63,13 +61,13 @@ SCENE=03 make dev
 
 This will run the game starting on level 3, on `assets/scenes/03.dat` file. Only works on dev mode, that is, when running `make dev`.
 
-To run the debugger, run the following:
+You can also make a development build that won't be ran automatically or deleted after you closing by running this:
 
 ```console
-make debug
+make build-dev
 ```
 
-It compiles a development build with debug info, runs [gdb](https://www.sourceware.org/gdb/) on it and after you're done, it deletes it.
+This will put the build at the project root. Can be ran on a debugger and can be sent to testers to use with the built-in dev tools.
 
 To format and lint the whole project, run the following:
 

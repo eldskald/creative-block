@@ -10,8 +10,11 @@ export
 EMSCRIPTEN_PATH := $(EMSDK_PATH)/upstream/emscripten
 PATH := $(shell printenv PATH):$(EMSCRIPTEN_PATH)
 
+# 16MB of heap size for the web build.
+BUILD_WEB_HEAP_SIZE = 134217728
+
 # File/directory names
-APP_NAME ?= app
+APP_NAME ?= creative-block
 BUILD_WEB_SHELL ?= shell.html
 EDITOR_NAME ?= level-editor
 TEMP_DIR := .tmp
@@ -56,7 +59,7 @@ WEB_COMPILE_FLAGS = -Os -Wall -I./src -I./$(INCLUDE_DIR) -I$(EMSCRIPTEN_PATH)/ca
 WEB_LINK_FLAGS = -L./$(WEB_LIBS) -lraylib -s USE_GLFW=3 -s TOTAL_MEMORY=$(BUILD_WEB_HEAP_SIZE) -s FORCE_FILESYSTEM=1
 
 # Phony targets
-.PHONY: all clean install dev debug build-linux build-windows build-web editor debug-editor format lint
+.PHONY: all clean install dev build-dev build-linux build-windows build-web editor debug-editor format lint
 
 # Default target, cleans and build for all platforms
 all: build-linux build-windows build-web
@@ -93,12 +96,9 @@ dev:
 	-./$(TEMP_DIR)/$(APP_NAME)$(EXT)
 	rm -rf ./$(TEMP_DIR)
 
-# Debug target, builds a debug version, runs with the debugger and deletes the build
-debug:
-	-mkdir -p $(TEMP_DIR)
-	-$(CC) -O0 -g $(call rwildcard,src,*.cpp) -o $(TEMP_DIR)/$(APP_NAME)$(EXT) $(DEV_COMPILE_FLAGS) $(DEV_LINK_FLAGS)
-	-$(GDB) -tui $(TEMP_DIR)/$(APP_NAME)$(EXT)
-	rm -rf ./$(TEMP_DIR)
+# Build a development build, can be ran on the compiler or sent to others with development tools
+build-dev:
+	-$(CC) -O0 -g $(call rwildcard,src,*.cpp) -o $(APP_NAME)$(EXT) $(DEV_COMPILE_FLAGS) $(DEV_LINK_FLAGS)
 
 # Build for the Linux platform, puts the binary at the build target folder
 build-linux:
@@ -120,17 +120,9 @@ build-web:
 	mkdir -p $(WEB_BUILD)
 	emcc $(call rwildcard,src,*.cpp) -o $(WEB_BUILD)/$(APP_NAME).html $(WEB_COMPILE_FLAGS) $(WEB_LINK_FLAGS)
 
-# Editor target, compiles the level editor and places it at the project root
+# Editor target, compiles the level editor and places it at the project root. Has debugger info.
 editor:
-	$(CC) $(call rwildcard,editor,*.cpp) -o $(EDITOR_NAME)$(EXT) $(EDITOR_COMPILE_FLAGS) $(EDITOR_LINK_FLAGS)
-
-# Debug editor target, builds a debug version of the editor, runs with the
-# debugger and deletes the build
-debug-editor:
-	-mkdir -p $(TEMP_DIR)
-	-$(CC) -O0 -g $(call rwildcard,editor,*.cpp) -o $(TEMP_DIR)/$(EDITOR_NAME)$(EXT) $(EDITOR_COMPILE_FLAGS) $(EDITOR_LINK_FLAGS)
-	-$(GDB) -tui $(TEMP_DIR)/$(EDITOR_NAME)$(EXT)
-	rm -rf ./$(TEMP_DIR)
+	$(CC) -O0 -g $(call rwildcard,editor,*.cpp) -o $(EDITOR_NAME)$(EXT) $(EDITOR_COMPILE_FLAGS) $(EDITOR_LINK_FLAGS)
 
 # Format files on ./src
 format:
