@@ -1,6 +1,9 @@
 #pragma once
 #include <list>
 #include <raylib.h>
+#ifdef DEV
+#include <string>
+#endif
 
 using namespace std;
 
@@ -14,6 +17,10 @@ class game_element {
     friend class player;
 
 public:
+#ifdef DEV
+    string debug_name{"game_element"};
+#endif
+
     Vector2 pos{(Vector2){0}};
 
     game_element() = default;

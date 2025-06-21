@@ -8,6 +8,10 @@ class text : public game_element {
     friend class renderer;
 
 public:
+#ifdef DEV
+    std::string debug_name{"text"};
+#endif
+
     enum text_type { label, title };
 
     string content{""};

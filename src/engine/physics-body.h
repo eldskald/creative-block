@@ -3,6 +3,9 @@
 #include <bitset>
 #include <list>
 #include <raylib.h>
+#ifdef DEV
+#include <string>
+#endif
 
 using namespace std;
 
@@ -20,6 +23,10 @@ class physics_body : public game_element {
 #endif
 
 public:
+#ifdef DEV
+    string debug_name{"physics_body"};
+#endif
+
     enum body_type { kinematic, fixed, area };
 
     Vector2 vel{(Vector2){0}};

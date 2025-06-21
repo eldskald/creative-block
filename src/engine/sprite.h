@@ -4,6 +4,9 @@
 #include <map>
 #include <raylib.h>
 #include <vector>
+#ifdef DEV
+#include <string>
+#endif
 
 using namespace std;
 
@@ -20,6 +23,10 @@ class sprite : public game_element {
     friend class renderer;
 
 public:
+#ifdef DEV
+    string debug_name{"sprite"};
+#endif
+
     Vector2 atlas_coords{(Vector2){0}};
     Color tint{WHITE};
     int z_index{0};

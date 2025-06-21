@@ -2,9 +2,16 @@
 #include "engine/game-element.h"
 #include "engine/physics-body.h"
 #include <raylib.h>
+#ifdef DEV
+#include <string>
+#endif
 
 class death_particles : public game_element {
 public:
+#ifdef DEV
+    std::string debug_name{"death_particles"};
+#endif
+
     Color tint{WHITE};
 
     void emit();
@@ -12,6 +19,10 @@ public:
 private:
     class particle_ : public physics_body {
     public:
+#ifdef DEV
+        std::string debug_name{"death_particles_particle_"};
+#endif
+
         particle_(Vector2 pos, Vector2 vel, Color tint);
 
     protected:

@@ -2,9 +2,16 @@
 #include "engine/game-element.h"
 #include "engine/physics-body.h"
 #include <raylib.h>
+#ifdef DEV
+#include <string>
+#endif
 
 class falling_leaves : public game_element {
 public:
+#ifdef DEV
+    std::string debug_name{"falling_leaves"};
+#endif
+
     falling_leaves();
 
 protected:
@@ -13,6 +20,10 @@ protected:
 private:
     class particle_ : public physics_body {
     public:
+#ifdef DEV
+        std::string debug_name{"falling_leaves_particle_"};
+#endif
+
         particle_(Vector2 init_pos, falling_leaves* emitter);
 
     protected:

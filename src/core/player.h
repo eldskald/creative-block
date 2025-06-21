@@ -4,9 +4,16 @@
 #include "core/respawn-particles.h"
 #include "engine/sprite.h"
 #include <raylib.h>
+#ifdef DEV
+#include <string>
+#endif
 
 class player : public base_unit {
 public:
+#ifdef DEV
+    std::string debug_name{"player"};
+#endif
+
     player();
 
     void kill() override;

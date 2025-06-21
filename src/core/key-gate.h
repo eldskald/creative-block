@@ -4,6 +4,9 @@
 #include "engine/sprite.h"
 #include <list>
 #include <raylib.h>
+#ifdef DEV
+#include <string>
+#endif
 
 class renderer;
 
@@ -11,6 +14,10 @@ class key_gate : public physics_body {
     friend class renderer;
 
 public:
+#ifdef DEV
+    std::string debug_name{"key_gate"};
+#endif
+
     float height{0.0f};
     list<Vector2> key_positions;
 
@@ -26,6 +33,10 @@ protected:
 private:
     class key_ : public physics_body {
     public:
+#ifdef DEV
+        std::string debug_name{"key_gate_key_"};
+#endif
+
         key_(key_gate* gate);
 
         bool is_active();

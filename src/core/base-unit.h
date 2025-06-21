@@ -3,6 +3,9 @@
 #include "engine/physics-body.h"
 #include <list>
 #include <raylib.h>
+#ifdef DEV
+#include <string>
+#endif
 
 using input = struct input {
     inputs::action action;
@@ -14,6 +17,10 @@ using input_history = list<input>;
 
 class base_unit : public physics_body {
 public:
+#ifdef DEV
+    std::string debug_name{"base_unit"};
+#endif
+
     void change_dir(Vector2 dir);
     void press_jump();
     void release_jump();
