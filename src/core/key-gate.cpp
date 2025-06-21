@@ -97,6 +97,7 @@ void key_gate::enter_() {
 }
 
 void key_gate::exit_() {
+    physics_body::exit_();
     key_gate::key_gates_.remove(this);
 }
 
