@@ -55,10 +55,17 @@
 #define SPRITESHEET_CELL_SIZE_X 8.0f
 #define SPRITESHEET_CELL_SIZE_Y 8.0f
 
+#define MAIN_GRADIENT_1_TEXTURE "assets/textures/main-gradient-1.png"
+#define MAIN_GRADIENT_2_TEXTURE "assets/textures/main-gradient-2.png"
+#define SHADOW_GRADIENT_1_TEXTURE "assets/textures/shadow-gradient-1.png"
+#define SHADOW_GRADIENT_2_TEXTURE "assets/textures/shadow-gradient-2.png"
+
 #define BASE_VERT_SHADER "assets/shaders/base.vert"
 #define BASE_FRAG_SHADER "assets/shaders/base.frag"
 #define SCREEN_SHADER "assets/shaders/screen.frag"
 #define FIRST_BLUR_SHADER "assets/shaders/custom-blur.frag"
 #define SECOND_BLUR_SHADER "assets/shaders/gaussian-range-4.frag"
+
+#define SCREEN_COLOR_SHADER_PATHS {"assets/shaders/screen-colors-1.frag"}
 
 #define FONT_TITLE "assets/fonts/nordine/Nordine.otf"

@@ -14,20 +14,23 @@ using namespace std;
 
 RenderTexture2D renderer::base_tex_1_ = (RenderTexture2D){0};
 RenderTexture2D renderer::base_tex_2_ = (RenderTexture2D){0};
+RenderTexture2D renderer::colored_tex_ = (RenderTexture2D){0};
 RenderTexture2D renderer::blur_tex_1_ = (RenderTexture2D){0};
 RenderTexture2D renderer::blur_tex_2_ = (RenderTexture2D){0};
 RenderTexture2D renderer::final_tex_ = (RenderTexture2D){0};
+vector<Shader> renderer::screen_color_shaders_;
 Shader renderer::base_screen_shader_ = (Shader){0};
 Shader renderer::blur_shader_1_ = (Shader){0};
 Shader renderer::blur_shader_2_ = (Shader){0};
 Vector2 renderer::stretched_tex_size_ = (Vector2){0};
 Vector2 renderer::window_size_ = (Vector2){0};
 vector<array<float, 4>> renderer::water_waves_;
+float renderer::time_ = 0.0f;
+int renderer::current_screen_color_shader_ = 0;
 #ifdef DEV
 bool renderer::showing_areas_ = false;
 bool renderer::showing_fixed_bodies_ = false;
 bool renderer::showing_kinematic_bodies_ = false;
-renderer::bloom_debug renderer::texture_rendered_ = final;
 #endif
 
 const float ASPECT_RATIO = (float)WINDOW_SIZE_X / (float)WINDOW_SIZE_Y;
@@ -36,6 +39,7 @@ void renderer::initialize() {
     // For the sake of the web build, all textures must be powers of 2
     renderer::base_tex_1_ = LoadRenderTexture(MAIN_TEX_SIZE, MAIN_TEX_SIZE);
     renderer::base_tex_2_ = LoadRenderTexture(MAIN_TEX_SIZE, MAIN_TEX_SIZE);
+    renderer::colored_tex_ = LoadRenderTexture(MAIN_TEX_SIZE, MAIN_TEX_SIZE);
     renderer::blur_tex_1_ = LoadRenderTexture(MAIN_TEX_SIZE, MAIN_TEX_SIZE);
     SetTextureFilter(renderer::blur_tex_1_.texture, TEXTURE_FILTER_TRILINEAR);
     SetTextureWrap(renderer::blur_tex_1_.texture, TEXTURE_WRAP_CLAMP);
@@ -48,107 +52,92 @@ void renderer::initialize() {
     renderer::window_size_ =
         (Vector2){(float)GetRenderWidth(), (float)GetRenderHeight()};
 
+    const float normalize_const = 255.0f;
+    array<float, 4> mask_main_value = {
+        (float)MASK_MAIN_COLOR.r / normalize_const,
+        (float)MASK_MAIN_COLOR.g / normalize_const,
+        (float)MASK_MAIN_COLOR.b / normalize_const,
+        1.0f};
+    array<float, 4> mask_shadow_value = {
+        (float)MASK_SHADOW_COLOR.r / normalize_const,
+        (float)MASK_SHADOW_COLOR.g / normalize_const,
+        (float)MASK_SHADOW_COLOR.b / normalize_const,
+        1.0f};
+    array<float, 4> mask_bg_value = {(float)MASK_BG_COLOR.r / normalize_const,
+                                     (float)MASK_BG_COLOR.g / normalize_const,
+                                     (float)MASK_BG_COLOR.b / normalize_const,
+                                     1.0f};
+    float col_bg_factor_value = COL_BG_FACTOR;
+    array<float, 4> debug_col_1_value = {
+        (float)DEBUG_COLOR_1.r / normalize_const,
+        (float)DEBUG_COLOR_1.g / normalize_const,
+        (float)DEBUG_COLOR_1.b / normalize_const,
+        1.0f};
+    array<float, 4> debug_col_2_value = {
+        (float)DEBUG_COLOR_2.r / normalize_const,
+        (float)DEBUG_COLOR_2.g / normalize_const,
+        (float)DEBUG_COLOR_2.b / normalize_const,
+        1.0f};
+    array<float, 4> debug_col_3_value = {
+        (float)DEBUG_COLOR_3.r / normalize_const,
+        (float)DEBUG_COLOR_3.g / normalize_const,
+        (float)DEBUG_COLOR_3.b / normalize_const,
+        1.0f};
+    array<float, 4> debug_col_4_value = {
+        (float)DEBUG_COLOR_4.r / normalize_const,
+        (float)DEBUG_COLOR_4.g / normalize_const,
+        (float)DEBUG_COLOR_4.b / normalize_const,
+        1.0f};
+
     // Base screen shader
     renderer::base_screen_shader_ = LoadShader(BASE_VERT_SHADER, SCREEN_SHADER);
-    const float normalize_const = 255.0f;
-    Color mask_main = MASK_MAIN_COLOR;
-    array<float, 4> maks_main_value = {(float)mask_main.r / normalize_const,
-                                       (float)mask_main.g / normalize_const,
-                                       (float)mask_main.b / normalize_const,
-                                       1.0f};
     renderer::set_shader_property_(renderer::base_screen_shader_,
                                    "maskMain",
-                                   &maks_main_value,
-                                   SHADER_UNIFORM_VEC4);
-    Color init_main = INIT_MAIN_COLOR;
-    array<float, 4> init_main_value = {(float)init_main.r / normalize_const,
-                                       (float)init_main.g / normalize_const,
-                                       (float)init_main.b / normalize_const,
-                                       1.0f};
-    renderer::set_shader_property_(renderer::base_screen_shader_,
-                                   "initMain",
-                                   &init_main_value,
-                                   SHADER_UNIFORM_VEC4);
-
-    Color mask_shadow = MASK_SHADOW_COLOR;
-    array<float, 4> mask_shadow_color = {(float)mask_shadow.r / normalize_const,
-                                         (float)mask_shadow.g / normalize_const,
-                                         (float)mask_shadow.b / normalize_const,
-                                         1.0f};
-    renderer::set_shader_property_(renderer::base_screen_shader_,
-                                   "maskShadow",
-                                   &mask_shadow_color,
-                                   SHADER_UNIFORM_VEC4);
-    Color init_shadow = INIT_SHADOW_COLOR;
-    array<float, 4> init_shadow_color = {(float)init_shadow.r / normalize_const,
-                                         (float)init_shadow.g / normalize_const,
-                                         (float)init_shadow.b / normalize_const,
-                                         1.0f};
-    renderer::set_shader_property_(renderer::base_screen_shader_,
-                                   "initShadow",
-                                   &init_shadow_color,
-                                   SHADER_UNIFORM_VEC4);
-
-    Color mask_bg = MASK_BG_COLOR;
-    array<float, 4> mask_bg_color = {(float)mask_bg.r / normalize_const,
-                                     (float)mask_bg.g / normalize_const,
-                                     (float)mask_bg.b / normalize_const,
-                                     1.0f};
-    renderer::set_shader_property_(renderer::base_screen_shader_,
-                                   "maskBg",
-                                   &mask_bg_color,
-                                   SHADER_UNIFORM_VEC4);
-    Color init_bg = INIT_BG_COLOR;
-    array<float, 4> init_bg_color = {(float)init_bg.r / normalize_const,
-                                     (float)init_bg.g / normalize_const,
-                                     (float)init_bg.b / normalize_const,
-                                     1.0f};
-    renderer::set_shader_property_(renderer::base_screen_shader_,
-                                   "initBg",
-                                   &init_bg_color,
-                                   SHADER_UNIFORM_VEC4);
-
-    Color debug_1 = DEBUG_COLOR_1;
-    array<float, 4> debug_1_value = {(float)debug_1.r / normalize_const,
-                                     (float)debug_1.g / normalize_const,
-                                     (float)debug_1.b / normalize_const,
-                                     1.0f};
-    renderer::set_shader_property_(renderer::base_screen_shader_,
-                                   "debug1",
-                                   &debug_1_value,
-                                   SHADER_UNIFORM_VEC4);
-    Color debug_2 = DEBUG_COLOR_2;
-    array<float, 4> debug_2_value = {(float)debug_2.r / normalize_const,
-                                     (float)debug_2.g / normalize_const,
-                                     (float)debug_2.b / normalize_const,
-                                     1.0f};
-    renderer::set_shader_property_(renderer::base_screen_shader_,
-                                   "debug2",
-                                   &debug_2_value,
-                                   SHADER_UNIFORM_VEC4);
-    Color debug_3 = DEBUG_COLOR_3;
-    array<float, 4> debug_3_value = {(float)debug_3.r / normalize_const,
-                                     (float)debug_3.g / normalize_const,
-                                     (float)debug_3.b / normalize_const,
-                                     1.0f};
-    renderer::set_shader_property_(renderer::base_screen_shader_,
-                                   "debug3",
-                                   &debug_3_value,
-                                   SHADER_UNIFORM_VEC4);
-    Color debug_4 = DEBUG_COLOR_4;
-    array<float, 4> debug_4_value = {(float)debug_4.r / normalize_const,
-                                     (float)debug_4.g / normalize_const,
-                                     (float)debug_4.b / normalize_const,
-                                     1.0f};
-    renderer::set_shader_property_(renderer::base_screen_shader_,
-                                   "debug4",
-                                   &debug_4_value,
+                                   &mask_main_value,
                                    SHADER_UNIFORM_VEC4);
     array<float, 2> tex_size = {MAIN_TEX_SIZE, MAIN_TEX_SIZE};
     renderer::set_shader_property_(renderer::base_screen_shader_,
                                    "textureSize",
                                    &tex_size,
                                    SHADER_UNIFORM_VEC2);
+
+    // Screen color shaders
+    for (auto path : SCREEN_COLOR_SHADER_PATHS) {
+        renderer::screen_color_shaders_.push_back(
+            LoadShader(BASE_VERT_SHADER, path));
+        renderer::set_shader_property_(renderer::screen_color_shaders_.back(),
+                                       "maskMain",
+                                       &mask_main_value,
+                                       SHADER_UNIFORM_VEC4);
+        renderer::set_shader_property_(renderer::screen_color_shaders_.back(),
+                                       "maskShadow",
+                                       &mask_shadow_value,
+                                       SHADER_UNIFORM_VEC4);
+        renderer::set_shader_property_(renderer::screen_color_shaders_.back(),
+                                       "maskBg",
+                                       &mask_bg_value,
+                                       SHADER_UNIFORM_VEC4);
+        renderer::set_shader_property_(renderer::screen_color_shaders_.back(),
+                                       "bgColorFactor",
+                                       &col_bg_factor_value,
+                                       SHADER_UNIFORM_FLOAT);
+        renderer::set_shader_property_(renderer::screen_color_shaders_.back(),
+                                       "debugCol1",
+                                       &debug_col_1_value,
+                                       SHADER_UNIFORM_VEC4);
+        renderer::set_shader_property_(renderer::screen_color_shaders_.back(),
+                                       "debugCol2",
+                                       &debug_col_2_value,
+                                       SHADER_UNIFORM_VEC4);
+        renderer::set_shader_property_(renderer::screen_color_shaders_.back(),
+                                       "debugCol3",
+                                       &debug_col_3_value,
+                                       SHADER_UNIFORM_VEC4);
+        renderer::set_shader_property_(renderer::screen_color_shaders_.back(),
+                                       "debugCol4",
+                                       &debug_col_4_value,
+                                       SHADER_UNIFORM_VEC4);
+    }
 
     // Two blur shaders for the two passes. The first one blurs with
     // intensity taken into account, and takes the base_tex_1_ so the shader
@@ -180,45 +169,11 @@ void renderer::render() {
     renderer::update_water_waves_();
     renderer::update_window_size_();
     renderer::update_tex_sizes_();
+    renderer::update_color_screen_();
     renderer::render_base_();
     renderer::post_process_();
     BeginDrawing();
     ClearBackground(BLACK);
-#ifdef DEV
-    switch (renderer::texture_rendered_) {
-    case final: {
-        DrawTexturePro(renderer::final_tex_.texture,
-                       (Rectangle){0.0f,
-                                   0.0f,
-                                   renderer::stretched_tex_size_.x,
-                                   -renderer::stretched_tex_size_.y},
-                       (Rectangle){0.0f,
-                                   0.0f,
-                                   renderer::stretched_tex_size_.x,
-                                   renderer::stretched_tex_size_.y},
-                       (Vector2){0, 0},
-                       0.0f,
-                       WHITE);
-        break;
-    }
-    case base_1: {
-        renderer::stretch_texture_(base_tex_1_.texture);
-        break;
-    }
-    case base_2: {
-        renderer::stretch_texture_(base_tex_2_.texture);
-        break;
-    }
-    case blur_1: {
-        renderer::stretch_texture_(blur_tex_1_.texture);
-        break;
-    }
-    case blur_2: {
-        renderer::stretch_texture_(blur_tex_2_.texture);
-        break;
-    }
-    }
-#else
     DrawTexturePro(renderer::final_tex_.texture,
                    (Rectangle){0.0f,
                                0.0f,
@@ -231,7 +186,6 @@ void renderer::render() {
                    (Vector2){0, 0},
                    0.0f,
                    WHITE);
-#endif
     EndDrawing();
 #ifdef DEV
     if (IsKeyPressed(DEBUG_CTL_SHOW_AREAS)) {
@@ -243,21 +197,6 @@ void renderer::render() {
     if (IsKeyPressed(DEBUG_CTL_SHOW_KINEMATIC_BODIES)) {
         renderer::showing_kinematic_bodies_ =
             !renderer::showing_kinematic_bodies_;
-    }
-    if (IsKeyPressed(DEBUG_CTL_RENDER_FINAL)) {
-        renderer::texture_rendered_ = final;
-    }
-    if (IsKeyPressed(DEBUG_CTL_RENDER_BLUR_1)) {
-        renderer::texture_rendered_ = blur_1;
-    }
-    if (IsKeyPressed(DEBUG_CTL_RENDER_BLUR_2)) {
-        renderer::texture_rendered_ = blur_2;
-    }
-    if (IsKeyPressed(DEBUG_CTL_RENDER_BASE_1)) {
-        renderer::texture_rendered_ = base_1;
-    }
-    if (IsKeyPressed(DEBUG_CTL_RENDER_BASE_2)) {
-        renderer::texture_rendered_ = base_2;
     }
 #endif
 }
@@ -284,6 +223,10 @@ void renderer::reset_water_waves() {
     renderer::water_waves_.clear();
 }
 
+void renderer::set_color_shader(int index) {
+    renderer::current_screen_color_shader_ = index;
+}
+
 void renderer::update_water_waves_() {
     float delta = GetFrameTime();
     for (int i = 0; i < (int)renderer::water_waves_.size(); i++) {
@@ -307,6 +250,15 @@ void renderer::update_water_waves_() {
                                        &zero,
                                        SHADER_UNIFORM_VEC4);
     }
+}
+
+void renderer::update_color_screen_() {
+    renderer::time_ += GetFrameTime();
+    renderer::set_shader_property_(renderer::screen_color_shaders_.at(
+                                       renderer::current_screen_color_shader_),
+                                   "time",
+                                   &renderer::time_,
+                                   SHADER_UNIFORM_FLOAT);
 }
 
 void renderer::update_window_size_() {
@@ -434,10 +386,23 @@ void renderer::stretch_texture_(Texture2D texture) {
 }
 
 void renderer::post_process_() {
+    BeginTextureMode(renderer::colored_tex_);
+    ClearBackground(BLANK);
+    BeginShaderMode(renderer::screen_color_shaders_.at(
+        renderer::current_screen_color_shader_));
+    DrawTexturePro(renderer::base_tex_2_.texture,
+                   (Rectangle){0.0f, 0.0f, MAIN_TEX_SIZE, -MAIN_TEX_SIZE},
+                   (Rectangle){0.0f, 0.0f, MAIN_TEX_SIZE, MAIN_TEX_SIZE},
+                   (Vector2){0.0f, 0.0f},
+                   0.0f,
+                   WHITE);
+    EndShaderMode();
+    EndTextureMode();
+
     BeginTextureMode(renderer::blur_tex_1_);
     ClearBackground(BLACK);
     BeginShaderMode(renderer::blur_shader_1_);
-    DrawTexturePro(renderer::base_tex_2_.texture,
+    DrawTexturePro(renderer::colored_tex_.texture,
                    (Rectangle){0.0f, 0.0f, MAIN_TEX_SIZE, -MAIN_TEX_SIZE},
                    (Rectangle){0.0f, 0.0f, MAIN_TEX_SIZE, MAIN_TEX_SIZE},
                    (Vector2){0.0f, 0.0f},
@@ -461,7 +426,7 @@ void renderer::post_process_() {
     BeginTextureMode(renderer::final_tex_);
     ClearBackground(BLACK);
     renderer::stretch_texture_(renderer::blur_tex_2_.texture);
-    renderer::stretch_texture_(renderer::base_tex_2_.texture);
+    renderer::stretch_texture_(renderer::colored_tex_.texture);
     EndTextureMode();
 }
 

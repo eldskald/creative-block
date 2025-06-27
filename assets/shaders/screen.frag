@@ -11,20 +11,8 @@ varying vec2 uv;
 uniform sampler2D texture0;
 
 uniform vec2 textureSize;
-uniform float time;
 
 uniform vec4 maskMain;
-uniform vec4 maskShadow;
-uniform vec4 maskBg;
-
-uniform vec4 initMain;
-uniform vec4 initShadow;
-uniform vec4 initBg;
-
-uniform vec4 debug1;
-uniform vec4 debug2;
-uniform vec4 debug3;
-uniform vec4 debug4;
 
 uniform float water;
 uniform float waterLevel;
@@ -43,7 +31,6 @@ float linstep(float min, float max, float val) {
 
 void main() {
     vec4 col = vec4(0.0);
-    vec4 smp = vec4(0.0);
     float currLevel = (1.0 - uv.y) * textureSize.y;
     float wLevel = waterLevel;
 
@@ -61,10 +48,7 @@ void main() {
     float notWater = (1.0 - waterSurface * water) * (1.0 - waterReflection * water);
 
     // Drawing the above water
-    smp = texture2D(texture0, uv);
-    col += step(dot(smp - maskMain, smp - maskMain), 0.05) * initMain * notWater;
-    col += step(dot(smp - maskShadow, smp - maskShadow), 0.05) * initShadow * notWater;
-    col += step(dot(smp - maskBg, smp - maskBg), 0.05) * initBg * notWater;
+    col += texture2D(texture0, uv) * notWater;
 
     // Drawing the water reflections
     float wLvNorm = 1.0 - waterLevel / textureSize.y;
@@ -101,20 +85,10 @@ void main() {
     modUV += wave5Offset * normalize(vec2(wave5Dist.x, -wave5Dist.y));
     modUV += wave6Offset * normalize(vec2(wave6Dist.x, -wave6Dist.y));
     modUV += wave7Offset * normalize(vec2(wave7Dist.x, -wave7Dist.y));
-    smp = texture2D(texture0, modUV);
-    col += step(dot(smp - maskMain, smp - maskMain), 0.05) * (initMain - col) * waterReflection * water;
-    col += step(dot(smp - maskShadow, smp - maskShadow), 0.05) * (initShadow - col) * waterReflection * water;
-    col += step(dot(smp - maskBg, smp - maskBg), 0.05) * (initBg - col) * waterReflection * water;
+    col += (texture2D(texture0, modUV) - col) * waterReflection * water;
 
     // Drawing the water surface
-    col += (initMain - col) * waterSurface * water;
-
-    // Drawing the debugs
-    smp = texture2D(texture0, uv);
-    col += step(dot(smp - debug1, smp - debug1), 0.05) * (debug1 - col);
-    col += step(dot(smp - debug2, smp - debug2), 0.05) * (debug2 - col);
-    col += step(dot(smp - debug3, smp - debug3), 0.05) * (debug3 - col);
-    col += step(dot(smp - debug4, smp - debug4), 0.05) * (debug4 - col);
+    col += (maskMain - col) * waterSurface * water;
 
     gl_FragColor = col;
 }
