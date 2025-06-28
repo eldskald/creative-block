@@ -41,9 +41,13 @@ const float ASPECT_RATIO = (float)WINDOW_SIZE_X / (float)WINDOW_SIZE_Y;
 
 void renderer::initialize() {
     renderer::main_gradient_1_ = LoadTexture(MAIN_GRADIENT_1_TEXTURE);
+    SetTextureFilter(renderer::main_gradient_1_, TEXTURE_FILTER_TRILINEAR);
     renderer::shadow_gradient_1_ = LoadTexture(SHADOW_GRADIENT_1_TEXTURE);
+    SetTextureFilter(renderer::shadow_gradient_1_, TEXTURE_FILTER_TRILINEAR);
     renderer::main_gradient_2_ = LoadTexture(MAIN_GRADIENT_2_TEXTURE);
+    SetTextureFilter(renderer::main_gradient_2_, TEXTURE_FILTER_TRILINEAR);
     renderer::shadow_gradient_2_ = LoadTexture(SHADOW_GRADIENT_2_TEXTURE);
+    SetTextureFilter(renderer::shadow_gradient_2_, TEXTURE_FILTER_TRILINEAR);
 
     // For the sake of the web build, all textures must be powers of 2
     renderer::base_tex_1_ = LoadRenderTexture(MAIN_TEX_SIZE, MAIN_TEX_SIZE);

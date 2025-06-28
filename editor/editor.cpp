@@ -215,51 +215,51 @@ void editor::initialize() {
     file_input = new text_input();
     file_input->label = "level name";
     file_input->rect =
-        (Rectangle){480, EDITOR_WINDOW_SIZE_Y - 40, 300, 32}; // NOLINT
+        (Rectangle){480, EDITOR_WINDOW_SIZE_Y - 40, 344, 32}; // NOLINT
 
     shadows_input = new text_input();
     shadows_input->label = "level shadows";
     shadows_input->number_input = true;
     shadows_input->rect =
-        (Rectangle){796, EDITOR_WINDOW_SIZE_Y - 40, 200, 32}; // NOLINT
+        (Rectangle){840, EDITOR_WINDOW_SIZE_Y - 40, 200, 32}; // NOLINT
 
     screen_colors_input = new text_input();
     screen_colors_input->label = "level colors";
     screen_colors_input->number_input = true;
     screen_colors_input->rect =
-        (Rectangle){1012, EDITOR_WINDOW_SIZE_Y - 40, 200, 32}; // NOLINT
+        (Rectangle){1056, EDITOR_WINDOW_SIZE_Y - 40, 200, 32}; // NOLINT
 
     txt_1_input = new text_input();
     txt_1_input->label = "level text 1";
-    txt_1_input->rect = (Rectangle){624, TILESET_ORIGIN_Y, 600, 32}; // NOLINT
+    txt_1_input->rect = (Rectangle){624, TILESET_ORIGIN_Y, 632, 32}; // NOLINT
 
     txt_2_input = new text_input();
     txt_2_input->label = "level text 2";
     txt_2_input->rect =
-        (Rectangle){624, TILESET_ORIGIN_Y + 40, 600, 32}; // NOLINT
+        (Rectangle){624, TILESET_ORIGIN_Y + 40, 632, 32}; // NOLINT
 
     txt_3_input = new text_input();
     txt_3_input->label = "level text 3";
     txt_3_input->rect =
-        (Rectangle){624, TILESET_ORIGIN_Y + 80, 600, 32}; // NOLINT
+        (Rectangle){624, TILESET_ORIGIN_Y + 80, 632, 32}; // NOLINT
 
     txt_1_hf_input = new text_input();
     txt_1_hf_input->label = "text 1 hf";
     txt_1_hf_input->number_input = true;
     txt_1_hf_input->rect =
-        (Rectangle){624, TILESET_ORIGIN_Y - 40, 160, 32}; // NOLINT
+        (Rectangle){624, TILESET_ORIGIN_Y - 40, 200, 32}; // NOLINT
 
     txt_2_hf_input = new text_input();
     txt_2_hf_input->label = "text 2 hf";
     txt_2_hf_input->number_input = true;
     txt_2_hf_input->rect =
-        (Rectangle){800, TILESET_ORIGIN_Y - 40, 160, 32}; // NOLINT
+        (Rectangle){840, TILESET_ORIGIN_Y - 40, 200, 32}; // NOLINT
 
     txt_3_hf_input = new text_input();
     txt_3_hf_input->label = "text 3 hf";
     txt_3_hf_input->number_input = true;
     txt_3_hf_input->rect =
-        (Rectangle){976, TILESET_ORIGIN_Y - 40, 160, 32}; // NOLINT
+        (Rectangle){1056, TILESET_ORIGIN_Y - 40, 200, 32}; // NOLINT
 }
 
 void editor::tick() {
