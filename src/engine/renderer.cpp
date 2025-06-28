@@ -12,6 +12,10 @@
 
 using namespace std;
 
+Texture2D renderer::main_gradient_1_ = (Texture2D){0};
+Texture2D renderer::shadow_gradient_1_ = (Texture2D){0};
+Texture2D renderer::main_gradient_2_ = (Texture2D){0};
+Texture2D renderer::shadow_gradient_2_ = (Texture2D){0};
 RenderTexture2D renderer::base_tex_1_ = (RenderTexture2D){0};
 RenderTexture2D renderer::base_tex_2_ = (RenderTexture2D){0};
 RenderTexture2D renderer::colored_tex_ = (RenderTexture2D){0};
@@ -36,6 +40,11 @@ bool renderer::showing_kinematic_bodies_ = false;
 const float ASPECT_RATIO = (float)WINDOW_SIZE_X / (float)WINDOW_SIZE_Y;
 
 void renderer::initialize() {
+    renderer::main_gradient_1_ = LoadTexture(MAIN_GRADIENT_1_TEXTURE);
+    renderer::shadow_gradient_1_ = LoadTexture(SHADOW_GRADIENT_1_TEXTURE);
+    renderer::main_gradient_2_ = LoadTexture(MAIN_GRADIENT_2_TEXTURE);
+    renderer::shadow_gradient_2_ = LoadTexture(SHADOW_GRADIENT_2_TEXTURE);
+
     // For the sake of the web build, all textures must be powers of 2
     renderer::base_tex_1_ = LoadRenderTexture(MAIN_TEX_SIZE, MAIN_TEX_SIZE);
     renderer::base_tex_2_ = LoadRenderTexture(MAIN_TEX_SIZE, MAIN_TEX_SIZE);
@@ -102,41 +111,31 @@ void renderer::initialize() {
                                    SHADER_UNIFORM_VEC2);
 
     // Screen color shaders
-    for (auto path : SCREEN_COLOR_SHADER_PATHS) {
-        renderer::screen_color_shaders_.push_back(
-            LoadShader(BASE_VERT_SHADER, path));
-        renderer::set_shader_property_(renderer::screen_color_shaders_.back(),
-                                       "maskMain",
-                                       &mask_main_value,
-                                       SHADER_UNIFORM_VEC4);
-        renderer::set_shader_property_(renderer::screen_color_shaders_.back(),
-                                       "maskShadow",
-                                       &mask_shadow_value,
-                                       SHADER_UNIFORM_VEC4);
-        renderer::set_shader_property_(renderer::screen_color_shaders_.back(),
-                                       "maskBg",
-                                       &mask_bg_value,
-                                       SHADER_UNIFORM_VEC4);
-        renderer::set_shader_property_(renderer::screen_color_shaders_.back(),
+    renderer::screen_color_shaders_.push_back(
+        LoadShader(BASE_VERT_SHADER, SCREEN_COLOR_SHADER_0));
+    renderer::screen_color_shaders_.push_back(
+        LoadShader(BASE_VERT_SHADER, SCREEN_COLOR_SHADER_1));
+    renderer::screen_color_shaders_.push_back(
+        LoadShader(BASE_VERT_SHADER, SCREEN_COLOR_SHADER_1));
+    for (Shader shader : renderer::screen_color_shaders_) {
+        renderer::set_shader_property_(
+            shader, "maskMain", &mask_main_value, SHADER_UNIFORM_VEC4);
+        renderer::set_shader_property_(
+            shader, "maskShadow", &mask_shadow_value, SHADER_UNIFORM_VEC4);
+        renderer::set_shader_property_(
+            shader, "maskBg", &mask_bg_value, SHADER_UNIFORM_VEC4);
+        renderer::set_shader_property_(
+            shader, "debugCol1", &debug_col_1_value, SHADER_UNIFORM_VEC4);
+        renderer::set_shader_property_(
+            shader, "debugCol2", &debug_col_2_value, SHADER_UNIFORM_VEC4);
+        renderer::set_shader_property_(
+            shader, "debugCol3", &debug_col_3_value, SHADER_UNIFORM_VEC4);
+        renderer::set_shader_property_(
+            shader, "debugCol4", &debug_col_4_value, SHADER_UNIFORM_VEC4);
+        renderer::set_shader_property_(shader,
                                        "bgColorFactor",
                                        &col_bg_factor_value,
                                        SHADER_UNIFORM_FLOAT);
-        renderer::set_shader_property_(renderer::screen_color_shaders_.back(),
-                                       "debugCol1",
-                                       &debug_col_1_value,
-                                       SHADER_UNIFORM_VEC4);
-        renderer::set_shader_property_(renderer::screen_color_shaders_.back(),
-                                       "debugCol2",
-                                       &debug_col_2_value,
-                                       SHADER_UNIFORM_VEC4);
-        renderer::set_shader_property_(renderer::screen_color_shaders_.back(),
-                                       "debugCol3",
-                                       &debug_col_3_value,
-                                       SHADER_UNIFORM_VEC4);
-        renderer::set_shader_property_(renderer::screen_color_shaders_.back(),
-                                       "debugCol4",
-                                       &debug_col_4_value,
-                                       SHADER_UNIFORM_VEC4);
     }
 
     // Two blur shaders for the two passes. The first one blurs with
@@ -155,6 +154,10 @@ void renderer::initialize() {
 }
 
 void renderer::unload() {
+    UnloadTexture(renderer::main_gradient_1_);
+    UnloadTexture(renderer::shadow_gradient_1_);
+    UnloadTexture(renderer::main_gradient_2_);
+    UnloadTexture(renderer::shadow_gradient_2_);
     UnloadRenderTexture(renderer::base_tex_1_);
     UnloadRenderTexture(renderer::base_tex_2_);
     UnloadRenderTexture(renderer::blur_tex_1_);
@@ -163,13 +166,15 @@ void renderer::unload() {
     UnloadShader(renderer::base_screen_shader_);
     UnloadShader(renderer::blur_shader_1_);
     UnloadShader(renderer::blur_shader_2_);
+    for (Shader shader : renderer::screen_color_shaders_) {
+        UnloadShader(shader);
+    }
 }
 
 void renderer::render() {
     renderer::update_water_waves_();
     renderer::update_window_size_();
     renderer::update_tex_sizes_();
-    renderer::update_color_screen_();
     renderer::render_base_();
     renderer::post_process_();
     BeginDrawing();
@@ -259,6 +264,32 @@ void renderer::update_color_screen_() {
                                    "time",
                                    &renderer::time_,
                                    SHADER_UNIFORM_FLOAT);
+
+    if (renderer::current_screen_color_shader_ == 1) {
+        int main_gradient_loc = GetShaderLocation(
+            renderer::screen_color_shaders_.at(1), "mainGradient");
+        SetShaderValueTexture(renderer::screen_color_shaders_.at(1),
+                              main_gradient_loc,
+                              renderer::main_gradient_1_);
+        int shadow_gradient_loc = GetShaderLocation(
+            renderer::screen_color_shaders_.at(1), "shadowGradient");
+        SetShaderValueTexture(renderer::screen_color_shaders_.at(1),
+                              shadow_gradient_loc,
+                              renderer::shadow_gradient_1_);
+    }
+
+    if (renderer::current_screen_color_shader_ == 2) {
+        int main_gradient_loc = GetShaderLocation(
+            renderer::screen_color_shaders_.at(2), "mainGradient");
+        SetShaderValueTexture(renderer::screen_color_shaders_.at(2),
+                              main_gradient_loc,
+                              renderer::main_gradient_2_);
+        int shadow_gradient_loc = GetShaderLocation(
+            renderer::screen_color_shaders_.at(2), "shadowGradient");
+        SetShaderValueTexture(renderer::screen_color_shaders_.at(2),
+                              shadow_gradient_loc,
+                              renderer::shadow_gradient_2_);
+    }
 }
 
 void renderer::update_window_size_() {
@@ -390,6 +421,7 @@ void renderer::post_process_() {
     ClearBackground(BLANK);
     BeginShaderMode(renderer::screen_color_shaders_.at(
         renderer::current_screen_color_shader_));
+    renderer::update_color_screen_();
     DrawTexturePro(renderer::base_tex_2_.texture,
                    (Rectangle){0.0f, 0.0f, MAIN_TEX_SIZE, -MAIN_TEX_SIZE},
                    (Rectangle){0.0f, 0.0f, MAIN_TEX_SIZE, MAIN_TEX_SIZE},

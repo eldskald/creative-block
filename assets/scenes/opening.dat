@@ -1246,3 +1246,7 @@ water_level = 160
 
 [shadows_limit]
 0
+
+[screen_colors_shader]
+0
+

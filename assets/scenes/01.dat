@@ -2215,3 +2215,7 @@ content = Press@J@to@jump
 
 [shadows_limit]
 0
+
+[screen_colors_shader]
+0
+

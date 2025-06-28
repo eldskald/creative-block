@@ -2052,3 +2052,8 @@ collision_layer = 00001000
 
 [shadows_limit]
 0
+
+[screen_colors_shader]
+
+
+

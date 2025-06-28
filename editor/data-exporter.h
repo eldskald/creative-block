@@ -15,7 +15,8 @@ public:
                                   string text_2_hidden_for,
                                   string level_text_3,
                                   string text_3_hidden_for,
-                                  string level_shadows);
+                                  string level_shadows,
+                                  string screen_colors_shader);
 
 private:
     static int current_id_count_;
@@ -50,4 +51,5 @@ private:
     static string get_opening_obj_text_(map* cells);
     static string get_credits_obj_text_(map* cells);
     static string get_level_shadow_totals_(string level_shadows);
+    static string get_screen_colors_shader_(string screen_colors_shader);
 };

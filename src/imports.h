@@ -66,6 +66,11 @@
 #define FIRST_BLUR_SHADER "assets/shaders/custom-blur.frag"
 #define SECOND_BLUR_SHADER "assets/shaders/gaussian-range-4.frag"
 
-#define SCREEN_COLOR_SHADER_PATHS {"assets/shaders/screen-colors-1.frag"}
+#define SCREEN_COLOR_SHADER_PATHS                                              \
+    {"assets/shaders/screen-colors-0.frag",                                    \
+     "assets/shaders/screen-colors-1.frag"}
+
+#define SCREEN_COLOR_SHADER_0 "assets/shaders/screen-colors-0.frag"
+#define SCREEN_COLOR_SHADER_1 "assets/shaders/screen-colors-1.frag"
 
 #define FONT_TITLE "assets/fonts/nordine/Nordine.otf"

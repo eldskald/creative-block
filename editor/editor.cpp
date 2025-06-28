@@ -24,6 +24,7 @@ button* load_btn = nullptr;
 button* export_btn = nullptr;
 button* clear_btn = nullptr;
 text_input* shadows_input = nullptr;
+text_input* screen_colors_input = nullptr;
 text_input* file_input = nullptr;
 text_input* txt_1_input = nullptr;
 text_input* txt_2_input = nullptr;
@@ -45,7 +46,8 @@ void editor::save_tilemap_data() {
     data += txt_3_input->get_input() + PROJ_TEXT_SEPARATOR;
     data += txt_1_hf_input->get_input() + PROJ_TEXT_SEPARATOR;
     data += txt_2_hf_input->get_input() + PROJ_TEXT_SEPARATOR;
-    data += txt_3_hf_input->get_input();
+    data += txt_3_hf_input->get_input() + PROJ_TEXT_SEPARATOR;
+    data += screen_colors_input->get_input();
 
     SaveFileText(filepath.c_str(), data.data());
 }
@@ -64,6 +66,7 @@ void editor::load_tilemap_data() {
     int fourth = -1;
     int fifth = -1;
     int sixth = -1;
+    int seventh = -1;
 
     for (int i = 0; i < (int)texts.length(); i++) {
         if (texts.at(i) == PROJ_TEXT_SEPARATOR) {
@@ -91,7 +94,12 @@ void editor::load_tilemap_data() {
             if (first != -1 && sec != -1 && third != -1 && fourth != -1 &&
                 fifth != -1 && sixth == -1) {
                 sixth = i;
-                break;
+                continue;
+            }
+            if (first != -1 && sec != -1 && third != -1 && fourth != -1 &&
+                fifth != -1 && sixth != -1 && seventh == -1) {
+                seventh = i;
+                continue;
             }
         }
     }
@@ -101,7 +109,8 @@ void editor::load_tilemap_data() {
     txt_3_input->set_input(texts.substr(third + 1, fourth - third - 1));
     txt_1_hf_input->set_input(texts.substr(fourth + 1, fifth - fourth - 1));
     txt_2_hf_input->set_input(texts.substr(fifth + 1, sixth - fifth - 1));
-    txt_3_hf_input->set_input(texts.substr(sixth + 1));
+    txt_3_hf_input->set_input(texts.substr(sixth + 1, seventh - sixth - 1));
+    screen_colors_input->set_input(texts.substr(seventh + 1));
 
     UnloadFileText(data);
 }
@@ -115,7 +124,8 @@ void editor::export_tilemap_data() {
                                                  txt_2_hf_input->get_input(),
                                                  txt_3_input->get_input(),
                                                  txt_3_hf_input->get_input(),
-                                                 shadows_input->get_input());
+                                                 shadows_input->get_input(),
+                                                 screen_colors_input->get_input());
     string filepath = "assets/scenes/" + file_input->get_input() + ".dat";
     SaveFileText(filepath.c_str(), data.data());
 }
@@ -205,7 +215,19 @@ void editor::initialize() {
     file_input = new text_input();
     file_input->label = "level name";
     file_input->rect =
-        (Rectangle){480, EDITOR_WINDOW_SIZE_Y - 40, 400, 32}; // NOLINT
+        (Rectangle){480, EDITOR_WINDOW_SIZE_Y - 40, 300, 32}; // NOLINT
+
+    shadows_input = new text_input();
+    shadows_input->label = "level shadows";
+    shadows_input->number_input = true;
+    shadows_input->rect =
+        (Rectangle){796, EDITOR_WINDOW_SIZE_Y - 40, 200, 32}; // NOLINT
+
+    screen_colors_input = new text_input();
+    screen_colors_input->label = "level colors";
+    screen_colors_input->number_input = true;
+    screen_colors_input->rect =
+        (Rectangle){1012, EDITOR_WINDOW_SIZE_Y - 40, 200, 32}; // NOLINT
 
     txt_1_input = new text_input();
     txt_1_input->label = "level text 1";
@@ -221,29 +243,23 @@ void editor::initialize() {
     txt_3_input->rect =
         (Rectangle){624, TILESET_ORIGIN_Y + 80, 600, 32}; // NOLINT
 
-    shadows_input = new text_input();
-    shadows_input->label = "level shadows";
-    shadows_input->number_input = true;
-    shadows_input->rect =
-        (Rectangle){448, TILESET_ORIGIN_Y - 40, 200, 32}; // NOLINT
-
     txt_1_hf_input = new text_input();
     txt_1_hf_input->label = "text 1 hf";
     txt_1_hf_input->number_input = true;
     txt_1_hf_input->rect =
-        (Rectangle){672, TILESET_ORIGIN_Y - 40, 160, 32}; // NOLINT
+        (Rectangle){624, TILESET_ORIGIN_Y - 40, 160, 32}; // NOLINT
 
     txt_2_hf_input = new text_input();
     txt_2_hf_input->label = "text 2 hf";
     txt_2_hf_input->number_input = true;
     txt_2_hf_input->rect =
-        (Rectangle){848, TILESET_ORIGIN_Y - 40, 160, 32}; // NOLINT
+        (Rectangle){800, TILESET_ORIGIN_Y - 40, 160, 32}; // NOLINT
 
     txt_3_hf_input = new text_input();
     txt_3_hf_input->label = "text 3 hf";
     txt_3_hf_input->number_input = true;
     txt_3_hf_input->rect =
-        (Rectangle){1024, TILESET_ORIGIN_Y - 40, 160, 32}; // NOLINT
+        (Rectangle){976, TILESET_ORIGIN_Y - 40, 160, 32}; // NOLINT
 }
 
 void editor::tick() {
@@ -271,6 +287,7 @@ void editor::tick() {
     clear_btn->tick();
     file_input->tick();
     shadows_input->tick();
+    screen_colors_input->tick();
     txt_1_input->tick();
     txt_2_input->tick();
     txt_3_input->tick();

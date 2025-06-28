@@ -2,8 +2,6 @@
 
 precision mediump float;
 
-#define PERIOD 15.0
-
 varying vec2 uv;
 uniform sampler2D texture0;
 
@@ -17,21 +15,10 @@ uniform vec4 debugCol2;
 uniform vec4 debugCol3;
 uniform vec4 debugCol4;
 
-uniform sampler2D mainGradient;
-uniform sampler2D shadowGradient;
-
-vec4 getMainColor() {
-    return texture2D(mainGradient, vec2(fract(time / PERIOD)));
-}
-
-vec4 getShadowColor() {
-    return texture2D(shadowGradient, vec2(fract(time / PERIOD)));
-}
+const vec4 mainCol = vec4(0.6, 1.0, 1.0, 1.0); // #99ffff
+const vec4 shadowCol = vec4(0.8, 0.4, 1.0, 1.0); // #cc66ff
 
 void main() {
-    vec4 mainCol = getMainColor();
-    vec4 shadowCol = getShadowColor();
-
     vec4 smp = texture2D(texture0, uv);
     vec4 col = vec4(0.0);
     vec4 bgCol = vec4(mainCol.x * bgColorFactor,
