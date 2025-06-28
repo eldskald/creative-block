@@ -73,7 +73,7 @@ install:
 	-rm -rf ./$(INCLUDE_DIR) ./$(LIBS_DIR)
 	-mkdir -p $(TEMP_DIR) $(INCLUDE_DIR) $(LIBS_DIR) $(LINUX_LIBS) $(WIN_LIBS) $(WEB_LIBS)
 	-cd $(TEMP_DIR) && git clone --depth 1 --branch 5.5 https://github.com/raysan5/raylib.git
-	-cd $(TEMP_DIR)/raylib/src && make PLATFORM=PLATFORM_DESKTOP
+	-cd $(TEMP_DIR)/raylib/src && make PLATFORM=PLATFORM_DESKTOP GLFW_LINUX_ENABLE_WAYLAND=TRUE
 	-cp $(TEMP_DIR)/raylib/src/raylib.h ./$(INCLUDE_DIR)
 	-cp $(TEMP_DIR)/raylib/src/raymath.h ./$(INCLUDE_DIR)
 	-mv $(TEMP_DIR)/raylib/src/libraylib.a ./$(LINUX_LIBS)
