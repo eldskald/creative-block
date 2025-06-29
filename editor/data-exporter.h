@@ -30,9 +30,12 @@ private:
     static string get_platform_from_map_(Vector2 start, map* cells);
     static string get_platform_bodies_text_(map* cells);
     static string get_platform_sprites_text_(map* cells);
+    static Vector2* find_next_shadow_platform_start_(map* cells);
+    static string get_shadow_platform_from_map_(Vector2 start, map* cells);
+    static string get_shadow_platform_bodies_text_(map* cells);
+    static string get_shadow_platform_sprites_text_(map* cells);
     static string get_bg_props_text_(map* cells);
     static string get_bg_grass_text_(map* cells);
-    static string get_bg_waterfall_text_(map* cells);
     static string get_bg_stars_text_(map* cells);
     static string get_bg_leaves_text_(map* cells);
     static string get_bg_drips_text_(map* cells);
@@ -40,6 +43,7 @@ private:
     static string get_player_text_(map* cells);
     static string get_goal_text_(map* cells);
     static string get_spikes_text_(map* cells);
+    static string get_shadow_spikes_text_(map* cells);
     static string get_water_text_(map* cells);
     static string get_key_gate_text_(map* cells);
     static string

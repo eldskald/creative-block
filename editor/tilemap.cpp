@@ -13,13 +13,14 @@ using namespace std;
 const int CONVERT_TO_DATA_CONST = 50;
 const int PLAYER_TILE_ID = 0;
 const int GOAL_TILE_ID = 1;
-const int WATER_TILE_ID = 2;
-const int OPENING_TILE_ID = 31;
-const int CREDITS_TILE_ID = 32;
-const int TEXT_1_TILE_ID = 33;
-const int TEXT_2_TILE_ID = 34;
-const int TEXT_3_TILE_ID = 35;
-const int KEY_GATE_TOP_ID = 20;
+const int OPENING_TILE_ID = 2;
+const int CREDITS_TILE_ID = 3;
+const int WATER_TILE_ID = 4;
+const int TEXT_1_TILE_ID = 5;
+const int TEXT_2_TILE_ID = 6;
+const int TEXT_3_TILE_ID = 7;
+const int KEY_GATE_TOP_ID = 8;
+const int FIRST_SHADOW_ID = 24;
 
 tilemap::tilemap() {
     for (auto set : TILESETS) {
@@ -248,7 +249,9 @@ void tilemap::render_cell_(int x, int y) {
         spritesheet::render_sprite_at(
             coords,
             (Vector2){(float)(x * CELL_SIZE_X + TILEMAP_ORIGIN_X),
-                      (float)(y * CELL_SIZE_Y + TILEMAP_ORIGIN_Y)});
+                      (float)(y * CELL_SIZE_Y + TILEMAP_ORIGIN_Y)},
+            id >= FIRST_SHADOW_ID && set == tileset::interact ? FOCUSED_COLOR
+                                                              : FG_COLOR);
     }
 }
 

@@ -9,29 +9,11 @@
 #include <raylib.h>
 #include <raymath.h>
 
-const float GATE_WIDTH = SPRITESHEET_CELL_SIZE_X - 2.0f;
-const float GATE_REC_LINE_WIDTH = 2.0f;
-const Vector2 GATE_SPRITE_ATLAS_COORDS = (Vector2){7, 5};
-const animation KEY_ANIM = {
-    (keyframe){{8, 4}, 0.2},
-    (keyframe){{8, 5}, 0.2},
-    (keyframe){{8, 6}, 0.2},
-    (keyframe){{8, 7}, 0.2},
-    (keyframe){{9, 4}, 0.2},
-    (keyframe){{9, 5}, 0.2},
-    (keyframe){{9, 6}, 0.2},
-    (keyframe){{9, 5}, 0.2},
-    (keyframe){{9, 4}, 0.2},
-    (keyframe){{8, 7}, 0.2},
-    (keyframe){{8, 6}, 0.2},
-    (keyframe){{8, 5}, 0.2},
-};
-
 list<key_gate*> key_gate::key_gates_;
 
 key_gate::key_::key_(key_gate* gate)
     : gate_(gate), key_sprite_(new sprite()), particles_(new key_particles()) {
-    this->key_sprite_->anim = KEY_ANIM;
+    this->key_sprite_->anim = KEY_GATE_KEY_ANIMATION;
     this->key_sprite_->tint = MASK_MAIN_COLOR;
     this->add_child(this->key_sprite_);
     this->collision_box =
@@ -74,7 +56,7 @@ key_gate::key_gate() : gate_collider_(new physics_body()) {
     this->collision_layer = KEY_GATE_GATE_COLLISION_LAYER;
     this->type = physics_body::fixed;
     auto gate_sprite = new sprite();
-    gate_sprite->atlas_coords = GATE_SPRITE_ATLAS_COORDS;
+    gate_sprite->atlas_coords = KEY_GATE_ATLAS_COORDS;
     gate_sprite->tint = MASK_MAIN_COLOR;
     this->add_child(gate_sprite);
     this->gate_collider_->type = physics_body::fixed;

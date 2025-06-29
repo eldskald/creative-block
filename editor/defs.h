@@ -57,16 +57,16 @@ enum tile_type {
     null,
     prop,
     grass,
-    waterfall,
     star,
     water,
     drip,
     leaves,
     puff,
     block,
-    platform,
     player,
     goal,
+    platform,
+    shadow_platform,
     spike_t,
     spike_b,
     spike_l,
@@ -77,15 +77,19 @@ enum tile_type {
     spike_h_l,
     spike_h_m,
     spike_h_r,
+    shadow_spike_t,
+    shadow_spike_b,
+    shadow_spike_l,
+    shadow_spike_r,
+    shadow_spike_v_t,
+    shadow_spike_v_m,
+    shadow_spike_v_b,
+    shadow_spike_h_l,
+    shadow_spike_h_m,
+    shadow_spike_h_r,
     key_gate_top,
     key_gate,
     key,
-    button1,
-    button2,
-    button3,
-    gate1,
-    gate2,
-    gate3,
     text1,
     text2,
     text3,
@@ -95,12 +99,46 @@ enum tile_type {
 
 #define TILESETS {blocks, background, interact}
 #define TILE_TYPES                                                             \
-    {null,      prop,      grass,        waterfall, star,      water,          \
-     drip,      leaves,    puff,         block,     platform,  player,         \
-     goal,      spike_t,   spike_b,      spike_l,   spike_r,   spike_v_t,      \
-     spike_v_m, spike_v_b, spike_h_l,    spike_h_m, spike_h_r, button1,        \
-     gate1,     button2,   gate2,        button3,   gate3,     text1,          \
-     text2,     text3,     key_gate_top, key_gate,  key,       opening,        \
+    {null,                                                                     \
+     prop,                                                                     \
+     grass,                                                                    \
+     star,                                                                     \
+     water,                                                                    \
+     drip,                                                                     \
+     leaves,                                                                   \
+     puff,                                                                     \
+     block,                                                                    \
+     player,                                                                   \
+     goal,                                                                     \
+     platform,                                                                 \
+     shadow_platform,                                                          \
+     spike_t,                                                                  \
+     spike_b,                                                                  \
+     spike_l,                                                                  \
+     spike_r,                                                                  \
+     spike_v_t,                                                                \
+     spike_v_m,                                                                \
+     spike_v_b,                                                                \
+     spike_h_l,                                                                \
+     spike_h_m,                                                                \
+     spike_h_r,                                                                \
+     shadow_spike_t,                                                           \
+     shadow_spike_b,                                                           \
+     shadow_spike_l,                                                           \
+     shadow_spike_r,                                                           \
+     shadow_spike_v_t,                                                         \
+     shadow_spike_v_m,                                                         \
+     shadow_spike_v_b,                                                         \
+     shadow_spike_h_l,                                                         \
+     shadow_spike_h_m,                                                         \
+     shadow_spike_h_r,                                                         \
+     key_gate_top,                                                             \
+     key_gate,                                                                 \
+     key,                                                                      \
+     text1,                                                                    \
+     text2,                                                                    \
+     text3,                                                                    \
+     opening,                                                                  \
      credits}
 
 #define EXPORT_SPACE_CHAR '@'
@@ -109,4 +147,5 @@ enum tile_type {
 using tile = struct tile {
     Vector2 spritesheet_coords;
     tile_type type;
+    Color tint;
 };

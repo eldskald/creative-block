@@ -24,132 +24,132 @@ collision_layer = 00000100
 
 [sprite]
 pos = (64,24)
-atlas_coords = (11,8)
+atlas_coords = (10,8)
 tint = (0,255,0,255)
 
 [sprite]
 pos = (64,32)
-atlas_coords = (11,9)
+atlas_coords = (10,9)
 tint = (0,255,0,255)
 
 [sprite]
 pos = (80,24)
-atlas_coords = (10,8)
+atlas_coords = (11,8)
 tint = (0,255,0,255)
 
 [sprite]
 pos = (80,32)
-atlas_coords = (10,8)
+atlas_coords = (11,8)
 tint = (0,255,0,255)
 
 [sprite]
 pos = (80,40)
-atlas_coords = (10,9)
+atlas_coords = (11,9)
 tint = (0,255,0,255)
 
 [sprite]
 pos = (104,24)
-atlas_coords = (10,8)
+atlas_coords = (11,8)
 tint = (0,255,0,255)
 
 [sprite]
 pos = (104,32)
-atlas_coords = (10,9)
+atlas_coords = (11,9)
 tint = (0,255,0,255)
 
 [sprite]
 pos = (128,24)
-atlas_coords = (11,8)
+atlas_coords = (10,8)
 tint = (0,255,0,255)
 
 [sprite]
 pos = (128,32)
-atlas_coords = (11,8)
+atlas_coords = (10,8)
 tint = (0,255,0,255)
 
 [sprite]
 pos = (128,40)
-atlas_coords = (11,8)
+atlas_coords = (10,8)
 tint = (0,255,0,255)
 
 [sprite]
 pos = (128,48)
-atlas_coords = (11,9)
+atlas_coords = (10,9)
 tint = (0,255,0,255)
 
 [sprite]
 pos = (176,24)
-atlas_coords = (11,8)
+atlas_coords = (10,8)
 tint = (0,255,0,255)
 
 [sprite]
 pos = (176,32)
-atlas_coords = (11,8)
+atlas_coords = (10,8)
 tint = (0,255,0,255)
 
 [sprite]
 pos = (176,40)
-atlas_coords = (11,9)
+atlas_coords = (10,9)
 tint = (0,255,0,255)
 
 [sprite]
 pos = (200,24)
-atlas_coords = (11,8)
+atlas_coords = (10,8)
 tint = (0,255,0,255)
 
 [sprite]
 pos = (200,32)
-atlas_coords = (11,8)
+atlas_coords = (10,8)
 tint = (0,255,0,255)
 
 [sprite]
 pos = (232,24)
-atlas_coords = (11,8)
+atlas_coords = (10,8)
 tint = (0,255,0,255)
 
 [sprite]
 pos = (232,32)
-atlas_coords = (11,8)
+atlas_coords = (10,8)
 tint = (0,255,0,255)
 
 [sprite]
 pos = (232,40)
-atlas_coords = (11,8)
+atlas_coords = (10,8)
 tint = (0,255,0,255)
 
 [sprite]
 pos = (232,48)
-atlas_coords = (11,9)
+atlas_coords = (10,9)
 tint = (0,255,0,255)
 
 [sprite]
 pos = (256,24)
-atlas_coords = (10,8)
+atlas_coords = (11,8)
 tint = (0,255,0,255)
 
 [sprite]
 pos = (256,32)
-atlas_coords = (10,8)
+atlas_coords = (11,8)
 tint = (0,255,0,255)
 
 [sprite]
 pos = (288,24)
-atlas_coords = (10,8)
+atlas_coords = (11,8)
 tint = (0,255,0,255)
 
 [sprite]
 pos = (288,32)
-atlas_coords = (10,8)
+atlas_coords = (11,8)
 tint = (0,255,0,255)
 
 [sprite]
 pos = (288,40)
-atlas_coords = (10,8)
+atlas_coords = (11,8)
 tint = (0,255,0,255)
 
 [sprite]
 pos = (288,48)
-atlas_coords = (10,9)
+atlas_coords = (11,9)
 tint = (0,255,0,255)
 
 [water_drip]

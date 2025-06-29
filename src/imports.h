@@ -15,7 +15,8 @@
      level_10,                                                                 \
      level_11,                                                                 \
      level_12,                                                                 \
-     level_13}
+     level_13,                                                                 \
+     level_14}
 #define SCENES_PATHS                                                           \
     {{opening, "assets/scenes/opening.dat"},                                   \
      {credits, "assets/scenes/credits.dat"},                                   \
@@ -31,7 +32,8 @@
      {level_10, "assets/scenes/10.dat"},                                       \
      {level_11, "assets/scenes/11.dat"},                                       \
      {level_12, "assets/scenes/12.dat"},                                       \
-     {level_13, "assets/scenes/13.dat"}}
+     {level_13, "assets/scenes/13.dat"},                                       \
+     {level_14, "assets/scenes/14.dat"}}
 
 #define SFX_DEF_ENUM {jump, death, respawn, next_level, select, key, gate}
 #define SFX_ENUMS                                                              \
@@ -65,10 +67,6 @@
 #define SCREEN_SHADER "assets/shaders/screen.frag"
 #define FIRST_BLUR_SHADER "assets/shaders/custom-blur.frag"
 #define SECOND_BLUR_SHADER "assets/shaders/gaussian-range-4.frag"
-
-#define SCREEN_COLOR_SHADER_PATHS                                              \
-    {"assets/shaders/screen-colors-0.frag",                                    \
-     "assets/shaders/screen-colors-1.frag"}
 
 #define SCREEN_COLOR_SHADER_0 "assets/shaders/screen-colors-0.frag"
 #define SCREEN_COLOR_SHADER_1 "assets/shaders/screen-colors-1.frag"
