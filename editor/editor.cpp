@@ -33,6 +33,7 @@ text_input* txt_1_hf_input = nullptr;
 text_input* txt_2_hf_input = nullptr;
 text_input* txt_3_hf_input = nullptr;
 button* open_test_popup_btn = nullptr;
+popup* file_not_found_popup = nullptr;
 
 void editor::save_tilemap_data() {
     if (file_input->get_input().empty()) return;
@@ -49,13 +50,18 @@ void editor::save_tilemap_data() {
     data += txt_3_hf_input->get_input() + PROJ_TEXT_SEPARATOR;
     data += screen_colors_input->get_input();
 
-    SaveFileText(filepath.c_str(), data.data());
+    SaveFileText(filepath.data(), data.data());
 }
 
 void editor::load_tilemap_data() {
     if (file_input->get_input().empty()) return;
     string filepath =
         "editor/level-projects/" + file_input->get_input() + ".lvproj";
+    if (!FileExists(filepath.data())) {
+        file_not_found_popup->line_1 = filepath;
+        file_not_found_popup->open();
+        return;
+    }
     char* data = LoadFileText(filepath.data());
     editor::tilemap_->load_from_data(data);
 
@@ -260,6 +266,9 @@ void editor::initialize() {
     txt_3_hf_input->number_input = true;
     txt_3_hf_input->rect =
         (Rectangle){1056, TILESET_ORIGIN_Y - 40, 200, 32}; // NOLINT
+
+    file_not_found_popup = new popup();
+    file_not_found_popup->line_2 = "file not found";
 }
 
 void editor::tick() {
