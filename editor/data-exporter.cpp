@@ -431,7 +431,8 @@ string data_exporter::get_bg_grass_text_(map* cells) {
 //                     to_string(j * SPRITESHEET_CELL_Y) + ")\n";
 //             text += "atlas_coords = " + frame_1_str + "\n";
 //             text += "tint = (0,255,0,255)\n";
-//             text += "animation = (" + frame_1_str + ",0.15);(" + frame_2_str +
+//             text += "animation = (" + frame_1_str + ",0.15);(" + frame_2_str
+//             +
 //                     ",0.15)\n";
 //             text += "\n";
 //         }
@@ -1105,7 +1106,7 @@ string data_exporter::get_export_text(unordered_map<tileset, map> cells,
     string data = "";
     data += data_exporter::get_out_of_bounds_walls_();
     data += data_exporter::get_bg_props_text_(&cells.at(tileset::background));
-    data+= data_exporter::get_bg_grass_text_(&cells.at(tileset::background));
+    data += data_exporter::get_bg_grass_text_(&cells.at(tileset::background));
     data += data_exporter::get_bg_stars_text_(&cells.at(tileset::background));
     data += data_exporter::get_bg_leaves_text_(&cells.at(tileset::background));
     data += data_exporter::get_bg_drips_text_(&cells.at(tileset::background));
@@ -1113,7 +1114,8 @@ string data_exporter::get_export_text(unordered_map<tileset, map> cells,
     data += data_exporter::get_blocks_sprites_text_(&cells.at(tileset::blocks));
     data += data_exporter::get_physics_bodies_text_(&cells.at(tileset::blocks));
     data += data_exporter::get_spikes_text_(&cells.at(tileset::interact));
-    data += data_exporter::get_shadow_spikes_text_(&cells.at(tileset::interact));
+    data +=
+        data_exporter::get_shadow_spikes_text_(&cells.at(tileset::interact));
     data += data_exporter::get_water_text_(&cells.at(tileset::interact));
     data += data_exporter::get_key_gate_text_(&cells.at(tileset::interact));
     data += data_exporter::get_player_text_(&cells.at(tileset::interact));
@@ -1130,10 +1132,10 @@ string data_exporter::get_export_text(unordered_map<tileset, map> cells,
         data_exporter::get_platform_sprites_text_(&cells.at(tileset::interact));
     data +=
         data_exporter::get_platform_bodies_text_(&cells.at(tileset::interact));
-    data +=
-        data_exporter::get_shadow_platform_sprites_text_(&cells.at(tileset::interact));
-    data +=
-        data_exporter::get_shadow_platform_bodies_text_(&cells.at(tileset::interact));
+    data += data_exporter::get_shadow_platform_sprites_text_(
+        &cells.at(tileset::interact));
+    data += data_exporter::get_shadow_platform_bodies_text_(
+        &cells.at(tileset::interact));
 
     data += data_exporter::get_level_shadow_totals_(level_shadows);
     data += data_exporter::get_screen_colors_shader_(screen_colors_shader);

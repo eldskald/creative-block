@@ -9,6 +9,7 @@
 #define EDITOR_WINDOW_SIZE_X (LEVEL_SIZE_X + 8)
 #define EDITOR_WINDOW_SIZE_Y (LEVEL_SIZE_Y + 232)
 #define EDITOR_WINDOW_TITLE "Level Editor"
+#define EDITOR_ICON "assets/textures/icon.png"
 
 #define SPRITESHEET_PATH "assets/textures/spritesheet.png"
 #define SPRITESHEET_CELL_X 8

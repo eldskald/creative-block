@@ -123,15 +123,16 @@ void editor::load_tilemap_data() {
 
 void editor::export_tilemap_data() {
     if (file_input->get_input().empty()) return;
-    string data = data_exporter::get_export_text(editor::tilemap_->get_cells(),
-                                                 txt_1_input->get_input(),
-                                                 txt_1_hf_input->get_input(),
-                                                 txt_2_input->get_input(),
-                                                 txt_2_hf_input->get_input(),
-                                                 txt_3_input->get_input(),
-                                                 txt_3_hf_input->get_input(),
-                                                 shadows_input->get_input(),
-                                                 screen_colors_input->get_input());
+    string data =
+        data_exporter::get_export_text(editor::tilemap_->get_cells(),
+                                       txt_1_input->get_input(),
+                                       txt_1_hf_input->get_input(),
+                                       txt_2_input->get_input(),
+                                       txt_2_hf_input->get_input(),
+                                       txt_3_input->get_input(),
+                                       txt_3_hf_input->get_input(),
+                                       shadows_input->get_input(),
+                                       screen_colors_input->get_input());
     string filepath = "assets/scenes/" + file_input->get_input() + ".dat";
     SaveFileText(filepath.c_str(), data.data());
 }

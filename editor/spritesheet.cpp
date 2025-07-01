@@ -8,7 +8,9 @@ void spritesheet::initialize() {
     spritesheet::spritesheet_ = LoadTexture(SPRITESHEET_PATH);
 }
 
-void spritesheet::render_sprite_at(Vector2 sprite_coords, Vector2 at, Color tint) {
+void spritesheet::render_sprite_at(Vector2 sprite_coords,
+                                   Vector2 at,
+                                   Color tint) {
     DrawTexturePro(spritesheet::spritesheet_,
                    (Rectangle){SPRITESHEET_CELL_X * sprite_coords.x,
                                SPRITESHEET_CELL_Y * sprite_coords.y,

@@ -72,3 +72,5 @@
 #define SCREEN_COLOR_SHADER_1 "assets/shaders/screen-colors-1.frag"
 
 #define FONT_TITLE "assets/fonts/nordine/Nordine.otf"
+
+#define APP_ICON "assets/textures/icon.png"
