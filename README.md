@@ -17,10 +17,10 @@ After cloning the repository, setup your `.env` file by copying the [.env.exampl
 Then, run the following to install dependencies:
 
 ```console
-make install
+bin/install-dependencies
 ```
 
-This will install [raylib](https://github.com/raysan5/raylib) on this project so you can compile it. To erase dependencies and builds in case you want to redo everything, run:
+This will install [raylib](https://github.com/raysan5/raylib) and [SDL2](https://wiki.libsdl.org/SDL2/FrontPage) on this project so you can compile it. To erase dependencies and builds in case you want to redo everything, run:
 
 ```console
 make clean
@@ -39,9 +39,9 @@ It will compile the binary `level-editor` at the project root, just run and star
 To make a build, run one of these commands:
 
 ```console
-make build-linux    # Makes a Linux build
-make build-windows  # Makes a Windows build
-make build-web      # Makes a Web (HTML5) build
+make linux    # Makes a Linux build
+make windows  # Makes a Windows build
+make web      # Makes a Web (HTML5) build
 make                # All of the above
 ```
 
@@ -50,13 +50,13 @@ It will create a `build` directory and put the binary `app` in there, just run i
 To build and run a development build, run the following:
 
 ```console
-make dev
+bin/dev
 ```
 
-It will create a `build` directory, put the binary `dev-app` in there and run it, deleting it after you close it. Easy for quickly compiling changes and running the game with them. You can also add a `SCENE` env var to load a specific scene on `assets/scenes` by name without the `.dat`, for example:
+It will make a build, run it and delete it after you close it. Easy for quickly compiling changes and running the game with them. You can also add a `SCENE` env var to load a specific scene on `assets/scenes` by name without the `.dat`, for example:
 
 ```console
-SCENE=03 make dev
+SCENE=03 bin/dev
 ```
 
 This will run the game starting on level 3, on `assets/scenes/03.dat` file. Only works on dev mode, that is, when running `make dev`.
@@ -64,7 +64,7 @@ This will run the game starting on level 3, on `assets/scenes/03.dat` file. Only
 You can also make a development build that won't be ran automatically or deleted after you closing by running this:
 
 ```console
-make build-dev
+make dev
 ```
 
 This will put the build at the project root. Can be ran on a debugger and can be sent to testers to use with the built-in dev tools.
@@ -72,11 +72,9 @@ This will put the build at the project root. Can be ran on a debugger and can be
 To format and lint the whole project, run the following:
 
 ```console
-make format
-make lint
+bin/format
+bin/lint
 ```
-
-Read the [Makefile](Makefile) for more details.
 
 ## Working with a web build
 
@@ -90,7 +88,7 @@ NODE_JS = '<your-emsdk-directory>/node/18.20.3_64bit/bin/node'
 
 If you can't compile either `raylib` or the game, pay attention to the error messages, might be some of these binaries that can't be found. Oh, and don't forget to setup your `.env` file with the path of your installation.
 
-After successfully compiling with `make build-web`, you can run the following python line on `build/web`:
+After successfully compiling with `make web`, you can run the following python line on `build/web`:
 
 ```console
 python -m http.server 3000

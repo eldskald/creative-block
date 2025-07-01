@@ -1,5 +1,6 @@
 #include "core/game.h"
 #include "defs.h"
+#include "imports.h"
 #include <raylib.h>
 #include <raymath.h>
 
@@ -27,8 +28,9 @@ int main() {
     SetTargetFPS(TARGET_FPS);
     SetWindowState(FLAG_WINDOW_RESIZABLE);
     SetWindowMinSize(WINDOW_SIZE_X, WINDOW_SIZE_Y);
-    // To force a size change and update window titlebar buttons
-    SetWindowSize(STARTING_WINDOW_SIZE_X, STARTING_WINDOW_SIZE_Y);
+    Image icon = LoadImage(APP_ICON);
+    SetWindowIcon(icon);
+    UnloadImage(icon);
     while (!WindowShouldClose()) {
         game::do_game_loop();
     }

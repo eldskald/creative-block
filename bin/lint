@@ -1,0 +1,9 @@
+#!/bin/bash
+
+for i in `find ./src -type f -name "*.cpp" -o -name "*.h"`; do
+    clang-tidy $i --quiet 2>&1 | grep -v "warnings generated."
+done
+
+for i in `find ./editor -type f -name "*.cpp" -o -name "*.h"`; do
+    clang-tidy $i --quiet 2>&1 | grep -v "warnings generated."
+done
