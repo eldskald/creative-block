@@ -1,5 +1,11 @@
 #!/bin/bash
 
+source .env
+
+# Paths to compile raylib for web
+EMSCRIPTEN_PATH=${EMSDK_PATH}/upstream/emscripten
+PATH=${PATH}:${EMSCRIPTEN_PATH}
+
 # Clean up old builds
 rm -rf ./lib ./include
 mkdir -p ./lib ./include ./lib/linux ./lib/windows ./lib/web

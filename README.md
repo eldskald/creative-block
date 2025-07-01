@@ -78,15 +78,9 @@ bin/lint
 
 ## Working with a web build
 
-To make a web build, you will need to have [emsdk](https://emscripten.org/docs/getting_started/downloads.html) version 3.1.62 and `python`. Follow the link on how to install it in this version. Then, you will need to setup an emscripten config file using the `clang` and `node` binaries that come on the `emsdk` repository, that means the following lines on your `.emscripten` file:
+To make a web build, you will need to have [emsdk](https://emscripten.org/docs/getting_started/downloads.html) version 4.0.10 and `python`. Follow the link on how to install it in this version. Then, update you `.env` file with the directory you installed `emsdk` in.
 
-```
-LLVM_ROOT = '<your-emsdk-directory>/upstream/bin'
-BINARYEN_ROOT = '<your-emsdk-directory>/upstream'
-NODE_JS = '<your-emsdk-directory>/node/18.20.3_64bit/bin/node'
-```
-
-If you can't compile either `raylib` or the game, pay attention to the error messages, might be some of these binaries that can't be found. Oh, and don't forget to setup your `.env` file with the path of your installation.
+If you can't compile either `raylib` or the game, pay attention to the error messages, might be some of these binaries that can't be found.
 
 After successfully compiling with `make web`, you can run the following python line on `build/web`:
 
