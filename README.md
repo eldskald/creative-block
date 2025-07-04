@@ -20,7 +20,9 @@ Then, run the following to install dependencies:
 bin/install-dependencies
 ```
 
-This will install [raylib](https://github.com/raysan5/raylib) and [SDL2](https://wiki.libsdl.org/SDL2/FrontPage) on this project so you can compile it. To erase dependencies and builds in case you want to redo everything, run:
+This will install [raylib](https://github.com/raysan5/raylib) and [SDL2](https://wiki.libsdl.org/SDL2/FrontPage) on this project so you can compile it. You need [emsdk](https://emscripten.org/docs/getting_started/downloads.html) and its path on `.env` to compile it for web. If you don't have it, it will still work for the desktop versions. More info on the web version later.
+
+To erase dependencies and builds in case you want to redo everything, run:
 
 ```console
 make clean
@@ -39,10 +41,10 @@ It will compile the binary `level-editor` at the project root, just run and star
 To make a build, run one of these commands:
 
 ```console
-make linux    # Makes a Linux build
-make windows  # Makes a Windows build
-make web      # Makes a Web (HTML5) build
-make                # All of the above
+make linux   # Makes a Linux build
+make windows # Makes a Windows build
+make web     # Makes a Web (HTML5) build
+make         # All of the above
 ```
 
 It will create a `build` directory and put the binary `app` in there, just run it to play the game.
@@ -65,9 +67,10 @@ You can also make a development build that won't be ran automatically or deleted
 
 ```console
 make dev
+make web-dev
 ```
 
-This will put the build at the project root. Can be ran on a debugger and can be sent to testers to use with the built-in dev tools.
+This will put the build at the project root. Can be ran on a debugger and can be sent to testers to use with the built-in dev tools. The web version builds it for web, with logging, sanitizing and assertions enabled.
 
 To format and lint the whole project, run the following:
 
@@ -82,13 +85,13 @@ To make a web build, you will need to have [emsdk](https://emscripten.org/docs/g
 
 If you can't compile either `raylib` or the game, pay attention to the error messages, might be some of these binaries that can't be found.
 
-After successfully compiling with `make web`, you can run the following python line on `build/web`:
+Having `raylib` installed for web, you can `make web` or `make web-dev` to make a web build on `build/dev`. Having either build there, you can serve it by running the following:
 
 ```console
-python -m http.server 3000
+bin/serve
 ```
 
-This will serve the web build folder on your `localhost:3000`. You can change the port to whatever you want.
+This will serve the web build folder on your `localhost:3000`. The port is set on `.env`, or defaulted to `3000` if not set, but you can change it to whatever you want on `.env`.
 
 ## License
 

@@ -73,7 +73,7 @@ dev:
 web-dev:
 	-rm -r $(WEB_BUILD)
 	mkdir -p $(WEB_BUILD)
-	emcc $(call rwildcard,src,*.cpp) -o $(WEB_BUILD)/$(APP_NAME).html $(WEB_COMPILE_FLAGS) $(WEB_LINK_FLAGS) -DDEV -fsanitize=address -s ASSERTIONS=1
+	emcc $(call rwildcard,src,*.cpp) -o $(WEB_BUILD)/$(APP_NAME).html $(WEB_COMPILE_FLAGS) $(WEB_LINK_FLAGS) -DDEV -s ASSERTIONS=1
 
 
 # Build for the Linux platform, puts the binary at the build target folder
