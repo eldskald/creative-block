@@ -23,7 +23,7 @@ int main() {
     game::on_start();
 
 #ifdef WEB
-    emscripten_set_main_loop(game::do_game_loop, TARGET_FPS, 1);
+    emscripten_set_main_loop(game::do_game_loop, 0, 1);
 #else
     SetTargetFPS(TARGET_FPS);
     SetWindowState(FLAG_WINDOW_RESIZABLE);

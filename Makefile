@@ -10,9 +10,6 @@ export
 EMSCRIPTEN_PATH := $(EMSDK_PATH)/upstream/emscripten
 PATH := $(shell printenv PATH):$(EMSCRIPTEN_PATH)
 
-# 16MB of heap size for the web build.
-BUILD_WEB_HEAP_SIZE = 134217728
-
 # File/directory names
 APP_NAME 		?= creative-block
 BUILD_WEB_SHELL ?= shell.html
@@ -34,7 +31,7 @@ ifeq ($(DEV_PLATFORM), Windows)
 	DEV_LIBS := $(WIN_LIBS)
 endif
 
-DEV_COMPILE_FLAGS = -std=c++17 -Wall -I./src -I./$(INCLUDE_DIR) -DDEV
+DEV_COMPILE_FLAGS = -std=c++17 -Wall -I./src -I./$(INCLUDE_DIR) -DDEV -fsanitize=address
 DEV_LINK_FLAGS = -L./$(DEV_LIBS)
 ifeq ($(DEV_PLATFORM), Linux)
 	DEV_LINK_FLAGS += -lraylib -lSDL2 -lSDL2main -lGL -lm -lpthread -ldl -lrt -lX11
@@ -55,11 +52,11 @@ LINUX_COMPILE_FLAGS = -Wall -I./src -I./$(INCLUDE_DIR)
 LINUX_LINK_FLAGS = -L./$(LINUX_LIBS) -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -lSDL2 -lSDL2main
 WIN_COMPILE_FLAGS = -Wall -I./src -I./$(INCLUDE_DIR)
 WIN_LINK_FLAGS = -L./$(WIN_LIBS) -lraylib -lgdi32 -lwinmm -lpthread -static -static-libgcc -static-libstdc++
-WEB_COMPILE_FLAGS = -Os -Wall -I./src -I./$(INCLUDE_DIR) -I$(EMSCRIPTEN_PATH)/cache/sysroot/include --preload-file assets --shell-file $(BUILD_WEB_SHELL) -DWEB
-WEB_LINK_FLAGS = -L./$(WEB_LIBS) -lraylib -s USE_GLFW=3 -s TOTAL_MEMORY=$(BUILD_WEB_HEAP_SIZE) -s FORCE_FILESYSTEM=1
+WEB_COMPILE_FLAGS = -Os -Wall -I./src -I./$(INCLUDE_DIR) -I$(EMSCRIPTEN_PATH)/cache/sysroot/include --preload-file assets --shell-file $(BUILD_WEB_SHELL) -DWEB -s USE_GLFW=3 -s EXPORTED_RUNTIME_METHODS=HEAPF32
+WEB_LINK_FLAGS = -L./$(WEB_LIBS) -lraylib
 
 # Phony targets
-.PHONY: all clean dev linux windows web editor
+.PHONY: all clean dev web-dev linux windows web editor
 
 # Default target, builds for all platforms
 all: linux windows web
@@ -71,6 +68,13 @@ clean:
 # Build a development build, can be ran on the compiler or sent to others with development tools
 dev:
 	-$(CC) -O0 -g $(call rwildcard,src,*.cpp) -o $(APP_NAME)$(EXT) $(DEV_COMPILE_FLAGS) $(DEV_LINK_FLAGS)
+
+# Build a development build for web. It's web build with dev flags for logging and debugging
+web-dev:
+	-rm -r $(WEB_BUILD)
+	mkdir -p $(WEB_BUILD)
+	emcc $(call rwildcard,src,*.cpp) -o $(WEB_BUILD)/$(APP_NAME).html $(WEB_COMPILE_FLAGS) $(WEB_LINK_FLAGS) -DDEV -fsanitize=address -s ASSERTIONS=1
+
 
 # Build for the Linux platform, puts the binary at the build target folder
 linux:

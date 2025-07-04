@@ -10,6 +10,7 @@
 #include <list>
 #include <raylib.h>
 #include <unordered_map>
+#include <iostream>
 
 using namespace std;
 
@@ -91,7 +92,6 @@ void scene_manager::next_scene() {
 
 void scene_manager::load_new_scene_() {
     if (!scene_manager::next_scene_called_) return;
-
     scene_manager::scene next_level =
         scene_manager::next_scenes_[scene_manager::current_scene_];
     list<game_element*> elements =
@@ -103,6 +103,7 @@ void scene_manager::load_new_scene_() {
             scene_manager::player_spawn_point_ = player_element->pos;
         }
     }
+    scene_manager::shadows_.clear();
     scene_manager::current_scene_ = next_level;
     scene_manager::next_scene_called_ = false;
 }
@@ -110,6 +111,7 @@ void scene_manager::load_new_scene_() {
 void scene_manager::spawn_shadows_() {
     game_element::trigger_on_player_shadow_(game::get_root());
     while (!scene_manager::shadows_.empty()) {
+        cout << "aaaaaaaaaaaaaasdfdasfasdfdas" << endl;
         scene_manager::shadows_.front()->mark_for_deletion();
         scene_manager::shadows_.pop_front();
     }
