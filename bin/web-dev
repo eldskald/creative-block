@@ -12,5 +12,6 @@ then
     PORT=3000
 fi
 
+make web-dev
 cd build/web
 python -m http.server ${PORT}

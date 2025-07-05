@@ -91,7 +91,13 @@ Having `raylib` installed for web, you can `make web` or `make web-dev` to make 
 bin/serve
 ```
 
-This will serve the web build folder on your `localhost:3000`. The port is set on `.env`, or defaulted to `3000` if not set, but you can change it to whatever you want on `.env`.
+This will serve the web build folder on your `localhost:3000`. The port is set on `.env`, or defaulted to `3000`. You can override it by passing a value manually, as in `PORT=5000 bin/serve`.
+
+If you just want to quickly make a web build and run, like what happens when you do `bin/dev`, you can run:
+
+```console
+bin/web-dev
+```
 
 ## License
 
