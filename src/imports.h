@@ -17,7 +17,8 @@
      level_12,                                                                 \
      level_13,                                                                 \
      level_14,                                                                 \
-     level_15}
+     level_15,                                                                 \
+     level_16}
 #define SCENES_PATHS                                                           \
     {{opening, "assets/scenes/opening.dat"},                                   \
      {credits, "assets/scenes/credits.dat"},                                   \
@@ -35,7 +36,8 @@
      {level_12, "assets/scenes/12.dat"},                                       \
      {level_13, "assets/scenes/13.dat"},                                       \
      {level_14, "assets/scenes/14.dat"},                                       \
-     {level_15, "assets/scenes/15.dat"}}
+     {level_15, "assets/scenes/15.dat"},                                       \
+     {level_16, "assets/scenes/16.dat"}}
 
 #define SFX_DEF_ENUM {jump, death, respawn, next_level, select, key, gate}
 #define SFX_ENUMS                                                              \
