@@ -18,7 +18,8 @@
      level_13,                                                                 \
      level_14,                                                                 \
      level_15,                                                                 \
-     level_16}
+     level_16,                                                                 \
+     level_17}
 #define SCENES_PATHS                                                           \
     {{opening, "assets/scenes/opening.dat"},                                   \
      {credits, "assets/scenes/credits.dat"},                                   \
@@ -37,7 +38,8 @@
      {level_13, "assets/scenes/13.dat"},                                       \
      {level_14, "assets/scenes/14.dat"},                                       \
      {level_15, "assets/scenes/15.dat"},                                       \
-     {level_16, "assets/scenes/16.dat"}}
+     {level_16, "assets/scenes/16.dat"},                                       \
+     {level_17, "assets/scenes/17.dat"}}
 
 #define SFX_DEF_ENUM {jump, death, respawn, next_level, select, key, gate}
 #define SFX_ENUMS                                                              \
@@ -63,8 +65,10 @@
 
 #define MAIN_GRADIENT_1_TEXTURE "assets/textures/main-gradient-1.png"
 #define MAIN_GRADIENT_2_TEXTURE "assets/textures/main-gradient-2.png"
+#define MAIN_GRADIENT_3_TEXTURE "assets/textures/main-gradient-3.png"
 #define SHADOW_GRADIENT_1_TEXTURE "assets/textures/shadow-gradient-1.png"
 #define SHADOW_GRADIENT_2_TEXTURE "assets/textures/shadow-gradient-2.png"
+#define SHADOW_GRADIENT_3_TEXTURE "assets/textures/shadow-gradient-3.png"
 
 #define BASE_VERT_SHADER "assets/shaders/base.vert"
 #define BASE_FRAG_SHADER "assets/shaders/base.frag"

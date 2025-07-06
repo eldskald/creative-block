@@ -19,13 +19,14 @@ uniform vec4 debugCol4;
 
 uniform sampler2D mainGradient;
 uniform sampler2D shadowGradient;
+uniform float period;
 
 vec4 getMainColor() {
-    return texture2D(mainGradient, vec2(fract(time / PERIOD)));
+    return texture2D(mainGradient, vec2(fract(time / period)));
 }
 
 vec4 getShadowColor() {
-    return texture2D(shadowGradient, vec2(fract(time / PERIOD)));
+    return texture2D(shadowGradient, vec2(fract(time / period)));
 }
 
 void main() {

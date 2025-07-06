@@ -21,6 +21,8 @@ private:
     static Texture2D shadow_gradient_1_;
     static Texture2D main_gradient_2_;
     static Texture2D shadow_gradient_2_;
+    static Texture2D main_gradient_3_;
+    static Texture2D shadow_gradient_3_;
     static RenderTexture2D base_tex_1_;
     static RenderTexture2D base_tex_2_;
     static RenderTexture2D colored_tex_;
