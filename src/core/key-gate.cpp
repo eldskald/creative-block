@@ -51,10 +51,6 @@ void key_gate::key_::on_player_shadow_() {
 }
 
 key_gate::key_gate() : gate_collider_(new physics_body()) {
-    this->collision_box = (Rectangle){
-        0.0f, 0.0f, SPRITESHEET_CELL_SIZE_X, SPRITESHEET_CELL_SIZE_Y};
-    this->collision_layer = KEY_GATE_GATE_COLLISION_LAYER;
-    this->type = physics_body::fixed;
     auto gate_sprite = new sprite();
     gate_sprite->atlas_coords = KEY_GATE_ATLAS_COORDS;
     gate_sprite->tint = MASK_MAIN_COLOR;
@@ -67,7 +63,6 @@ key_gate::key_gate() : gate_collider_(new physics_body()) {
 }
 
 void key_gate::enter_() {
-    physics_body::enter_();
     for (Vector2 pos : this->key_positions) {
         key_* key = new key_(this);
         key->pos = Vector2Subtract(pos, this->pos);
@@ -79,7 +74,6 @@ void key_gate::enter_() {
 }
 
 void key_gate::exit_() {
-    physics_body::exit_();
     key_gate::key_gates_.remove(this);
 }
 
@@ -115,6 +109,11 @@ void key_gate::tick_() {
             this->height);
     }
     this->gate_collider_->collision_box.height = this->current_height_;
+    if (this->current_height_ == 0.0f) {
+        this->gate_collider_->collision_layer = 0b00000000;
+    } else {
+        this->gate_collider_->collision_layer = KEY_GATE_GATE_COLLISION_LAYER;
+    }
 }
 
 void key_gate::render_gates_() {

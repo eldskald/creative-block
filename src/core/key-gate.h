@@ -1,4 +1,5 @@
 #pragma once
+#include "engine/game-element.h"
 #include "core/key-particles.h"
 #include "engine/physics-body.h"
 #include "engine/sprite.h"
@@ -10,7 +11,7 @@
 
 class renderer;
 
-class key_gate : public physics_body {
+class key_gate : public game_element {
     friend class renderer;
 
 public:
