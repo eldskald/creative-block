@@ -280,6 +280,45 @@ pos = (296,56)
 [falling_leaves]
 pos = (304,96)
 
+[pollen]
+pos = (8,104)
+
+[pollen]
+pos = (24,104)
+
+[pollen]
+pos = (40,96)
+
+[pollen]
+pos = (56,96)
+
+[pollen]
+pos = (72,104)
+
+[pollen]
+pos = (88,104)
+
+[pollen]
+pos = (104,104)
+
+[pollen]
+pos = (120,104)
+
+[pollen]
+pos = (136,104)
+
+[pollen]
+pos = (264,104)
+
+[pollen]
+pos = (280,104)
+
+[pollen]
+pos = (296,104)
+
+[pollen]
+pos = (312,104)
+
 [sprite]
 pos = (0,120)
 atlas_coords = (6,0)

@@ -40,6 +40,7 @@ private:
     static string get_bg_leaves_text_(map* cells);
     static string get_bg_drips_text_(map* cells);
     static string get_bg_puffs_text_(map* cells);
+    static string get_bg_pollens_text_(map* cells);
     static string get_player_text_(map* cells);
     static string get_goal_text_(map* cells);
     static string get_spikes_text_(map* cells);

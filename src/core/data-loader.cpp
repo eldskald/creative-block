@@ -7,6 +7,7 @@
 #include "core/opening.h"
 #include "core/player.h"
 #include "core/puff.h"
+#include "core/pollen.h"
 #include "core/scene-manager.h"
 #include "core/water-drip.h"
 #include "core/water.h"
@@ -445,6 +446,13 @@ game_element* data_loader::get_element_from_block_(element_block block) {
     }
     if (block.type == "puff") {
         auto* emitter = new puff();
+        for (auto& line : block.properties) {
+            data_loader::parse_game_element_property_line_(emitter, line);
+        }
+        return emitter;
+    }
+    if (block.type == "pollen") {
+        auto* emitter = new pollen();
         for (auto& line : block.properties) {
             data_loader::parse_game_element_property_line_(emitter, line);
         }
