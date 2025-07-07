@@ -29,7 +29,8 @@
         {level_15, level_16},                                                  \
         {level_16, level_17},                                                  \
         {level_17, level_18},                                                  \
-        {level_18, credits},                                                   \
+        {level_18, level_19},                                                  \
+        {level_19, credits},                                                   \
         {credits, opening},                                                    \
     }
 
