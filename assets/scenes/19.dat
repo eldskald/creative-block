@@ -175,61 +175,142 @@ animation_starting_phase = 10.500000
 pos = (24,8)
 
 [falling_leaves]
-pos = (24,72)
+pos = (24,32)
+
+[falling_leaves]
+pos = (24,56)
+
+[falling_leaves]
+pos = (24,80)
+
+[falling_leaves]
+pos = (48,16)
 
 [falling_leaves]
 pos = (48,40)
 
 [falling_leaves]
+pos = (48,64)
+
+[falling_leaves]
 pos = (72,8)
+
+[falling_leaves]
+pos = (72,24)
+
+[falling_leaves]
+pos = (72,48)
+
+[falling_leaves]
+pos = (72,72)
+
+[falling_leaves]
+pos = (96,24)
 
 [falling_leaves]
 pos = (96,40)
 
 [falling_leaves]
+pos = (96,64)
+
+[falling_leaves]
 pos = (120,8)
+
+[falling_leaves]
+pos = (120,32)
 
 [falling_leaves]
 pos = (120,72)
 
 [falling_leaves]
+pos = (120,104)
+
+[falling_leaves]
+pos = (128,48)
+
+[falling_leaves]
+pos = (144,16)
+
+[falling_leaves]
 pos = (152,40)
 
 [falling_leaves]
-pos = (152,104)
+pos = (152,64)
+
+[falling_leaves]
+pos = (152,88)
 
 [falling_leaves]
 pos = (176,8)
 
 [falling_leaves]
+pos = (176,24)
+
+[falling_leaves]
+pos = (176,48)
+
+[falling_leaves]
 pos = (176,72)
+
+[falling_leaves]
+pos = (176,104)
+
+[falling_leaves]
+pos = (200,16)
 
 [falling_leaves]
 pos = (200,40)
 
 [falling_leaves]
-pos = (200,104)
+pos = (200,64)
+
+[falling_leaves]
+pos = (200,88)
 
 [falling_leaves]
 pos = (224,8)
 
 [falling_leaves]
+pos = (224,32)
+
+[falling_leaves]
+pos = (224,56)
+
+[falling_leaves]
 pos = (224,72)
+
+[falling_leaves]
+pos = (224,104)
+
+[falling_leaves]
+pos = (248,16)
 
 [falling_leaves]
 pos = (248,40)
 
 [falling_leaves]
-pos = (248,104)
+pos = (248,64)
+
+[falling_leaves]
+pos = (248,88)
 
 [falling_leaves]
 pos = (264,8)
 
 [falling_leaves]
+pos = (272,48)
+
+[falling_leaves]
 pos = (272,72)
 
 [falling_leaves]
+pos = (280,16)
+
+[falling_leaves]
 pos = (296,40)
+
+[falling_leaves]
+pos = (296,64)
 
 [falling_leaves]
 pos = (304,8)

@@ -154,7 +154,8 @@ void game_element::delete_marked_() {
             }
         }
     }
-    for (auto element : game_element::marked_for_deletion_) delete element;
+    for (auto element : game_element::marked_for_deletion_)
+        delete element;
     game_element::marked_for_deletion_.clear();
 }
 

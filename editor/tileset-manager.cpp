@@ -138,6 +138,8 @@ void tileset_manager::initialize() {
     bg_tiles.push_back((tile){(Vector2){11, 12}, tile_type::leaves, FG_COLOR});
     bg_tiles.push_back((tile){(Vector2){9, 15}, tile_type::puff, FG_COLOR});
     bg_tiles.push_back((tile){(Vector2){6, 12}, tile_type::pollen, FG_COLOR});
+    bg_tiles.push_back(
+        (tile){(Vector2){10, 14}, tile_type::raindrop, FG_COLOR});
 
     vector<tile> int_tiles;
     // player and goal

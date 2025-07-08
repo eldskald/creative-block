@@ -11,26 +11,13 @@
 
 #define SCENES_ORDER                                                           \
     {                                                                          \
-        {opening, level_01},                                                   \
-        {level_01, level_02},                                                  \
-        {level_02, level_03},                                                  \
-        {level_03, level_04},                                                  \
-        {level_04, level_05},                                                  \
-        {level_05, level_06},                                                  \
-        {level_06, level_07},                                                  \
-        {level_07, level_08},                                                  \
-        {level_08, level_09},                                                  \
-        {level_09, level_10},                                                  \
-        {level_10, level_11},                                                  \
-        {level_11, level_12},                                                  \
-        {level_12, level_13},                                                  \
-        {level_13, level_14},                                                  \
-        {level_14, level_15},                                                  \
-        {level_15, level_16},                                                  \
-        {level_16, level_17},                                                  \
-        {level_17, level_18},                                                  \
-        {level_18, level_19},                                                  \
-        {level_19, credits},                                                   \
+        {opening, level_01},  {level_01, level_02}, {level_02, level_03},      \
+        {level_03, level_04}, {level_04, level_05}, {level_05, level_06},      \
+        {level_06, level_07}, {level_07, level_08}, {level_08, level_09},      \
+        {level_09, level_10}, {level_10, level_11}, {level_11, level_12},      \
+        {level_12, level_13}, {level_13, level_14}, {level_14, level_15},      \
+        {level_15, level_16}, {level_16, level_17}, {level_17, level_18},      \
+        {level_18, level_19}, {level_19, level_20}, {level_20, credits},       \
         {credits, opening},                                                    \
     }
 
@@ -199,6 +186,23 @@
 #define PARTICLE_DRIP_SUB_PARTICLE_VEL_2 (Vector2){40.0f, -140.0f}
 #define PARTICLE_DRIP_SUB_PARTICLE_VEL_3 (Vector2){-100.0f, -80.0f}
 #define PARTICLE_DRIP_SUB_PARTICLE_VEL_4 (Vector2){-40.0f, -140.0f}
+
+#define PARTICLE_RAINDROP_MIN_SPAWN_TIME 3
+#define PARTICLE_RAINDROP_MAX_SPAWN_TIME 10
+#define PARTICLE_RAINDROP_SPAWN_RANGE 16
+#define PARTICLE_RAINDROP_PARTICLE_ATLAS_COORDS (Vector2){10.0f, 14.0f}
+#define PARTICLE_RAINDROP_SUB_PARTICLE_ATLAS_COORDS (Vector2){10.0f, 15.0f}
+#define PARTICLE_RAINDROP_PARTICLE_COLLISION_BOX                               \
+    (Rectangle){2.0f, 2.0f, 3.0f, 4.0f}
+#define PARTICLE_RAINDROP_SUB_PARTICLE_COLLISION_BOX                           \
+    (Rectangle){3.0f, 3.0f, 2.0f, 2.0f}
+#define PARTICLE_RAINDROP_COLLISION_MASK 0b00010111
+#define PARTICLE_RAINDROP_GRAVITY 800.0f
+#define PARTICLE_RAINDROP_MAX_FALLING_SPEED 300.0f
+#define PARTICLE_RAINDROP_SUB_PARTICLE_VEL_1 (Vector2){100.0f, -80.0f}
+#define PARTICLE_RAINDROP_SUB_PARTICLE_VEL_2 (Vector2){40.0f, -140.0f}
+#define PARTICLE_RAINDROP_SUB_PARTICLE_VEL_3 (Vector2){-100.0f, -80.0f}
+#define PARTICLE_RAINDROP_SUB_PARTICLE_VEL_4 (Vector2){-40.0f, -140.0f}
 
 #define PARTICLE_PUFF_MIN_SPAWN_TIME 2
 #define PARTICLE_PUFF_MAX_SPAWN_TIME 14
