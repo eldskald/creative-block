@@ -100,7 +100,6 @@ void player::shadow_tick_() {
 }
 
 void player::tick_() {
-    this->time_ += GetFrameTime();
     if (this->killed_ && this->time_ >= PLAYER_RESPAWN_TIME) {
         this->mark_for_deletion();
         scene_manager::respawn_player();
@@ -109,6 +108,7 @@ void player::tick_() {
         this->history_tick_();
         this->shadow_tick_();
     }
+    this->time_ += GetFrameTime();
 }
 
 void player::on_player_respawn_() {
