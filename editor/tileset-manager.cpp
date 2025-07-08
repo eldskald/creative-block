@@ -72,6 +72,16 @@ void tileset_manager::initialize() {
         block_tiles.push_back(
             (tile){(Vector2){(float)i, 3}, tile_type::block, FG_COLOR});
     }
+    for (int i = 10; i <= 11; ++i) {
+        block_tiles.push_back(
+            (tile){(Vector2){(float)i, 4}, tile_type::block, FG_COLOR});
+        block_tiles.push_back(
+            (tile){(Vector2){(float)i, 5}, tile_type::block, FG_COLOR});
+        block_tiles.push_back(
+            (tile){(Vector2){(float)i, 6}, tile_type::block, FG_COLOR});
+        block_tiles.push_back(
+            (tile){(Vector2){(float)i, 7}, tile_type::block, FG_COLOR});
+    }
 
     vector<tile> bg_tiles;
     // grass
