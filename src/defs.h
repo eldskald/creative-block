@@ -9,18 +9,6 @@
 #define MAIN_TEX_SIZE 512
 #define TARGET_FPS 60
 
-#define SCENES_ORDER                                                           \
-    {                                                                          \
-        {opening, level_01},  {level_01, level_02}, {level_02, level_03},      \
-        {level_03, level_04}, {level_04, level_05}, {level_05, level_06},      \
-        {level_06, level_07}, {level_07, level_08}, {level_08, level_09},      \
-        {level_09, level_10}, {level_10, level_11}, {level_11, level_12},      \
-        {level_12, level_13}, {level_13, level_14}, {level_14, level_15},      \
-        {level_15, level_16}, {level_16, level_17}, {level_17, level_18},      \
-        {level_18, level_19}, {level_19, level_20}, {level_20, level_21},      \
-        {level_21, credits},  {credits, opening},                              \
-    }
-
 #define MASK_MAIN_COLOR (Color){255, 0, 0, 255}
 #define MASK_SHADOW_COLOR (Color){0, 0, 255, 255}
 #define MASK_BG_COLOR (Color){0, 255, 0, 255}

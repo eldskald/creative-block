@@ -15,8 +15,6 @@ using namespace std;
 
 unordered_map<scene_manager::scene, const char*> scene_manager::scenes_map_ =
     SCENES_PATHS;
-unordered_map<scene_manager::scene, scene_manager::scene>
-    scene_manager::next_scenes_ = SCENES_ORDER;
 scene_manager::scene scene_manager::current_scene_ = scene_manager::opening;
 Vector2 scene_manager::player_spawn_point_ = (Vector2){0};
 list<input_history> scene_manager::shadow_histories_ = {};
@@ -91,8 +89,8 @@ void scene_manager::next_scene() {
 
 void scene_manager::load_new_scene_() {
     if (!scene_manager::next_scene_called_) return;
-    scene_manager::scene next_level =
-        scene_manager::next_scenes_[scene_manager::current_scene_];
+    auto next_level = (scene)(((int)scene_manager::current_scene_ + 1) %
+                              scene_manager::scenes_map_.size());
     list<game_element*> elements =
         data_loader::load(scene_manager::scenes_map_[next_level]);
     for (game_element* element : elements) {
