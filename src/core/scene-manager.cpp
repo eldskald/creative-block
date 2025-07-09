@@ -25,7 +25,9 @@ bool scene_manager::next_scene_called_ = false;
 void scene_manager::initialize() {
     auto* root = new game_element();
 #ifdef SCENE
-    list<game_element*> elements = data_loader::load(SCENE);
+    list<game_element*> elements =
+        data_loader::load(scene_manager::scenes_map_[(scene)SCENE]);
+    scene_manager::current_scene_ = (scene)SCENE;
 #else
     list<game_element*> elements =
         data_loader::load(scene_manager::scenes_map_[opening]);

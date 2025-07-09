@@ -42,7 +42,7 @@ ifeq ($(DEV_PLATFORM), Windows)
 	EXT := .exe
 endif
 ifdef SCENE
-	DEV_COMPILE_FLAGS += -DSCENE=\"assets/scenes/$(SCENE).dat\"
+	DEV_COMPILE_FLAGS += -DSCENE=$(SCENE)
 endif
 
 EDITOR_COMPILE_FLAGS = -std=c++17 -Wall -I./$(INCLUDE_DIR)

@@ -24,7 +24,6 @@ public:
     static void shadow_pressed(input_history history, player* player);
 
 private:
-    // static unordered_map<scene, scene> next_scenes_;
     static unordered_map<scene, const char*> scenes_map_;
     static scene current_scene_;
     static Vector2 player_spawn_point_;
