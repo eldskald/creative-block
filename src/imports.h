@@ -4,7 +4,7 @@
     {opening,  level_01, level_02, level_03, level_04, level_05, level_06,     \
      level_07, level_08, level_09, level_10, level_11, level_12, level_13,     \
      level_14, level_15, level_16, level_17, level_18, level_19, level_20,     \
-     level_21, level_22, level_23, credits}
+     level_21, level_22, level_23, level_24, credits}
 #define SCENES_PATHS                                                           \
     {{opening, "assets/scenes/opening.dat"},                                   \
      {level_01, "assets/scenes/01.dat"},                                       \
@@ -30,6 +30,7 @@
      {level_21, "assets/scenes/21.dat"},                                       \
      {level_22, "assets/scenes/22.dat"},                                       \
      {level_23, "assets/scenes/23.dat"},                                       \
+     {level_24, "assets/scenes/24.dat"},                                       \
      {credits, "assets/scenes/credits.dat"}}
 
 #define SFX_DEF_ENUM {jump, death, respawn, next_level, select, key, gate}
@@ -57,9 +58,11 @@
 #define MAIN_GRADIENT_1_TEXTURE "assets/textures/main-gradient-1.png"
 #define MAIN_GRADIENT_2_TEXTURE "assets/textures/main-gradient-2.png"
 #define MAIN_GRADIENT_3_TEXTURE "assets/textures/main-gradient-3.png"
+#define MAIN_GRADIENT_4_TEXTURE "assets/textures/main-gradient-4.png"
 #define SHADOW_GRADIENT_1_TEXTURE "assets/textures/shadow-gradient-1.png"
 #define SHADOW_GRADIENT_2_TEXTURE "assets/textures/shadow-gradient-2.png"
 #define SHADOW_GRADIENT_3_TEXTURE "assets/textures/shadow-gradient-3.png"
+#define SHADOW_GRADIENT_4_TEXTURE "assets/textures/shadow-gradient-4.png"
 
 #define BASE_VERT_SHADER "assets/shaders/base.vert"
 #define BASE_FRAG_SHADER "assets/shaders/base.frag"
