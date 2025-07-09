@@ -23,271 +23,379 @@ collision_box = (0,0,320,8)
 collision_layer = 00000100
 
 [sprite]
+pos = (40,104)
+atlas_coords = (4,10)
+tint = (0,255,0,255)
+
+[sprite]
+pos = (48,104)
+atlas_coords = (5,10)
+tint = (0,255,0,255)
+
+[sprite]
+pos = (72,96)
+atlas_coords = (4,14)
+tint = (0,255,0,255)
+
+[sprite]
+pos = (72,104)
+atlas_coords = (4,15)
+tint = (0,255,0,255)
+
+[sprite]
+pos = (80,96)
+atlas_coords = (5,14)
+tint = (0,255,0,255)
+
+[sprite]
 pos = (80,104)
+atlas_coords = (5,15)
+tint = (0,255,0,255)
+
+[sprite]
+pos = (88,104)
 atlas_coords = (0,12)
 tint = (0,255,0,255)
 
 [sprite]
-pos = (96,104)
-atlas_coords = (4,9)
+pos = (96,96)
+atlas_coords = (4,12)
 tint = (0,255,0,255)
 
 [sprite]
-pos = (120,96)
-atlas_coords = (0,14)
+pos = (96,104)
+atlas_coords = (4,13)
+tint = (0,255,0,255)
+
+[sprite]
+pos = (104,96)
+atlas_coords = (5,12)
+tint = (0,255,0,255)
+
+[sprite]
+pos = (104,104)
+atlas_coords = (5,13)
 tint = (0,255,0,255)
 
 [sprite]
 pos = (120,104)
-atlas_coords = (0,15)
-tint = (0,255,0,255)
-
-[sprite]
-pos = (128,96)
-atlas_coords = (1,14)
+atlas_coords = (1,12)
 tint = (0,255,0,255)
 
 [sprite]
 pos = (128,104)
-atlas_coords = (1,15)
+atlas_coords = (4,8)
 tint = (0,255,0,255)
 
 [sprite]
-pos = (280,80)
-atlas_coords = (2,14)
+pos = (152,104)
+atlas_coords = (5,8)
 tint = (0,255,0,255)
 
 [sprite]
-pos = (280,88)
-atlas_coords = (2,15)
+pos = (224,104)
+atlas_coords = (4,11)
 tint = (0,255,0,255)
 
 [sprite]
-pos = (288,80)
-atlas_coords = (3,14)
+pos = (232,104)
+atlas_coords = (5,11)
 tint = (0,255,0,255)
 
 [sprite]
-pos = (288,88)
-atlas_coords = (3,15)
+pos = (248,104)
+atlas_coords = (0,12)
 tint = (0,255,0,255)
+
+[sprite]
+pos = (296,96)
+atlas_coords = (4,12)
+tint = (0,255,0,255)
+
+[sprite]
+pos = (296,104)
+atlas_coords = (4,13)
+tint = (0,255,0,255)
+
+[sprite]
+pos = (304,96)
+atlas_coords = (5,12)
+tint = (0,255,0,255)
+
+[sprite]
+pos = (304,104)
+atlas_coords = (5,13)
+tint = (0,255,0,255)
+
+[sprite]
+pos = (24,104)
+atlas_coords = (2,10)
+tint = (255,0,0,255)
+animation = ((2,10),1.5);((2,11),1.0);((2,10),1.0);((2,11),0.75)
+animation_starting_phase = 0.900000
 
 [sprite]
 pos = (32,104)
-atlas_coords = (2,8)
-tint = (255,0,0,255)
-animation = ((2,8),1.5);((2,9),1.0);((2,8),1.0);((2,9),0.75)
-animation_starting_phase = 1.200000
-
-[sprite]
-pos = (40,104)
-atlas_coords = (1,8)
-tint = (255,0,0,255)
-animation = ((1,8),1.5);((1,9),1.0);((1,8),1.0);((1,9),0.75)
-animation_starting_phase = 1.500000
-
-[sprite]
-pos = (48,104)
-atlas_coords = (0,8)
-tint = (255,0,0,255)
-animation = ((0,8),1.5);((0,9),1.0);((0,8),1.0);((0,9),0.75)
-animation_starting_phase = 1.800000
-
-[sprite]
-pos = (56,104)
 atlas_coords = (3,8)
 tint = (255,0,0,255)
 animation = ((3,8),1.5);((3,9),1.0);((3,8),1.0);((3,9),0.75)
+animation_starting_phase = 1.200000
+
+[sprite]
+pos = (56,104)
+atlas_coords = (3,10)
+tint = (255,0,0,255)
+animation = ((3,10),1.5);((3,11),1.0);((3,10),1.0);((3,11),0.75)
 animation_starting_phase = 2.100000
 
 [sprite]
 pos = (64,104)
-atlas_coords = (3,10)
+atlas_coords = (0,10)
 tint = (255,0,0,255)
-animation = ((3,10),1.5);((3,11),1.0);((3,10),1.0);((3,11),0.75)
+animation = ((0,10),1.5);((0,11),1.0);((0,10),1.0);((0,11),0.75)
 animation_starting_phase = 2.400000
 
 [sprite]
-pos = (72,104)
-atlas_coords = (2,8)
-tint = (255,0,0,255)
-animation = ((2,8),1.5);((2,9),1.0);((2,8),1.0);((2,9),0.75)
-animation_starting_phase = 2.700000
-
-[sprite]
-pos = (88,104)
-atlas_coords = (2,10)
-tint = (255,0,0,255)
-animation = ((2,10),1.5);((2,11),1.0);((2,10),1.0);((2,11),0.75)
-animation_starting_phase = 3.300000
-
-[sprite]
-pos = (104,104)
-atlas_coords = (3,10)
-tint = (255,0,0,255)
-animation = ((3,10),1.5);((3,11),1.0);((3,10),1.0);((3,11),0.75)
-animation_starting_phase = 3.900000
-
-[sprite]
 pos = (112,104)
-atlas_coords = (1,8)
+atlas_coords = (3,8)
 tint = (255,0,0,255)
-animation = ((1,8),1.5);((1,9),1.0);((1,8),1.0);((1,9),0.75)
+animation = ((3,8),1.5);((3,9),1.0);((3,8),1.0);((3,9),0.75)
 animation_starting_phase = 4.200000
 
 [sprite]
 pos = (136,104)
-atlas_coords = (1,10)
-tint = (255,0,0,255)
-animation = ((1,10),1.5);((1,11),1.0);((1,10),1.0);((1,11),0.75)
-animation_starting_phase = 5.100000
-
-[sprite]
-pos = (144,104)
-atlas_coords = (2,8)
-tint = (255,0,0,255)
-animation = ((2,8),1.5);((2,9),1.0);((2,8),1.0);((2,9),0.75)
-animation_starting_phase = 5.400000
-
-[sprite]
-pos = (272,88)
-atlas_coords = (2,8)
-tint = (255,0,0,255)
-animation = ((2,8),1.5);((2,9),1.0);((2,8),1.0);((2,9),0.75)
-animation_starting_phase = 10.200001
-
-[sprite]
-pos = (304,88)
-atlas_coords = (1,10)
-tint = (255,0,0,255)
-animation = ((1,10),1.5);((1,11),1.0);((1,10),1.0);((1,11),0.75)
-animation_starting_phase = 11.400001
-
-[sprite]
-pos = (312,88)
 atlas_coords = (2,10)
 tint = (255,0,0,255)
 animation = ((2,10),1.5);((2,11),1.0);((2,10),1.0);((2,11),0.75)
-animation_starting_phase = 11.700001
-
-[falling_leaves]
-pos = (8,32)
-
-[falling_leaves]
-pos = (8,88)
-
-[falling_leaves]
-pos = (40,8)
-
-[falling_leaves]
-pos = (40,64)
-
-[falling_leaves]
-pos = (64,32)
-
-[falling_leaves]
-pos = (64,88)
-
-[falling_leaves]
-pos = (88,8)
-
-[falling_leaves]
-pos = (88,64)
-
-[falling_leaves]
-pos = (112,32)
-
-[falling_leaves]
-pos = (112,88)
-
-[falling_leaves]
-pos = (136,8)
-
-[falling_leaves]
-pos = (136,64)
-
-[falling_leaves]
-pos = (176,40)
-
-[falling_leaves]
-pos = (176,88)
-
-[falling_leaves]
-pos = (208,8)
-
-[falling_leaves]
-pos = (208,64)
-
-[falling_leaves]
-pos = (208,112)
-
-[falling_leaves]
-pos = (240,40)
-
-[falling_leaves]
-pos = (240,88)
-
-[falling_leaves]
-pos = (264,8)
-
-[falling_leaves]
-pos = (264,64)
-
-[falling_leaves]
-pos = (264,112)
-
-[falling_leaves]
-pos = (288,40)
-
-[falling_leaves]
-pos = (304,8)
-
-[falling_leaves]
-pos = (304,64)
+animation_starting_phase = 5.100000
 
 [sprite]
-pos = (32,112)
+pos = (216,104)
+atlas_coords = (2,10)
+tint = (255,0,0,255)
+animation = ((2,10),1.5);((2,11),1.0);((2,10),1.0);((2,11),0.75)
+animation_starting_phase = 8.100000
+
+[sprite]
+pos = (240,104)
+atlas_coords = (1,10)
+tint = (255,0,0,255)
+animation = ((1,10),1.5);((1,11),1.0);((1,10),1.0);((1,11),0.75)
+animation_starting_phase = 9.000000
+
+[sprite]
+pos = (264,104)
+atlas_coords = (1,10)
+tint = (255,0,0,255)
+animation = ((1,10),1.5);((1,11),1.0);((1,10),1.0);((1,11),0.75)
+animation_starting_phase = 9.900001
+
+[sprite]
+pos = (272,104)
+atlas_coords = (3,10)
+tint = (255,0,0,255)
+animation = ((3,10),1.5);((3,11),1.0);((3,10),1.0);((3,11),0.75)
+animation_starting_phase = 10.200001
+
+[sprite]
+pos = (280,104)
+atlas_coords = (0,10)
+tint = (255,0,0,255)
+animation = ((0,10),1.5);((0,11),1.0);((0,10),1.0);((0,11),0.75)
+animation_starting_phase = 10.500000
+
+[sprite]
+pos = (312,104)
+atlas_coords = (3,10)
+tint = (255,0,0,255)
+animation = ((3,10),1.5);((3,11),1.0);((3,10),1.0);((3,11),0.75)
+animation_starting_phase = 11.700001
+
+[pollen]
+pos = (24,96)
+
+[pollen]
+pos = (40,96)
+
+[pollen]
+pos = (56,96)
+
+[pollen]
+pos = (72,88)
+
+[pollen]
+pos = (88,96)
+
+[pollen]
+pos = (104,88)
+
+[pollen]
+pos = (120,96)
+
+[pollen]
+pos = (136,96)
+
+[pollen]
+pos = (160,96)
+
+[pollen]
+pos = (216,96)
+
+[pollen]
+pos = (232,96)
+
+[pollen]
+pos = (248,96)
+
+[pollen]
+pos = (264,96)
+
+[pollen]
+pos = (280,96)
+
+[pollen]
+pos = (296,88)
+
+[pollen]
+pos = (312,88)
+
+[raindrop]
+pos = (8,0)
+
+[raindrop]
+pos = (24,0)
+
+[raindrop]
+pos = (40,0)
+
+[raindrop]
+pos = (56,0)
+
+[raindrop]
+pos = (72,0)
+
+[raindrop]
+pos = (88,0)
+
+[raindrop]
+pos = (104,0)
+
+[raindrop]
+pos = (120,0)
+
+[raindrop]
+pos = (136,0)
+
+[raindrop]
+pos = (184,0)
+
+[raindrop]
+pos = (200,0)
+
+[raindrop]
+pos = (216,0)
+
+[raindrop]
+pos = (232,0)
+
+[raindrop]
+pos = (248,0)
+
+[raindrop]
+pos = (264,0)
+
+[raindrop]
+pos = (280,0)
+
+[raindrop]
+pos = (296,0)
+
+[raindrop]
+pos = (312,0)
+
+[sprite]
+pos = (24,112)
 atlas_coords = (4,0)
 tint = (255,0,0,255)
 
 [sprite]
-pos = (32,120)
+pos = (24,120)
 atlas_coords = (14,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (24,128)
+atlas_coords = (14,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (24,136)
+atlas_coords = (14,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (24,144)
+atlas_coords = (14,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (24,152)
+atlas_coords = (14,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (24,160)
+atlas_coords = (14,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (24,168)
+atlas_coords = (14,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (32,112)
+atlas_coords = (5,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (32,120)
+atlas_coords = (9,1)
 tint = (255,0,0,255)
 
 [sprite]
 pos = (32,128)
-atlas_coords = (14,0)
+atlas_coords = (9,1)
 tint = (255,0,0,255)
 
 [sprite]
 pos = (32,136)
-atlas_coords = (14,0)
+atlas_coords = (9,1)
 tint = (255,0,0,255)
 
 [sprite]
 pos = (32,144)
-atlas_coords = (14,0)
+atlas_coords = (9,1)
 tint = (255,0,0,255)
 
 [sprite]
 pos = (32,152)
-atlas_coords = (14,0)
+atlas_coords = (9,1)
 tint = (255,0,0,255)
 
 [sprite]
 pos = (32,160)
-atlas_coords = (14,0)
+atlas_coords = (9,1)
 tint = (255,0,0,255)
 
 [sprite]
 pos = (32,168)
-atlas_coords = (14,0)
+atlas_coords = (9,1)
 tint = (255,0,0,255)
 
 [sprite]
 pos = (40,112)
-atlas_coords = (5,0)
+atlas_coords = (5,1)
 tint = (255,0,0,255)
 
 [sprite]
@@ -327,7 +435,7 @@ tint = (255,0,0,255)
 
 [sprite]
 pos = (48,112)
-atlas_coords = (6,1)
+atlas_coords = (6,0)
 tint = (255,0,0,255)
 
 [sprite]
@@ -367,7 +475,7 @@ tint = (255,0,0,255)
 
 [sprite]
 pos = (56,112)
-atlas_coords = (5,1)
+atlas_coords = (6,1)
 tint = (255,0,0,255)
 
 [sprite]
@@ -407,7 +515,7 @@ tint = (255,0,0,255)
 
 [sprite]
 pos = (64,112)
-atlas_coords = (6,0)
+atlas_coords = (5,0)
 tint = (255,0,0,255)
 
 [sprite]
@@ -447,7 +555,7 @@ tint = (255,0,0,255)
 
 [sprite]
 pos = (72,112)
-atlas_coords = (5,0)
+atlas_coords = (5,1)
 tint = (255,0,0,255)
 
 [sprite]
@@ -487,7 +595,7 @@ tint = (255,0,0,255)
 
 [sprite]
 pos = (80,112)
-atlas_coords = (5,1)
+atlas_coords = (6,0)
 tint = (255,0,0,255)
 
 [sprite]
@@ -567,7 +675,7 @@ tint = (255,0,0,255)
 
 [sprite]
 pos = (96,112)
-atlas_coords = (6,0)
+atlas_coords = (5,1)
 tint = (255,0,0,255)
 
 [sprite]
@@ -607,7 +715,7 @@ tint = (255,0,0,255)
 
 [sprite]
 pos = (104,112)
-atlas_coords = (5,0)
+atlas_coords = (6,0)
 tint = (255,0,0,255)
 
 [sprite]
@@ -647,7 +755,7 @@ tint = (255,0,0,255)
 
 [sprite]
 pos = (112,112)
-atlas_coords = (5,1)
+atlas_coords = (5,0)
 tint = (255,0,0,255)
 
 [sprite]
@@ -687,7 +795,7 @@ tint = (255,0,0,255)
 
 [sprite]
 pos = (120,112)
-atlas_coords = (6,1)
+atlas_coords = (5,1)
 tint = (255,0,0,255)
 
 [sprite]
@@ -767,7 +875,7 @@ tint = (255,0,0,255)
 
 [sprite]
 pos = (136,112)
-atlas_coords = (5,0)
+atlas_coords = (6,1)
 tint = (255,0,0,255)
 
 [sprite]
@@ -802,6 +910,11 @@ tint = (255,0,0,255)
 
 [sprite]
 pos = (136,168)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (144,16)
 atlas_coords = (9,1)
 tint = (255,0,0,255)
 
@@ -847,147 +960,562 @@ tint = (255,0,0,255)
 
 [sprite]
 pos = (152,0)
-atlas_coords = (3,3)
+atlas_coords = (14,0)
 tint = (255,0,0,255)
 
 [sprite]
 pos = (152,8)
-atlas_coords = (3,3)
+atlas_coords = (14,0)
 tint = (255,0,0,255)
 
 [sprite]
 pos = (152,16)
-atlas_coords = (3,3)
+atlas_coords = (14,0)
 tint = (255,0,0,255)
 
 [sprite]
 pos = (152,24)
-atlas_coords = (3,3)
+atlas_coords = (14,0)
 tint = (255,0,0,255)
 
 [sprite]
 pos = (152,32)
-atlas_coords = (3,3)
+atlas_coords = (14,0)
 tint = (255,0,0,255)
 
 [sprite]
 pos = (152,40)
-atlas_coords = (3,3)
+atlas_coords = (0,2)
 tint = (255,0,0,255)
 
 [sprite]
 pos = (152,48)
-atlas_coords = (3,3)
+atlas_coords = (0,2)
 tint = (255,0,0,255)
 
 [sprite]
 pos = (152,56)
-atlas_coords = (3,3)
+atlas_coords = (13,3)
 tint = (255,0,0,255)
 
 [sprite]
 pos = (152,112)
-atlas_coords = (7,0)
-tint = (255,0,0,255)
-
-[sprite]
-pos = (152,120)
-atlas_coords = (15,0)
-tint = (255,0,0,255)
-
-[sprite]
-pos = (152,128)
-atlas_coords = (15,0)
-tint = (255,0,0,255)
-
-[sprite]
-pos = (152,136)
-atlas_coords = (15,0)
-tint = (255,0,0,255)
-
-[sprite]
-pos = (152,144)
-atlas_coords = (15,0)
-tint = (255,0,0,255)
-
-[sprite]
-pos = (152,152)
-atlas_coords = (15,0)
-tint = (255,0,0,255)
-
-[sprite]
-pos = (152,160)
-atlas_coords = (15,0)
-tint = (255,0,0,255)
-
-[sprite]
-pos = (152,168)
-atlas_coords = (15,0)
-tint = (255,0,0,255)
-
-[sprite]
-pos = (272,96)
-atlas_coords = (4,0)
-tint = (255,0,0,255)
-
-[sprite]
-pos = (272,104)
-atlas_coords = (14,0)
-tint = (255,0,0,255)
-
-[sprite]
-pos = (272,112)
-atlas_coords = (14,0)
-tint = (255,0,0,255)
-
-[sprite]
-pos = (272,120)
-atlas_coords = (14,0)
-tint = (255,0,0,255)
-
-[sprite]
-pos = (272,128)
-atlas_coords = (14,0)
-tint = (255,0,0,255)
-
-[sprite]
-pos = (272,136)
-atlas_coords = (14,0)
-tint = (255,0,0,255)
-
-[sprite]
-pos = (272,144)
-atlas_coords = (14,0)
-tint = (255,0,0,255)
-
-[sprite]
-pos = (272,152)
-atlas_coords = (14,0)
-tint = (255,0,0,255)
-
-[sprite]
-pos = (272,160)
-atlas_coords = (14,0)
-tint = (255,0,0,255)
-
-[sprite]
-pos = (272,168)
-atlas_coords = (14,0)
-tint = (255,0,0,255)
-
-[sprite]
-pos = (280,96)
 atlas_coords = (6,0)
 tint = (255,0,0,255)
 
 [sprite]
-pos = (280,104)
+pos = (152,120)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (152,128)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (152,136)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (152,144)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (152,152)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (152,160)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (152,168)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (160,0)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (160,8)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (160,16)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (160,24)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (160,32)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (160,40)
+atlas_coords = (1,2)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (160,48)
+atlas_coords = (1,2)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (160,56)
+atlas_coords = (14,3)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (160,112)
+atlas_coords = (7,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (160,120)
+atlas_coords = (15,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (160,128)
+atlas_coords = (15,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (160,136)
+atlas_coords = (15,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (160,144)
+atlas_coords = (15,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (160,152)
+atlas_coords = (15,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (160,160)
+atlas_coords = (15,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (160,168)
+atlas_coords = (15,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (168,0)
+atlas_coords = (15,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (168,8)
+atlas_coords = (15,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (168,16)
+atlas_coords = (15,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (168,24)
+atlas_coords = (15,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (168,32)
+atlas_coords = (15,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (168,40)
+atlas_coords = (2,2)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (168,48)
+atlas_coords = (2,2)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (168,56)
+atlas_coords = (15,3)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (216,112)
+atlas_coords = (4,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (216,120)
+atlas_coords = (14,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (216,128)
+atlas_coords = (14,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (216,136)
+atlas_coords = (14,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (216,144)
+atlas_coords = (14,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (216,152)
+atlas_coords = (14,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (216,160)
+atlas_coords = (14,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (216,168)
+atlas_coords = (14,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (224,112)
+atlas_coords = (5,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (224,120)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (224,128)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (224,136)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (224,144)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (224,152)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (224,160)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (224,168)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (232,112)
+atlas_coords = (6,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (232,120)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (232,128)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (232,136)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (232,144)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (232,152)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (232,160)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (232,168)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (240,112)
+atlas_coords = (6,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (240,120)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (240,128)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (240,136)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (240,144)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (240,152)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (240,160)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (240,168)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (248,112)
+atlas_coords = (5,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (248,120)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (248,128)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (248,136)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (248,144)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (248,152)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (248,160)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (248,168)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (256,56)
+atlas_coords = (10,4)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (256,64)
+atlas_coords = (10,4)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (256,72)
+atlas_coords = (10,4)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (256,80)
+atlas_coords = (10,4)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (256,88)
+atlas_coords = (10,4)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (256,96)
+atlas_coords = (10,4)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (256,104)
+atlas_coords = (10,4)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (256,112)
+atlas_coords = (6,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (256,120)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (256,128)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (256,136)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (256,144)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (256,152)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (256,160)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (256,168)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (264,112)
+atlas_coords = (5,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (264,120)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (264,128)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (264,136)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (264,144)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (264,152)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (264,160)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (264,168)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (272,112)
+atlas_coords = (6,0)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (272,120)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (272,128)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (272,136)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (272,144)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (272,152)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (272,160)
+atlas_coords = (9,1)
+tint = (255,0,0,255)
+
+[sprite]
+pos = (272,168)
 atlas_coords = (9,1)
 tint = (255,0,0,255)
 
 [sprite]
 pos = (280,112)
-atlas_coords = (9,1)
+atlas_coords = (5,0)
 tint = (255,0,0,255)
 
 [sprite]
@@ -1026,18 +1554,8 @@ atlas_coords = (9,1)
 tint = (255,0,0,255)
 
 [sprite]
-pos = (288,96)
-atlas_coords = (6,1)
-tint = (255,0,0,255)
-
-[sprite]
-pos = (288,104)
-atlas_coords = (9,1)
-tint = (255,0,0,255)
-
-[sprite]
 pos = (288,112)
-atlas_coords = (9,1)
+atlas_coords = (5,1)
 tint = (255,0,0,255)
 
 [sprite]
@@ -1076,18 +1594,8 @@ atlas_coords = (9,1)
 tint = (255,0,0,255)
 
 [sprite]
-pos = (296,96)
-atlas_coords = (5,0)
-tint = (255,0,0,255)
-
-[sprite]
-pos = (296,104)
-atlas_coords = (9,1)
-tint = (255,0,0,255)
-
-[sprite]
 pos = (296,112)
-atlas_coords = (9,1)
+atlas_coords = (6,1)
 tint = (255,0,0,255)
 
 [sprite]
@@ -1126,18 +1634,8 @@ atlas_coords = (9,1)
 tint = (255,0,0,255)
 
 [sprite]
-pos = (304,96)
-atlas_coords = (5,1)
-tint = (255,0,0,255)
-
-[sprite]
-pos = (304,104)
-atlas_coords = (9,1)
-tint = (255,0,0,255)
-
-[sprite]
 pos = (304,112)
-atlas_coords = (9,1)
+atlas_coords = (5,1)
 tint = (255,0,0,255)
 
 [sprite]
@@ -1176,18 +1674,8 @@ atlas_coords = (9,1)
 tint = (255,0,0,255)
 
 [sprite]
-pos = (312,96)
-atlas_coords = (6,0)
-tint = (255,0,0,255)
-
-[sprite]
-pos = (312,104)
-atlas_coords = (9,1)
-tint = (255,0,0,255)
-
-[sprite]
 pos = (312,112)
-atlas_coords = (9,1)
+atlas_coords = (5,0)
 tint = (255,0,0,255)
 
 [sprite]
@@ -1226,37 +1714,55 @@ atlas_coords = (9,1)
 tint = (255,0,0,255)
 
 [physics_body]
-pos = (32,112)
+pos = (24,112)
 type = fixed
-collision_box = (0,0,128,64)
+collision_box = (0,0,144,64)
+collision_layer = 00000100
+
+[physics_body]
+pos = (144,16)
+type = fixed
+collision_box = (0,0,32,8)
 collision_layer = 00000100
 
 [physics_body]
 pos = (152,0)
 type = fixed
-collision_box = (0,0,8,64)
+collision_box = (0,0,24,16)
 collision_layer = 00000100
 
 [physics_body]
-pos = (272,96)
+pos = (152,24)
 type = fixed
-collision_box = (0,0,48,80)
+collision_box = (0,0,24,40)
+collision_layer = 00000100
+
+[physics_body]
+pos = (216,112)
+type = fixed
+collision_box = (0,0,104,64)
+collision_layer = 00000100
+
+[physics_body]
+pos = (256,56)
+type = fixed
+collision_box = (0,0,8,56)
 collision_layer = 00000100
 
 [water]
 water_level = 128
 
 [key_gate]
-pos = (152,56)
-height = 48
-key_positions = (80,16)
+pos = (144,16)
+height = 88
+key_positions = (96,24)
 
 [player]
-pos = (48,104)
+pos = (40,104)
 
 [goal]
 id = 0
-pos = (296,88)
+pos = (288,104)
 collision_box = (0,0,8,8)
 collision_mask = 00000011
 [sprite]
@@ -1266,112 +1772,100 @@ tint = (255,0,0,255)
 animation = ((0,4),0.08);((0,5),0.08);((0,6),0.08);((1,6),0.08);((2,6),0.08);((2,5),0.08);((2,4),0.08);((1,4),0.08)
 
 [sprite]
-pos = (64,88)
-atlas_coords = (4,7)
-tint = (0,0,255,255)
-
-[sprite]
-pos = (72,88)
+pos = (0,56)
 atlas_coords = (5,7)
 tint = (0,0,255,255)
 
 [sprite]
-pos = (80,88)
+pos = (8,56)
 atlas_coords = (5,7)
 tint = (0,0,255,255)
 
 [sprite]
-pos = (88,88)
+pos = (16,56)
 atlas_coords = (5,7)
 tint = (0,0,255,255)
 
 [sprite]
-pos = (96,88)
+pos = (24,56)
+atlas_coords = (5,7)
+tint = (0,0,255,255)
+
+[sprite]
+pos = (32,56)
+atlas_coords = (5,7)
+tint = (0,0,255,255)
+
+[sprite]
+pos = (40,56)
+atlas_coords = (5,7)
+tint = (0,0,255,255)
+
+[sprite]
+pos = (48,56)
+atlas_coords = (5,7)
+tint = (0,0,255,255)
+
+[sprite]
+pos = (56,56)
+atlas_coords = (5,7)
+tint = (0,0,255,255)
+
+[sprite]
+pos = (64,56)
+atlas_coords = (5,7)
+tint = (0,0,255,255)
+
+[sprite]
+pos = (72,56)
+atlas_coords = (5,7)
+tint = (0,0,255,255)
+
+[sprite]
+pos = (80,56)
+atlas_coords = (5,7)
+tint = (0,0,255,255)
+
+[sprite]
+pos = (88,56)
+atlas_coords = (5,7)
+tint = (0,0,255,255)
+
+[sprite]
+pos = (96,56)
+atlas_coords = (5,7)
+tint = (0,0,255,255)
+
+[sprite]
+pos = (104,56)
+atlas_coords = (5,7)
+tint = (0,0,255,255)
+
+[sprite]
+pos = (112,56)
+atlas_coords = (5,7)
+tint = (0,0,255,255)
+
+[sprite]
+pos = (120,56)
+atlas_coords = (5,7)
+tint = (0,0,255,255)
+
+[sprite]
+pos = (128,56)
+atlas_coords = (5,7)
+tint = (0,0,255,255)
+
+[sprite]
+pos = (136,56)
 atlas_coords = (6,7)
 tint = (0,0,255,255)
 
-[sprite]
-pos = (160,120)
-atlas_coords = (5,7)
-tint = (0,0,255,255)
-
-[sprite]
-pos = (168,120)
-atlas_coords = (5,7)
-tint = (0,0,255,255)
-
-[sprite]
-pos = (176,120)
-atlas_coords = (5,7)
-tint = (0,0,255,255)
-
-[sprite]
-pos = (184,120)
-atlas_coords = (5,7)
-tint = (0,0,255,255)
-
-[sprite]
-pos = (192,120)
-atlas_coords = (5,7)
-tint = (0,0,255,255)
-
-[sprite]
-pos = (200,120)
-atlas_coords = (5,7)
-tint = (0,0,255,255)
-
-[sprite]
-pos = (208,120)
-atlas_coords = (5,7)
-tint = (0,0,255,255)
-
-[sprite]
-pos = (216,120)
-atlas_coords = (5,7)
-tint = (0,0,255,255)
-
-[sprite]
-pos = (224,120)
-atlas_coords = (5,7)
-tint = (0,0,255,255)
-
-[sprite]
-pos = (232,120)
-atlas_coords = (5,7)
-tint = (0,0,255,255)
-
-[sprite]
-pos = (240,120)
-atlas_coords = (5,7)
-tint = (0,0,255,255)
-
-[sprite]
-pos = (248,120)
-atlas_coords = (5,7)
-tint = (0,0,255,255)
-
-[sprite]
-pos = (256,120)
-atlas_coords = (5,7)
-tint = (0,0,255,255)
-
-[sprite]
-pos = (264,120)
-atlas_coords = (5,7)
-tint = (0,0,255,255)
-
 [physics_body]
-pos = (64,88)
+pos = (0,56)
 type = fixed
 one_way = true
-collision_box = (0,0,40,4)
-collision_layer = 00100000
-
-[physics_body]
-pos = (160,120)
-type = fixed
-one_way = true
-collision_box = (0,0,112,4)
+collision_box = (0,0,144,4)
 collision_layer = 00100000
 
 [shadows_limit]
