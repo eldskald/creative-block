@@ -146,6 +146,7 @@ void editor::clear_tilemap() {
     txt_2_hf_input->set_input("");
     txt_3_input->set_input("");
     txt_3_hf_input->set_input("");
+    screen_colors_input->set_input("");
 }
 
 void editor::change_to_blocks_tileset() {
