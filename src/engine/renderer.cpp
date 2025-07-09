@@ -18,6 +18,8 @@ Texture2D renderer::main_gradient_2_ = (Texture2D){0};
 Texture2D renderer::shadow_gradient_2_ = (Texture2D){0};
 Texture2D renderer::main_gradient_3_ = (Texture2D){0};
 Texture2D renderer::shadow_gradient_3_ = (Texture2D){0};
+Texture2D renderer::main_gradient_4_ = (Texture2D){0};
+Texture2D renderer::shadow_gradient_4_ = (Texture2D){0};
 RenderTexture2D renderer::base_tex_1_ = (RenderTexture2D){0};
 RenderTexture2D renderer::base_tex_2_ = (RenderTexture2D){0};
 RenderTexture2D renderer::colored_tex_ = (RenderTexture2D){0};
@@ -43,27 +45,31 @@ const float ASPECT_RATIO = (float)WINDOW_SIZE_X / (float)WINDOW_SIZE_Y;
 
 void renderer::initialize() {
     renderer::main_gradient_1_ = LoadTexture(MAIN_GRADIENT_1_TEXTURE);
-    SetTextureFilter(renderer::main_gradient_1_, TEXTURE_FILTER_TRILINEAR);
+    SetTextureFilter(renderer::main_gradient_1_, TEXTURE_FILTER_BILINEAR);
     renderer::shadow_gradient_1_ = LoadTexture(SHADOW_GRADIENT_1_TEXTURE);
-    SetTextureFilter(renderer::shadow_gradient_1_, TEXTURE_FILTER_TRILINEAR);
+    SetTextureFilter(renderer::shadow_gradient_1_, TEXTURE_FILTER_BILINEAR);
     renderer::main_gradient_2_ = LoadTexture(MAIN_GRADIENT_2_TEXTURE);
-    SetTextureFilter(renderer::main_gradient_2_, TEXTURE_FILTER_TRILINEAR);
+    SetTextureFilter(renderer::main_gradient_2_, TEXTURE_FILTER_BILINEAR);
     renderer::shadow_gradient_2_ = LoadTexture(SHADOW_GRADIENT_2_TEXTURE);
-    SetTextureFilter(renderer::shadow_gradient_2_, TEXTURE_FILTER_TRILINEAR);
+    SetTextureFilter(renderer::shadow_gradient_2_, TEXTURE_FILTER_BILINEAR);
     renderer::main_gradient_3_ = LoadTexture(MAIN_GRADIENT_3_TEXTURE);
-    SetTextureFilter(renderer::main_gradient_3_, TEXTURE_FILTER_TRILINEAR);
+    SetTextureFilter(renderer::main_gradient_3_, TEXTURE_FILTER_BILINEAR);
     renderer::shadow_gradient_3_ = LoadTexture(SHADOW_GRADIENT_3_TEXTURE);
-    SetTextureFilter(renderer::shadow_gradient_3_, TEXTURE_FILTER_TRILINEAR);
+    SetTextureFilter(renderer::shadow_gradient_3_, TEXTURE_FILTER_BILINEAR);
+    renderer::main_gradient_4_ = LoadTexture(MAIN_GRADIENT_4_TEXTURE);
+    SetTextureFilter(renderer::main_gradient_4_, TEXTURE_FILTER_BILINEAR);
+    renderer::shadow_gradient_4_ = LoadTexture(SHADOW_GRADIENT_4_TEXTURE);
+    SetTextureFilter(renderer::shadow_gradient_4_, TEXTURE_FILTER_BILINEAR);
 
     // For the sake of the web build, all textures must be powers of 2
     renderer::base_tex_1_ = LoadRenderTexture(MAIN_TEX_SIZE, MAIN_TEX_SIZE);
     renderer::base_tex_2_ = LoadRenderTexture(MAIN_TEX_SIZE, MAIN_TEX_SIZE);
     renderer::colored_tex_ = LoadRenderTexture(MAIN_TEX_SIZE, MAIN_TEX_SIZE);
     renderer::blur_tex_1_ = LoadRenderTexture(MAIN_TEX_SIZE, MAIN_TEX_SIZE);
-    SetTextureFilter(renderer::blur_tex_1_.texture, TEXTURE_FILTER_TRILINEAR);
+    SetTextureFilter(renderer::blur_tex_1_.texture, TEXTURE_FILTER_BILINEAR);
     SetTextureWrap(renderer::blur_tex_1_.texture, TEXTURE_WRAP_CLAMP);
     renderer::blur_tex_2_ = LoadRenderTexture(MAIN_TEX_SIZE, MAIN_TEX_SIZE);
-    SetTextureFilter(renderer::blur_tex_2_.texture, TEXTURE_FILTER_TRILINEAR);
+    SetTextureFilter(renderer::blur_tex_2_.texture, TEXTURE_FILTER_BILINEAR);
     SetTextureWrap(renderer::blur_tex_2_.texture, TEXTURE_WRAP_CLAMP);
     renderer::final_tex_ = LoadRenderTexture(2, 2);
     renderer::final_tex_ = LoadRenderTexture(2, 2);
@@ -123,6 +129,8 @@ void renderer::initialize() {
     // Screen color shaders
     renderer::screen_color_shaders_.push_back(
         LoadShader(BASE_VERT_SHADER, SCREEN_COLOR_SHADER_0));
+    renderer::screen_color_shaders_.push_back(
+        LoadShader(BASE_VERT_SHADER, SCREEN_COLOR_SHADER_1));
     renderer::screen_color_shaders_.push_back(
         LoadShader(BASE_VERT_SHADER, SCREEN_COLOR_SHADER_1));
     renderer::screen_color_shaders_.push_back(
@@ -326,6 +334,24 @@ void renderer::update_color_screen_() {
                               renderer::shadow_gradient_3_);
         const float period = 20.0f;
         renderer::set_shader_property_(renderer::screen_color_shaders_.at(3),
+                                       "period",
+                                       &period,
+                                       SHADER_UNIFORM_FLOAT);
+    }
+
+    if (renderer::current_screen_color_shader_ == 4) {
+        int main_gradient_loc = GetShaderLocation(
+            renderer::screen_color_shaders_.at(4), "mainGradient");
+        SetShaderValueTexture(renderer::screen_color_shaders_.at(4),
+                              main_gradient_loc,
+                              renderer::main_gradient_4_);
+        int shadow_gradient_loc = GetShaderLocation(
+            renderer::screen_color_shaders_.at(4), "shadowGradient");
+        SetShaderValueTexture(renderer::screen_color_shaders_.at(4),
+                              shadow_gradient_loc,
+                              renderer::shadow_gradient_4_);
+        const float period = 20.0f;
+        renderer::set_shader_property_(renderer::screen_color_shaders_.at(4),
                                        "period",
                                        &period,
                                        SHADER_UNIFORM_FLOAT);
