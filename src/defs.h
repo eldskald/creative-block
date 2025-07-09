@@ -17,8 +17,8 @@
         {level_09, level_10}, {level_10, level_11}, {level_11, level_12},      \
         {level_12, level_13}, {level_13, level_14}, {level_14, level_15},      \
         {level_15, level_16}, {level_16, level_17}, {level_17, level_18},      \
-        {level_18, level_19}, {level_19, level_20}, {level_20, credits},       \
-        {credits, opening},                                                    \
+        {level_18, level_19}, {level_19, level_20}, {level_20, level_21},      \
+        {level_21, credits},  {credits, opening},                              \
     }
 
 #define MASK_MAIN_COLOR (Color){255, 0, 0, 255}
