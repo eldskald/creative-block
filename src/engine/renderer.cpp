@@ -136,7 +136,7 @@ void renderer::initialize() {
     renderer::screen_color_shaders_.push_back(
         LoadShader(BASE_VERT_SHADER, SCREEN_COLOR_SHADER_1));
     renderer::screen_color_shaders_.push_back(
-        LoadShader(BASE_VERT_SHADER, SCREEN_COLOR_SHADER_1));
+        LoadShader(BASE_VERT_SHADER, SCREEN_COLOR_SHADER_2));
     for (Shader shader : renderer::screen_color_shaders_) {
         renderer::set_shader_property_(
             shader, "maskMain", &mask_main_value, SHADER_UNIFORM_VEC4);
@@ -350,11 +350,6 @@ void renderer::update_color_screen_() {
         SetShaderValueTexture(renderer::screen_color_shaders_.at(4),
                               shadow_gradient_loc,
                               renderer::shadow_gradient_4_);
-        const float period = 20.0f;
-        renderer::set_shader_property_(renderer::screen_color_shaders_.at(4),
-                                       "period",
-                                       &period,
-                                       SHADER_UNIFORM_FLOAT);
     }
 }
 
