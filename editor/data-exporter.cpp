@@ -1001,7 +1001,7 @@ string data_exporter::get_shadow_spikes_text_(map* cells) {
                 text += "[sprite]\n";
                 text += "parent = " + to_string(id) + "\n";
                 text += "atlas_coords = (5,6)\n";
-                text += "tint = (255,0,255,255)\n";
+                text += "tint = (0,0,255,255)\n";
                 break;
             }
             default:
