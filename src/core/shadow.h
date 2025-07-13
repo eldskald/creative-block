@@ -23,6 +23,7 @@ public:
 protected:
     void tick_() override;
     void on_player_death_() override;
+    void jumped_() override;
 
 private:
     float time_{0.0f};

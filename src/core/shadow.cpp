@@ -3,6 +3,7 @@
 #include "core/death-particles.h"
 #include "core/respawn-particles.h"
 #include "defs.h"
+#include "engine/sfx.h"
 #include "engine/sprite.h"
 #include "imports.h"
 #include <algorithm>
@@ -37,6 +38,7 @@ shadow::shadow(input_history history) : history_(std::move(history)) {
 
 void shadow::emit_spawn_particles() {
     this->spawn_particles_emitter_->emit();
+    sfx::play(sfx::shadow);
 }
 
 void shadow::kill() {
@@ -47,6 +49,7 @@ void shadow::kill() {
     this->collision_mask = 0b00000000;
     this->sprite_->mark_for_deletion();
     this->sprite_ = nullptr;
+    sfx::play(sfx::shadow_death);
 }
 
 void shadow::tick_() {
@@ -118,4 +121,8 @@ void shadow::read_input_(input input) {
     this->curr_dir_.x = clamp(this->curr_dir_.x, -1.0f, 1.0f);
     this->curr_dir_.y = clamp(this->curr_dir_.y, -1.0f, 1.0f);
     this->change_dir(this->curr_dir_);
+}
+
+void shadow::jumped_() {
+    sfx::play(sfx::shadow_jump);
 }

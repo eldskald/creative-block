@@ -40,10 +40,23 @@
      {level_30, "assets/scenes/30.dat"},                                       \
      {credits, "assets/scenes/credits.dat"}}
 
-#define SFX_DEF_ENUM {jump, death, respawn, next_level, select, key, gate}
+#define SFX_DEF_ENUM                                                           \
+    {jump,                                                                     \
+     shadow_jump,                                                              \
+     shadow,                                                                   \
+     death,                                                                    \
+     shadow_death,                                                             \
+     respawn,                                                                  \
+     next_level,                                                               \
+     select,                                                                   \
+     key,                                                                      \
+     gate}
 #define SFX_ENUMS                                                              \
     {sfx::jump,                                                                \
+     sfx::shadow_jump,                                                         \
+     sfx::shadow,                                                              \
      sfx::death,                                                               \
+     sfx::shadow_death,                                                        \
      sfx::respawn,                                                             \
      sfx::next_level,                                                          \
      sfx::select,                                                              \
@@ -51,7 +64,10 @@
      sfx::gate}
 #define SFX_PATHS                                                              \
     {{sfx::jump, "assets/sfx/jump.wav"},                                       \
+     {sfx::shadow_jump, "assets/sfx/shadow-jump.wav"},                         \
+     {sfx::shadow, "assets/sfx/shadow.wav"},                                   \
      {sfx::death, "assets/sfx/death.wav"},                                     \
+     {sfx::shadow_death, "assets/sfx/shadow-death.wav"},                       \
      {sfx::respawn, "assets/sfx/respawn.wav"},                                 \
      {sfx::next_level, "assets/sfx/next-level.wav"},                           \
      {sfx::select, "assets/sfx/select.wav"},                                   \
