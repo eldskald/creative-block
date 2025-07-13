@@ -2193,3 +2193,6 @@ collision_layer = 00100000
 [screen_colors_shader]
 4
 
+[bgm]
+2
+

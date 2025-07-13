@@ -74,6 +74,11 @@
      {sfx::key, "assets/sfx/key.wav"},                                         \
      {sfx::gate, "assets/sfx/gate.wav"}}
 
+#define BGM_PATHS                                                              \
+    {"assets/bgm/lonely-night.ogg",                                            \
+     "assets/bgm/unstable-field.ogg",                                          \
+     "assets/bgm/gods-forbid.ogg"}
+
 #define SPRITESHEET_FILE "assets/textures/spritesheet.png"
 #define SPRITESHEET_CELL_SIZE_X 8.0f
 #define SPRITESHEET_CELL_SIZE_Y 8.0f

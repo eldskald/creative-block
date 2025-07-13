@@ -1087,16 +1087,24 @@ string data_exporter::get_key_gate_text_(map* cells) {
     return text;
 }
 
-string data_exporter::get_level_shadow_totals_(string level_shadows) {
+string data_exporter::get_level_shadow_totals_text_(string level_shadows) {
     string text = "[shadows_limit]\n";
     text += level_shadows.empty() ? "0" : level_shadows;
     text += "\n\n";
     return text;
 }
 
-string data_exporter::get_screen_colors_shader_(string screen_colors_shader) {
+string
+data_exporter::get_screen_colors_shader_text_(string screen_colors_shader) {
     string text = "[screen_colors_shader]\n";
     text += screen_colors_shader.empty() ? "0" : screen_colors_shader;
+    text += "\n\n";
+    return text;
+}
+
+string data_exporter::get_bgm_text_(string level_bgm) {
+    string text = "[bgm]\n";
+    text += level_bgm.empty() ? "0" : level_bgm;
     text += "\n\n";
     return text;
 }
@@ -1109,7 +1117,8 @@ string data_exporter::get_export_text(unordered_map<tileset, map> cells,
                                       string level_text_3,
                                       string text_3_hidden_for,
                                       string level_shadows,
-                                      string screen_colors_shader) {
+                                      string screen_colors_shader,
+                                      string level_bgm) {
     data_exporter::current_id_count_ = 0;
     string data = "";
     data += data_exporter::get_out_of_bounds_walls_();
@@ -1148,8 +1157,9 @@ string data_exporter::get_export_text(unordered_map<tileset, map> cells,
     data += data_exporter::get_shadow_platform_bodies_text_(
         &cells.at(tileset::interact));
 
-    data += data_exporter::get_level_shadow_totals_(level_shadows);
-    data += data_exporter::get_screen_colors_shader_(screen_colors_shader);
+    data += data_exporter::get_level_shadow_totals_text_(level_shadows);
+    data += data_exporter::get_screen_colors_shader_text_(screen_colors_shader);
+    data += data_exporter::get_bgm_text_(level_bgm);
 
     return data;
 }

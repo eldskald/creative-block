@@ -15,6 +15,7 @@
 #include "engine/game-element.h"
 #include "engine/physics-body.h"
 #include "engine/renderer.h"
+#include "engine/bgm.h"
 #include "engine/sprite.h"
 #include "engine/text.h"
 #include <cctype>
@@ -381,6 +382,10 @@ void data_loader::parse_screen_colors_shader_line_(string line) {
     renderer::set_color_shader(stoi(line));
 }
 
+void data_loader::parse_level_bgm_(string line) {
+    bgm::play(stoi(line));
+}
+
 game_element* data_loader::get_element_from_block_(element_block block) {
     if (block.type == "game_element") {
         auto* obj = new game_element();
@@ -489,6 +494,12 @@ game_element* data_loader::get_element_from_block_(element_block block) {
     if (block.type == "screen_colors_shader") {
         for (auto& line : block.properties) {
             data_loader::parse_screen_colors_shader_line_(line);
+        }
+        return nullptr;
+    }
+    if (block.type == "bgm") {
+        for (auto& line : block.properties) {
+            data_loader::parse_level_bgm_(line);
         }
         return nullptr;
     }

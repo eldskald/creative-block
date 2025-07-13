@@ -52,5 +52,6 @@ private:
     static void parse_water_property_line_(water* water, string line);
     static void parse_key_gate_property_line_(key_gate* gate, string line);
     static void parse_level_shadows_limit_line_(string line);
+    static void parse_level_bgm_(string line);
     static void parse_screen_colors_shader_line_(string line);
 };

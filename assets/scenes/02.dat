@@ -2054,6 +2054,8 @@ collision_layer = 00001000
 0
 
 [screen_colors_shader]
+0
 
-
+[bgm]
+0
 
