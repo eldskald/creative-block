@@ -334,6 +334,9 @@ pos = (120,104)
 pos = (128,96)
 
 [pollen]
+pos = (136,96)
+
+[pollen]
 pos = (144,104)
 
 [sprite]
@@ -883,6 +886,236 @@ type = fixed
 collision_box = (0,0,24,24)
 collision_layer = 00000100
 
+[killbox]
+id = 0
+pos = (136,64)
+collision_box = (0,2,8,4)
+collision_mask = 00000011
+
+[sprite]
+parent = 0
+atlas_coords = (5,5)
+tint = (255,0,0,255)
+[killbox]
+id = 1
+pos = (144,64)
+collision_box = (0,2,8,4)
+collision_mask = 00000011
+
+[sprite]
+parent = 1
+atlas_coords = (5,5)
+tint = (255,0,0,255)
+[killbox]
+id = 2
+pos = (152,64)
+collision_box = (0,2,8,4)
+collision_mask = 00000011
+
+[sprite]
+parent = 2
+atlas_coords = (5,5)
+tint = (255,0,0,255)
+[killbox]
+id = 3
+pos = (160,64)
+collision_box = (0,2,8,4)
+collision_mask = 00000011
+
+[sprite]
+parent = 3
+atlas_coords = (5,5)
+tint = (255,0,0,255)
+[killbox]
+id = 4
+pos = (168,64)
+collision_box = (0,2,8,4)
+collision_mask = 00000011
+
+[sprite]
+parent = 4
+atlas_coords = (5,5)
+tint = (255,0,0,255)
+[killbox]
+id = 5
+pos = (176,64)
+collision_box = (0,2,8,4)
+collision_mask = 00000011
+
+[sprite]
+parent = 5
+atlas_coords = (5,5)
+tint = (255,0,0,255)
+[killbox]
+id = 6
+pos = (184,64)
+collision_box = (0,2,8,4)
+collision_mask = 00000011
+
+[sprite]
+parent = 6
+atlas_coords = (5,5)
+tint = (255,0,0,255)
+[killbox]
+id = 7
+pos = (192,64)
+collision_box = (0,2,8,4)
+collision_mask = 00000011
+
+[sprite]
+parent = 7
+atlas_coords = (5,5)
+tint = (255,0,0,255)
+[killbox]
+id = 8
+pos = (200,64)
+collision_box = (0,2,8,4)
+collision_mask = 00000011
+
+[sprite]
+parent = 8
+atlas_coords = (5,5)
+tint = (255,0,0,255)
+[killbox]
+id = 9
+pos = (208,64)
+collision_box = (0,2,8,4)
+collision_mask = 00000011
+
+[sprite]
+parent = 9
+atlas_coords = (5,5)
+tint = (255,0,0,255)
+[killbox]
+id = 10
+pos = (216,64)
+collision_box = (0,2,8,4)
+collision_mask = 00000011
+
+[sprite]
+parent = 10
+atlas_coords = (5,5)
+tint = (255,0,0,255)
+[killbox]
+id = 11
+pos = (224,64)
+collision_box = (0,2,8,4)
+collision_mask = 00000011
+
+[sprite]
+parent = 11
+atlas_coords = (5,5)
+tint = (255,0,0,255)
+[killbox]
+id = 12
+pos = (232,64)
+collision_box = (0,2,8,4)
+collision_mask = 00000011
+
+[sprite]
+parent = 12
+atlas_coords = (5,5)
+tint = (255,0,0,255)
+[killbox]
+id = 13
+pos = (240,64)
+collision_box = (0,2,8,4)
+collision_mask = 00000011
+
+[sprite]
+parent = 13
+atlas_coords = (5,5)
+tint = (255,0,0,255)
+[killbox]
+id = 14
+pos = (248,64)
+collision_box = (0,2,8,4)
+collision_mask = 00000011
+
+[sprite]
+parent = 14
+atlas_coords = (5,5)
+tint = (255,0,0,255)
+[killbox]
+id = 15
+pos = (256,64)
+collision_box = (0,2,8,4)
+collision_mask = 00000011
+
+[sprite]
+parent = 15
+atlas_coords = (5,5)
+tint = (255,0,0,255)
+[killbox]
+id = 16
+pos = (264,64)
+collision_box = (0,2,8,4)
+collision_mask = 00000011
+
+[sprite]
+parent = 16
+atlas_coords = (5,5)
+tint = (255,0,0,255)
+[killbox]
+id = 17
+pos = (272,64)
+collision_box = (0,2,8,4)
+collision_mask = 00000011
+
+[sprite]
+parent = 17
+atlas_coords = (5,5)
+tint = (255,0,0,255)
+[killbox]
+id = 18
+pos = (280,64)
+collision_box = (0,2,8,4)
+collision_mask = 00000011
+
+[sprite]
+parent = 18
+atlas_coords = (5,5)
+tint = (255,0,0,255)
+[killbox]
+id = 19
+pos = (288,64)
+collision_box = (0,2,8,4)
+collision_mask = 00000011
+
+[sprite]
+parent = 19
+atlas_coords = (5,5)
+tint = (255,0,0,255)
+[killbox]
+id = 20
+pos = (296,64)
+collision_box = (0,2,8,4)
+collision_mask = 00000011
+
+[sprite]
+parent = 20
+atlas_coords = (5,5)
+tint = (255,0,0,255)
+[killbox]
+id = 21
+pos = (304,64)
+collision_box = (0,2,8,4)
+collision_mask = 00000011
+
+[sprite]
+parent = 21
+atlas_coords = (5,5)
+tint = (255,0,0,255)
+[killbox]
+id = 22
+pos = (312,64)
+collision_box = (0,2,8,4)
+collision_mask = 00000011
+
+[sprite]
+parent = 22
+atlas_coords = (5,5)
+tint = (255,0,0,255)
 [water]
 water_level = 136
 
@@ -895,12 +1128,12 @@ key_positions = (248,48)
 pos = (56,112)
 
 [goal]
-id = 0
+id = 23
 pos = (272,112)
 collision_box = (0,0,8,8)
 collision_mask = 00000011
 [sprite]
-parent = 0
+parent = 23
 atlas_coords = (0,4)
 tint = (255,0,0,255)
 animation = ((0,4),0.08);((0,5),0.08);((0,6),0.08);((1,6),0.08);((2,6),0.08);((2,5),0.08);((2,4),0.08);((1,4),0.08)
