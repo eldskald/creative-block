@@ -17,7 +17,10 @@ public:
 
 private:
     static vector<Music> bgms_;
+    static float time_;
+    static float volume_;
     static int current_;
+    static int next_;
 
     static void tick_();
 };

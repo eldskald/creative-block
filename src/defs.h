@@ -42,6 +42,11 @@
 
 #define SFX_LIMIT_TIMER 0.2f
 
+#define BGM_VOL 1.0f
+#define BGM_VOL_DOWN_TIME 2.0f
+#define BGM_VOL_UP_TIME 2.0f
+#define BGM_TRANSITION_TIME 1.0f
+
 #define PLAYER_ATLAS_COORDS (Vector2){1.0f, 5.0f}
 #define PLAYER_Z_INDEX 5
 #define PLAYER_SHADOW_Z_INDEX 4
