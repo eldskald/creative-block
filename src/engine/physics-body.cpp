@@ -31,12 +31,13 @@ list<physics_body*> physics_body::get_physics_body_children_() {
     return children;
 }
 
-list<Rectangle> physics_body::get_children_collision_rects_() {
-    list<Rectangle> rects;
-    for (auto i : this->get_physics_body_children_()) {
-        rects.push_back(i->get_collision_rect_());
-    }
-    return rects;
+list<physics_body*> physics_body::get_overlapping_bodies() {
+    list<physics_body*> bodies =
+        physics_body::get_colliders(this->get_collision_rect_(),
+                                    this->collision_mask,
+                                    this->collision_layer);
+    bodies.remove(this);
+    return bodies;
 }
 
 list<physics_body*> physics_body::get_bodies_touching_top() {

@@ -40,6 +40,7 @@ public:
     list<physics_body*> get_bodies_touching_left();
     list<physics_body*> get_bodies_touching_bottom();
     list<physics_body*> get_bodies_touching_right();
+    list<physics_body*> get_overlapping_bodies();
     list<physics_body*> get_detected_bodies();
     list<physics_body*> get_detected_areas();
     bool collision_detected();
@@ -69,7 +70,6 @@ private:
 
     Rectangle get_collision_rect_();
     list<physics_body*> get_physics_body_children_();
-    list<Rectangle> get_children_collision_rects_();
     float compute_h_movement_(float delta_d, bool ignore_children = false);
     float compute_v_movement_(float delta_d, bool ignore_children = false);
     float move_and_drag_children_h_(float delta_d);

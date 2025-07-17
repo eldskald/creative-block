@@ -1,6 +1,7 @@
 #include "core/base-unit.h"
 #include "core/game.h"
 #include "defs.h"
+#include "imports.h"
 #include <algorithm>
 #include <cmath>
 #include <raylib.h>
@@ -114,6 +115,23 @@ void base_unit::tick_() {
             // down, usually after a jump for example.
             else
                 this->pos.y = -this->collision_box.height;
+            break;
+        }
+    }
+    // Because of the way the physics system is jank, there is a chance a
+    // base_unit jumping from underneath might clip through so we do this.
+    for (auto* body : this->get_overlapping_bodies()) {
+        if (body == this->get_parent() || body->vel.y >= 0.0f ||
+            body->get_global_pos().y - this->get_global_pos().y <=
+                SPRITESHEET_CELL_SIZE_Y / 2)
+            continue;
+        auto* unit = dynamic_cast<base_unit*>(body);
+        if (unit) {
+            is_carried = true;
+            this->reparent(unit);
+            this->pos.y -=
+                this->collision_box.height -
+                (unit->get_global_pos().y - this->get_global_pos().y);
             break;
         }
     }
