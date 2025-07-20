@@ -82,6 +82,12 @@ void tileset_manager::initialize() {
         block_tiles.push_back(
             (tile){(Vector2){(float)i, 7}, tile_type::block, FG_COLOR});
     }
+    block_tiles.push_back(
+        (tile){(Vector2){12, 4}, tile_type::block, FG_COLOR});
+    block_tiles.push_back(
+        (tile){(Vector2){12, 5}, tile_type::block, FG_COLOR});
+    block_tiles.push_back(
+        (tile){(Vector2){12, 6}, tile_type::block, FG_COLOR});
 
     vector<tile> bg_tiles;
     // grass
@@ -140,6 +146,7 @@ void tileset_manager::initialize() {
     bg_tiles.push_back((tile){(Vector2){6, 12}, tile_type::pollen, FG_COLOR});
     bg_tiles.push_back(
         (tile){(Vector2){10, 14}, tile_type::raindrop, FG_COLOR});
+    bg_tiles.push_back((tile){(Vector2){11, 13}, tile_type::wisp, FG_COLOR});
 
     vector<tile> int_tiles;
     // player and goal

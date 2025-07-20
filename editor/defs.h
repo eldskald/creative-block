@@ -65,6 +65,7 @@ enum tile_type {
     puff,
     pollen,
     raindrop,
+    wisp,
     block,
     player,
     goal,
@@ -112,6 +113,7 @@ enum tile_type {
      puff,                                                                     \
      pollen,                                                                   \
      raindrop,                                                                 \
+     wisp,                                                                     \
      block,                                                                    \
      player,                                                                   \
      goal,                                                                     \

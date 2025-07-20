@@ -12,6 +12,7 @@
 #include "core/scene-manager.h"
 #include "core/water-drip.h"
 #include "core/water.h"
+#include "core/wisp.h"
 #include "engine/game-element.h"
 #include "engine/physics-body.h"
 #include "engine/renderer.h"
@@ -466,6 +467,13 @@ game_element* data_loader::get_element_from_block_(element_block block) {
     }
     if (block.type == "raindrop") {
         auto* emitter = new raindrop();
+        for (auto& line : block.properties) {
+            data_loader::parse_game_element_property_line_(emitter, line);
+        }
+        return emitter;
+    }
+    if (block.type == "wisp") {
+        auto* emitter = new wisp();
         for (auto& line : block.properties) {
             data_loader::parse_game_element_property_line_(emitter, line);
         }
