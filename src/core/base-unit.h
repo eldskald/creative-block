@@ -32,6 +32,7 @@ public:
 
 protected:
     void tick_() override;
+    void marked_for_deletion_() override;
 
     virtual void jumped_();
 

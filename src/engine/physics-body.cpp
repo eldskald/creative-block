@@ -21,16 +21,6 @@ Rectangle physics_body::get_collision_rect_() {
                        floor(this->collision_box.height)};
 }
 
-list<physics_body*> physics_body::get_physics_body_children_() {
-    list<physics_body*> children;
-    for (auto i : this->get_children()) {
-        auto* child = dynamic_cast<physics_body*>(i);
-        if (!child) continue;
-        children.push_back(child);
-    }
-    return children;
-}
-
 list<physics_body*> physics_body::get_overlapping_bodies() {
     list<physics_body*> bodies =
         physics_body::get_colliders(this->get_collision_rect_(),
@@ -136,6 +126,30 @@ list<physics_body*> physics_body::get_detected_areas() {
         clone.push_back(body);
     }
     return clone;
+}
+
+physics_body* physics_body::get_carrier() {
+    return this->carried_by_;
+}
+
+list<physics_body*> physics_body::get_carried_bodies() {
+    list<physics_body*> clone;
+    for (auto* body : this->carried_bodies_) {
+        clone.push_back(body);
+    }
+    return clone;
+}
+
+void physics_body::carry(physics_body* body) {
+    if (body->carried_by_) return;
+    this->carried_bodies_.push_back(body);
+    body->carried_by_ = this;
+}
+
+void physics_body::let_go_of(physics_body* body) {
+    if (body->carried_by_ != this) return;
+    this->carried_bodies_.remove(body);
+    body->carried_by_ = nullptr;
 }
 
 bool physics_body::collision_detected() {
@@ -294,69 +308,52 @@ float physics_body::compute_v_movement_(float delta_d, bool ignore_children) {
     return delta;
 }
 
-// Move the body and then bring the children on top back the same distance that
+// Move the body and then bring the carrieds on top back the same distance that
 // was moved, because as we move the body we will automatically move its
 // children without taking physics into account, so we need to move them back
 // and call this same function on each one of them. We don't need to worry about
-// collisions with the children because they are all on top of the body and
+// collisions with the carrieds because they are all on top of the body and
 // can't collide with it. We also don't need to worry about collisions between
-// the children because they can't collide on the X axis, only on the Y.
-float physics_body::move_and_drag_children_h_(float delta_d) {
+// the carreids because they can't collide on the X axis, only on the Y.
+float physics_body::move_and_drag_carrieds_h_(float delta_d) {
     if (FloatEquals(delta_d, 0.0f)) return 0.0f;
     float delta = this->compute_h_movement_(delta_d, true);
     if (FloatEquals(delta, 0.0f)) return 0.0f;
 
     this->pos.x += delta;
-    list<physics_body*> children = this->get_physics_body_children_();
-    for (auto i : children) {
-        i->pos.x -= delta;
-        i->move_and_drag_children_h_(delta);
+    for (auto i : this->carried_bodies_) {
+        i->move_and_drag_carrieds_h_(delta);
     }
 
     return delta;
 }
 
-float physics_body::move_and_drag_children_v_(float delta_d) {
+float physics_body::move_and_drag_carrieds_v_(float delta_d) {
     if (FloatEquals(delta_d, 0.0f)) return 0.0f;
-    if (delta_d > 0.0f) return this->move_and_drag_children_down_(delta_d);
-    return this->move_and_drag_children_up_(delta_d);
+    if (delta_d > 0.0f) return this->move_and_drag_carrieds_down_(delta_d);
+    return this->move_and_drag_carrieds_up_(delta_d);
 }
 
-// When going up, we should move the children from top to bottom. While moving
+// When going up, we should move the carrieds from top to bottom. While moving
 // them, we reuse the delta because this guarantees the delta will only go down
 // as they collide, so we don't move the following bodies more than necessary.
-float physics_body::move_and_drag_children_up_(float delta_d) {
+float physics_body::move_and_drag_carrieds_up_(float delta_d) {
     float delta = delta_d;
-    list<physics_body*> children = this->get_physics_body_children_();
-    for (auto i : children) {
-        delta = i->move_and_drag_children_up_(delta);
+    for (auto i : this->carried_bodies_) {
+        delta = i->move_and_drag_carrieds_up_(delta);
     }
     delta = this->compute_v_movement_(delta);
     this->pos.y += delta;
-
-    // After moving the body, because of the composite system of game_object we
-    // will also move the children, and without taking collision into account.
-    // We already moved them, so just readjusting them should be enough.
-    for (auto i : children) {
-        i->pos.y -= delta;
-    }
     return delta;
 }
 
 // When going down, move them from bottom to top.
-float physics_body::move_and_drag_children_down_(float delta_d) {
+float physics_body::move_and_drag_carrieds_down_(float delta_d) {
     float delta = this->compute_v_movement_(delta_d);
     this->pos.y += delta;
-
-    // Same thing as in move_and_drag_children_up_, when moving the parent we
-    // end up moving the children too because of the composite system, so we
-    // put them back and then move them with move_and_drag_children_down_.
-    list<physics_body*> children = this->get_physics_body_children_();
-    for (auto i : children) {
-        i->pos.y -= delta;
-        i->move_and_drag_children_down_(delta);
+    for (auto i : this->carried_bodies_) {
+        i->move_and_drag_carrieds_down_(delta);
     }
-
     return delta;
 }
 
@@ -364,10 +361,10 @@ void physics_body::physics_tick_() {
     float delta_x = this->vel.x * GetFrameTime();
     float delta_y = this->vel.y * GetFrameTime();
     if (this->type == kinematic) {
-        if (!FloatEquals(delta_x, this->move_and_drag_children_h_(delta_x))) {
+        if (!FloatEquals(delta_x, this->move_and_drag_carrieds_h_(delta_x))) {
             this->vel.x = 0.0f;
         }
-        if (!FloatEquals(delta_y, this->move_and_drag_children_v_(delta_y))) {
+        if (!FloatEquals(delta_y, this->move_and_drag_carrieds_v_(delta_y))) {
             this->vel.y = 0.0f;
         }
     } else {

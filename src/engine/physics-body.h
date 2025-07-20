@@ -43,6 +43,10 @@ public:
     list<physics_body*> get_overlapping_bodies();
     list<physics_body*> get_detected_bodies();
     list<physics_body*> get_detected_areas();
+    physics_body* get_carrier();
+    list<physics_body*> get_carried_bodies();
+    void carry(physics_body*);
+    void let_go_of(physics_body*);
     bool collision_detected();
 
     static list<physics_body*> get_colliders(Rectangle collision_box,
@@ -65,17 +69,18 @@ protected:
     void exit_() override;
 
 private:
+    physics_body* carried_by_{nullptr};
+    list<physics_body*> carried_bodies_;
     list<physics_body*> detected_bodies_;
     list<physics_body*> detected_areas_;
 
     Rectangle get_collision_rect_();
-    list<physics_body*> get_physics_body_children_();
     float compute_h_movement_(float delta_d, bool ignore_children = false);
     float compute_v_movement_(float delta_d, bool ignore_children = false);
-    float move_and_drag_children_h_(float delta_d);
-    float move_and_drag_children_v_(float delta_d);
-    float move_and_drag_children_up_(float delta_d);
-    float move_and_drag_children_down_(float delta_d);
+    float move_and_drag_carrieds_h_(float delta_d);
+    float move_and_drag_carrieds_v_(float delta_d);
+    float move_and_drag_carrieds_up_(float delta_d);
+    float move_and_drag_carrieds_down_(float delta_d);
     list<physics_body*> find_entering_bodies_();
     list<physics_body*> find_exiting_bodies_();
     list<physics_body*> find_entering_areas_();

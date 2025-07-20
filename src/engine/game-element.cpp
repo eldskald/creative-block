@@ -5,7 +5,7 @@
 
 using namespace std;
 
-list<game_element*> game_element::marked_for_deletion_ = {};
+list<game_element*> game_element::elements_marked_for_deletion_ = {};
 list<game_element*> game_element::to_be_reparented_ = {};
 
 game_element* game_element::get_parent() {
@@ -53,8 +53,19 @@ bool game_element::is_on_tree() {
     return this->is_on_tree_;
 }
 
+bool game_element::is_marked_for_deletion() {
+    return this->is_marked_for_deletion_;
+}
+
 void game_element::mark_for_deletion() {
-    game_element::rec_mark_for_deletion_(this);
+    if (this->is_marked_for_deletion_) return;
+    game_element::elements_marked_for_deletion_.push_back(this);
+    this->is_marked_for_deletion_ = true;
+    for (auto child : this->children_) {
+        child->mark_for_deletion();
+    }
+    this->marked_for_deletion_();
+
 }
 
 Vector2 game_element::get_global_pos() {
@@ -76,6 +87,10 @@ void game_element::exit_() {
 }
 
 void game_element::tick_() {
+    return;
+}
+
+void game_element::marked_for_deletion_() {
     return;
 }
 
@@ -135,18 +150,9 @@ void game_element::trigger_on_player_shadow_(game_element* element) {
     element->on_player_shadow_();
 }
 
-void game_element::rec_mark_for_deletion_(game_element* element) {
-    if (element->is_marked_for_deletion_) return;
-    game_element::marked_for_deletion_.push_back(element);
-    element->is_marked_for_deletion_ = true;
-    for (auto child : element->children_) {
-        game_element::rec_mark_for_deletion_(child);
-    }
-}
-
 void game_element::delete_marked_() {
-    if (game_element::marked_for_deletion_.empty()) return;
-    for (auto element : game_element::marked_for_deletion_) {
+    if (game_element::elements_marked_for_deletion_.empty()) return;
+    for (auto element : game_element::elements_marked_for_deletion_) {
         if (element->is_on_tree_) element->exit_();
         if (element->parent_) {
             if (!element->parent_->is_marked_for_deletion_) {
@@ -154,9 +160,9 @@ void game_element::delete_marked_() {
             }
         }
     }
-    for (auto element : game_element::marked_for_deletion_)
+    for (auto element : game_element::elements_marked_for_deletion_)
         delete element;
-    game_element::marked_for_deletion_.clear();
+    game_element::elements_marked_for_deletion_.clear();
 }
 
 void game_element::reparent_elements_() {

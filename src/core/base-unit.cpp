@@ -94,52 +94,63 @@ void base_unit::tick_() {
     // code that causes a jump to end when you release the button is on the
     // release_jump() function.
 
-    // Gravity. Can't clamp because there's no max vertical rising speed
+    // Gravity. Can't clamp because there's no max vertical rising speed.
     this->vel.y += PLAYER_GRAVITY * GetFrameTime();
     if (this->vel.y > PLAYER_MAX_FALL_SPEED) {
         this->vel.y = PLAYER_MAX_FALL_SPEED;
     }
 
-    // Checks if it is on top of another base_unit to see if it gets carried
-    bool is_carried = false;
-    for (auto* body : this->get_bodies_touching_bottom()) {
-        auto* unit = dynamic_cast<base_unit*>(body);
-        if (unit) {
-            is_carried = true;
-            if (this->get_parent() != unit) this->reparent(unit);
-            // We do this next line because reparenting happens at the end of
-            // the tick cycle, and moves the child's pos to match it's pos on
-            // screen in relation to its new parent. The point is to fix the y
-            // pos to eliminate fraction values because they were accumulating
-            // and would cause the body to fall off its parent when it moved
-            // down, usually after a jump for example.
-            else
-                this->pos.y = -this->collision_box.height;
-            break;
+    // Checks if it is on top of another base_unit to see if it gets carried.
+    // Only does so if it's not about to be deleted because when deleting it
+    // we need to clear the pointers to it on its carrier/carrieds, and because
+    // this is on tick_(), this can get carried again.
+    if (!this->is_marked_for_deletion()) {
+        bool found = false;
+        for (auto* body : this->get_bodies_touching_bottom()) {
+            auto* unit = dynamic_cast<base_unit*>(body);
+            if (unit) {
+                found = true;
+                if (this->get_carrier() != unit) unit->carry(this);
+                // We do this pos.y value set thing because of floating point math.
+                // While going down, decimal values would be accumulating and the
+                // the body would fall off, usually when the carrier jumps.
+                else {
+                    this->pos.y = unit->pos.y - this->collision_box.height;
+                }
+                break;
+            }
         }
-    }
-    // Because of the way the physics system is jank, there is a chance a
-    // base_unit jumping from underneath might clip through so we do this.
-    for (auto* body : this->get_overlapping_bodies()) {
-        if (body == this->get_parent() || body->vel.y >= 0.0f ||
-            body->get_global_pos().y - this->get_global_pos().y <=
-                SPRITESHEET_CELL_SIZE_Y / 2)
-            continue;
-        auto* unit = dynamic_cast<base_unit*>(body);
-        if (unit) {
-            is_carried = true;
-            this->reparent(unit);
-            this->pos.y -=
-                this->collision_box.height -
-                (unit->get_global_pos().y - this->get_global_pos().y);
-            break;
+        // Because of the way the physics system is jank, there is a chance a
+        // base_unit jumping from underneath might clip through and escape the
+        // get_bodies_touching_bottom() check, so we do this to make sure.
+        for (auto* body : this->get_overlapping_bodies()) {
+            if (body == this->get_parent() || body->vel.y >= 0.0f ||
+                body->get_global_pos().y - this->get_global_pos().y <=
+                    SPRITESHEET_CELL_SIZE_Y / 2)
+                continue;
+            auto* unit = dynamic_cast<base_unit*>(body);
+            if (unit) {
+                unit->carry(this);
+                found = true;
+                this->pos.y -=
+                    this->collision_box.height -
+                    (unit->get_global_pos().y - this->get_global_pos().y);
+                break;
+            }
         }
-    }
-    if (!is_carried && this->get_parent() != game::get_root()) {
-        this->reparent(game::get_root());
+        if (!found && this->get_carrier()) {
+            this->get_carrier()->let_go_of(this);
+        }
     }
 }
 
 void base_unit::jumped_() {
     return;
+}
+
+void base_unit::marked_for_deletion_() {
+    if (this->get_carrier()) this->get_carrier()->let_go_of(this);
+    for (auto* unit : this->get_carried_bodies()) {
+        this->let_go_of(unit);
+    }
 }

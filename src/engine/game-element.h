@@ -38,12 +38,14 @@ public:
     void mark_for_deletion();
     bool descends_from(game_element* element);
     bool is_on_tree();
+    bool is_marked_for_deletion();
     Vector2 get_global_pos();
 
 protected:
     virtual void enter_();
     virtual void exit_();
     virtual void tick_();
+    virtual void marked_for_deletion_();
     virtual void on_player_death_();
     virtual void on_player_respawn_();
     virtual void on_player_shadow_();
@@ -56,7 +58,7 @@ private:
     bool is_marked_for_deletion_{false};
 
     static list<game_element*> to_be_reparented_;
-    static list<game_element*> marked_for_deletion_;
+    static list<game_element*> elements_marked_for_deletion_;
 
     static void trigger_enter_(game_element* element);
     static void trigger_exit_(game_element* element);
@@ -64,7 +66,6 @@ private:
     static void trigger_on_player_death_(game_element* element);
     static void trigger_on_player_respawn_(game_element* element);
     static void trigger_on_player_shadow_(game_element* element);
-    static void rec_mark_for_deletion_(game_element* element);
     static void delete_marked_();
     static void reparent_elements_();
 };
