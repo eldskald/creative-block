@@ -55,6 +55,7 @@ int scene_manager::get_shadows_limit() {
 }
 
 void scene_manager::respawn_player() {
+    scene_manager::shadow_histories_.clear();
     auto* new_player = new player();
     new_player->pos = scene_manager::player_spawn_point_;
     game::get_root()->add_child(new_player);

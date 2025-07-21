@@ -41,4 +41,6 @@ private:
     float jump_buffer_timer_{0.0f};
     bool is_pre_buffering_jump_{false};
     bool is_jumping_{false};
+
+    void normalize_y_pos_on_carrier_();
 };

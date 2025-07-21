@@ -115,7 +115,7 @@ void base_unit::tick_() {
                 // While going down, decimal values would be accumulating and the
                 // the body would fall off, usually when the carrier jumps.
                 else {
-                    this->pos.y = unit->pos.y - this->collision_box.height;
+                    this->normalize_y_pos_on_carrier_();
                 }
                 break;
             }
@@ -152,5 +152,14 @@ void base_unit::marked_for_deletion_() {
     if (this->get_carrier()) this->get_carrier()->let_go_of(this);
     for (auto* unit : this->get_carried_bodies()) {
         this->let_go_of(unit);
+    }
+}
+
+void base_unit::normalize_y_pos_on_carrier_() {
+    auto* carrier = this->get_carrier();
+    this->pos.y = carrier->pos.y - this->collision_box.height;
+    for (auto* carried : this->get_carried_bodies()) {
+        auto* unit = dynamic_cast<base_unit*>(carried);
+        if (unit) unit->normalize_y_pos_on_carrier_();
     }
 }
