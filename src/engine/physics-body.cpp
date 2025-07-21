@@ -141,7 +141,8 @@ list<physics_body*> physics_body::get_carried_bodies() {
 }
 
 void physics_body::carry(physics_body* body) {
-    if (body->carried_by_) return;
+    if (body->carried_by_ == this) return;
+    if (body->carried_by_) body->carried_by_->let_go_of(body);
     this->carried_bodies_.push_back(body);
     body->carried_by_ = this;
 }

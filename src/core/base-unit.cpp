@@ -1,5 +1,4 @@
 #include "core/base-unit.h"
-#include "core/game.h"
 #include "defs.h"
 #include "imports.h"
 #include <algorithm>
@@ -105,41 +104,44 @@ void base_unit::tick_() {
     // we need to clear the pointers to it on its carrier/carrieds, and because
     // this is on tick_(), this can get carried again.
     if (!this->is_marked_for_deletion()) {
-        bool found = false;
+
+        // Ok, this is how we're going to do this: if it's already carried and
+        // we find it standing on top of multiple units (say it's on top of a
+        // shadow and the player passes underneath it) we don't want to change
+        // its carrier. If it's not being carried, we use the last found unit.
+        physics_body* last = nullptr;
+        bool found_carrier = false;
         for (auto* body : this->get_bodies_touching_bottom()) {
             auto* unit = dynamic_cast<base_unit*>(body);
-            if (unit) {
-                found = true;
-                if (this->get_carrier() != unit) unit->carry(this);
-                // We do this pos.y value set thing because of floating point math.
-                // While going down, decimal values would be accumulating and the
-                // the body would fall off, usually when the carrier jumps.
-                else {
-                    this->normalize_y_pos_on_carrier_();
-                }
-                break;
-            }
+            if (unit) last = unit;
+            if (body == this->get_carrier()) found_carrier = true;
         }
+
+        if (found_carrier) {
+            // We need this next line so float points don't accumulate and cause
+            // the carried bodies to fall off. Usually happens when the carrier
+            // is going down, most often at the top of a jump.
+            this->normalize_y_pos_on_carrier_();
+        } else if (last) {
+            last->carry(this);
+            this->normalize_y_pos_on_carrier_();
+        } else if (this->get_carrier() && !found_carrier) {
+            this->get_carrier()->let_go_of(this);
+        } 
+
         // Because of the way the physics system is jank, there is a chance a
         // base_unit jumping from underneath might clip through and escape the
         // get_bodies_touching_bottom() check, so we do this to make sure.
         for (auto* body : this->get_overlapping_bodies()) {
             if (body == this->get_parent() || body->vel.y >= 0.0f ||
-                body->get_global_pos().y - this->get_global_pos().y <=
-                    SPRITESHEET_CELL_SIZE_Y / 2)
+                body->get_global_pos().y - this->get_global_pos().y <= 1.0f)
                 continue;
             auto* unit = dynamic_cast<base_unit*>(body);
             if (unit) {
                 unit->carry(this);
-                found = true;
-                this->pos.y -=
-                    this->collision_box.height -
-                    (unit->get_global_pos().y - this->get_global_pos().y);
+                this->normalize_y_pos_on_carrier_();
                 break;
             }
-        }
-        if (!found && this->get_carrier()) {
-            this->get_carrier()->let_go_of(this);
         }
     }
 }
