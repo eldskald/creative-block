@@ -65,7 +65,6 @@ void game_element::mark_for_deletion() {
         child->mark_for_deletion();
     }
     this->marked_for_deletion_();
-
 }
 
 Vector2 game_element::get_global_pos() {

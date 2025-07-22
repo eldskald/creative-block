@@ -127,7 +127,7 @@ void base_unit::tick_() {
             this->normalize_y_pos_on_carrier_();
         } else if (this->get_carrier() && !found_carrier) {
             this->get_carrier()->let_go_of(this);
-        } 
+        }
 
         // Because of the way the physics system is jank, there is a chance a
         // base_unit jumping from underneath might clip through and escape the

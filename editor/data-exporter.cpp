@@ -433,7 +433,6 @@ string data_exporter::get_bg_wisps_text_(map* cells) {
         }
     }
     return text;
-
 }
 
 string data_exporter::get_bg_grass_text_(map* cells) {

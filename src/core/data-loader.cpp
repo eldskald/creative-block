@@ -13,10 +13,10 @@
 #include "core/water-drip.h"
 #include "core/water.h"
 #include "core/wisp.h"
+#include "engine/bgm.h"
 #include "engine/game-element.h"
 #include "engine/physics-body.h"
 #include "engine/renderer.h"
-#include "engine/bgm.h"
 #include "engine/sprite.h"
 #include "engine/text.h"
 #include <cctype>

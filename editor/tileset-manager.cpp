@@ -82,12 +82,9 @@ void tileset_manager::initialize() {
         block_tiles.push_back(
             (tile){(Vector2){(float)i, 7}, tile_type::block, FG_COLOR});
     }
-    block_tiles.push_back(
-        (tile){(Vector2){12, 4}, tile_type::block, FG_COLOR});
-    block_tiles.push_back(
-        (tile){(Vector2){12, 5}, tile_type::block, FG_COLOR});
-    block_tiles.push_back(
-        (tile){(Vector2){12, 6}, tile_type::block, FG_COLOR});
+    block_tiles.push_back((tile){(Vector2){12, 4}, tile_type::block, FG_COLOR});
+    block_tiles.push_back((tile){(Vector2){12, 5}, tile_type::block, FG_COLOR});
+    block_tiles.push_back((tile){(Vector2){12, 6}, tile_type::block, FG_COLOR});
 
     vector<tile> bg_tiles;
     // grass
