@@ -7,6 +7,7 @@
 #include "engine/game-element.h"
 #include "engine/renderer.h"
 #include "imports.h"
+#include "raymath.h"
 #include <list>
 #include <raylib.h>
 #include <unordered_map>
@@ -71,6 +72,7 @@ void scene_manager::shadow_pressed(input_history history, player* player) {
 
 void scene_manager::reset_player_pos_(player* player) {
     player->pos = scene_manager::player_spawn_point_;
+    player->vel = Vector2Zero();
 }
 
 void scene_manager::new_shadow_history_(input_history history) {

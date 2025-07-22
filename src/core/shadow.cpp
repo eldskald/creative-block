@@ -56,12 +56,12 @@ void shadow::tick_() {
     if (this->killed_) return;
 
     if (!this->history_.empty()) {
-        this->time_ += GetFrameTime();
         input curr = this->history_.front();
         if (this->time_ >= curr.time) {
             this->read_input_(curr);
             this->history_.pop_front();
         }
+        this->time_ += GetFrameTime();
     }
 
     this->base_unit::tick_();
