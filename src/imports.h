@@ -105,6 +105,7 @@
 #define SCREEN_COLOR_SHADER_0 "assets/shaders/screen-colors-0.frag"
 #define SCREEN_COLOR_SHADER_1 "assets/shaders/screen-colors-1.frag"
 #define SCREEN_COLOR_SHADER_2 "assets/shaders/screen-colors-2.frag"
+#define SCREEN_COLOR_SHADER_3 "assets/shaders/screen-colors-3.frag"
 
 #define FONT_TITLE "assets/fonts/nordine/Nordine.otf"
 

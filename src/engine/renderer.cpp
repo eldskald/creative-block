@@ -137,6 +137,8 @@ void renderer::initialize() {
         LoadShader(BASE_VERT_SHADER, SCREEN_COLOR_SHADER_1));
     renderer::screen_color_shaders_.push_back(
         LoadShader(BASE_VERT_SHADER, SCREEN_COLOR_SHADER_2));
+    renderer::screen_color_shaders_.push_back(
+        LoadShader(BASE_VERT_SHADER, SCREEN_COLOR_SHADER_3));
     for (Shader shader : renderer::screen_color_shaders_) {
         renderer::set_shader_property_(
             shader, "maskMain", &mask_main_value, SHADER_UNIFORM_VEC4);
@@ -157,6 +159,19 @@ void renderer::initialize() {
                                        &col_bg_factor_value,
                                        SHADER_UNIFORM_FLOAT);
     }
+    renderer::set_shader_property_(
+        renderer::screen_color_shaders_.at(
+            renderer::screen_color_shaders_.size() - 1),
+        "textureSize",
+        &tex_size,
+        SHADER_UNIFORM_VEC2);
+    array<float, 2> screen_size = {WINDOW_SIZE_X, WINDOW_SIZE_Y};
+    renderer::set_shader_property_(
+        renderer::screen_color_shaders_.at(
+            renderer::screen_color_shaders_.size() - 1),
+        "screenSize",
+        &screen_size,
+        SHADER_UNIFORM_VEC2);
 
     // Two blur shaders for the two passes. The first one blurs with
     // intensity taken into account, and takes the base_tex_1_ so the shader
