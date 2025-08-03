@@ -1,4 +1,5 @@
 #include "core/game.h"
+#include "core/pause-menu.h"
 #include "core/scene-manager.h"
 #include "engine/bgm.h"
 #include "engine/game-element.h"
@@ -12,6 +13,18 @@
 
 game_element* game::root_ = nullptr;
 bool game::paused_ = false;
+
+#ifndef WEB
+bool game::game_closing_ = false;
+
+void game::close_game() {
+    game::game_closing_ = true;
+}
+
+bool game::is_game_closing() {
+    return WindowShouldClose() || game::game_closing_;
+}
+#endif
 
 void game::on_start() {
     SetRandomSeed(0);
@@ -40,6 +53,8 @@ void game::do_game_loop() {
         physics_body::update_areas_();
         game_element::trigger_tick_(game::root_);
         bgm::tick_();
+    } else {
+        pause_menu::tick_();
     }
     sfx::tick_();
     renderer::render();
@@ -64,6 +79,11 @@ bool game::is_paused() {
     return game::paused_;
 }
 
-void game::toggle_pause() {
-    game::paused_ = !game::paused_;
+void game::pause() {
+    game::paused_ = true;
+    pause_menu::reset_state();
+}
+
+void game::unpause() {
+    game::paused_ = false;
 }

@@ -31,7 +31,7 @@ int main() {
     Image icon = LoadImage(APP_ICON);
     SetWindowIcon(icon);
     UnloadImage(icon);
-    while (!WindowShouldClose()) {
+    while (!game::is_game_closing()) {
         game::do_game_loop();
     }
 #endif

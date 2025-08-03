@@ -4,8 +4,11 @@
 #include <raylib.h>
 #include <string>
 
+class pause_menu;
+
 class text : public game_element {
     friend class renderer;
+    friend class pause_menu;
 
 public:
 #ifdef DEV

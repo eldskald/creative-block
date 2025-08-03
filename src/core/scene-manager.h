@@ -21,6 +21,7 @@ public:
     static int get_shadows_limit();
     static void respawn_player();
     static void next_scene();
+    static void reload_scene();
     static void shadow_pressed(input_history history, player* player);
 
 private:
@@ -30,7 +31,7 @@ private:
     static list<input_history> shadow_histories_;
     static int level_shadows_limit_;
     static list<shadow*> shadows_;
-    static bool next_scene_called_;
+    static bool loading_scene_;
 
     static void reset_player_pos_(player* player);
     static void new_shadow_history_(input_history history);

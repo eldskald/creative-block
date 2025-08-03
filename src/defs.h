@@ -30,6 +30,22 @@
 
 #define GAME_TITLE "CREATIVE BLOCK"
 
+#define PAUSE_MENU_WIDTH 160
+#ifndef WEB
+#define PAUSE_MENU_HEIGHT 85
+#else
+#define PAUSE_MENU_HEIGHT 70
+#endif
+#define PAUSE_MENU_LINE_WIDTH 2
+#define PAUSE_MENU_TITLE "Game paused"
+#define PAUSE_MENU_TITLE_Y 15
+#define PAUSE_MENU_RESUME "Resume"
+#define PAUSE_MENU_RESUME_Y 40
+#define PAUSE_MENU_RESTART "Restart level"
+#define PAUSE_MENU_RESTART_Y 55
+#define PAUSE_MENU_QUIT "Quit game"
+#define PAUSE_MENU_QUIT_Y 70
+
 #define OPENING_SCREEN_TITLE_Y 80
 #define OPENING_SCREEN_MSG "Press enter to start"
 #define OPENING_SCREEN_MSG_Y 110
@@ -60,7 +76,7 @@
 #define PLAYER_JUMP_BUFFER 0.1f
 #define PLAYER_RESPAWN_TIME 1.0f
 
-#define CONTROLS_ACTIONS {left, right, up, down, jump, shadow, pause}
+#define CONTROLS_ACTIONS {left, right, up, down, jump, shadow, pause, accept}
 
 #define CONTROLS_KEYBOARD_LEFT KEY_A, KEY_LEFT
 #define CONTROLS_KEYBOARD_RIGHT KEY_D, KEY_RIGHT
@@ -68,7 +84,8 @@
 #define CONTROLS_KEYBOARD_DOWN KEY_S, KEY_DOWN
 #define CONTROLS_KEYBOARD_JUMP KEY_J
 #define CONTROLS_KEYBOARD_SHADOW KEY_K
-#define CONTROLS_KEYBOARD_PAUSE KEY_ENTER
+#define CONTROLS_KEYBOARD_PAUSE KEY_ENTER, KEY_ESCAPE
+#define CONTROLS_KEYBOARD_ACCEPT KEY_ENTER, KEY_SPACE, KEY_J, KEY_K
 
 #define CONTROLS_GAMEPAD_LEFT GAMEPAD_BUTTON_LEFT_FACE_LEFT
 #define CONTROLS_GAMEPAD_RIGHT GAMEPAD_BUTTON_LEFT_FACE_RIGHT
@@ -81,6 +98,10 @@
     GAMEPAD_BUTTON_LEFT_TRIGGER_1, GAMEPAD_BUTTON_LEFT_TRIGGER_2
 #define CONTROLS_GAMEPAD_PAUSE                                                 \
     GAMEPAD_BUTTON_MIDDLE_RIGHT, GAMEPAD_BUTTON_MIDDLE_LEFT
+#define CONTROLS_GAMEPAD_ACCEPT                                                \
+    GAMEPAD_BUTTON_MIDDLE_RIGHT, GAMEPAD_BUTTON_MIDDLE_LEFT,                   \
+        GAMEPAD_BUTTON_RIGHT_FACE_LEFT, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT,       \
+        GAMEPAD_BUTTON_RIGHT_FACE_UP, GAMEPAD_BUTTON_RIGHT_FACE_DOWN
 
 #define CONTROLS_KEYBOARD                                                      \
     {                                                                          \
@@ -91,6 +112,7 @@
         {jump, {CONTROLS_KEYBOARD_JUMP}},                                      \
         {shadow, {CONTROLS_KEYBOARD_SHADOW}},                                  \
         {pause, {CONTROLS_KEYBOARD_PAUSE}},                                    \
+        {accept, {CONTROLS_KEYBOARD_ACCEPT}},                                  \
     }
 
 #define CONTROLS_GAMEPAD                                                       \
@@ -102,6 +124,7 @@
         {jump, {CONTROLS_GAMEPAD_JUMP}},                                       \
         {shadow, {CONTROLS_GAMEPAD_SHADOW}},                                   \
         {pause, {CONTROLS_GAMEPAD_PAUSE}},                                     \
+        {accept, {CONTROLS_GAMEPAD_ACCEPT}},                                   \
     }
 
 #define COL_LAYER_PLAYER 0b00000001

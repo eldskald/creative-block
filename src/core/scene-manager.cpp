@@ -22,7 +22,7 @@ Vector2 scene_manager::player_spawn_point_ = (Vector2){0};
 list<input_history> scene_manager::shadow_histories_ = {};
 list<shadow*> scene_manager::shadows_ = {};
 int scene_manager::level_shadows_limit_ = 1;
-bool scene_manager::next_scene_called_ = false;
+bool scene_manager::loading_scene_ = false;
 
 void scene_manager::initialize() {
     auto* root = new game_element();
@@ -86,19 +86,26 @@ void scene_manager::new_shadow_history_(input_history history) {
 }
 
 void scene_manager::next_scene() {
-    scene_manager::next_scene_called_ = true;
-    renderer::reset_water_waves();
+    scene_manager::loading_scene_ = true;
+    scene_manager::current_scene_ =
+        (scene)(((int)scene_manager::current_scene_ + 1) %
+                scene_manager::scenes_map_.size());
+    for (game_element* element : game::get_root()->get_children()) {
+        element->mark_for_deletion();
+    }
+}
+
+void scene_manager::reload_scene() {
+    scene_manager::loading_scene_ = true;
     for (game_element* element : game::get_root()->get_children()) {
         element->mark_for_deletion();
     }
 }
 
 void scene_manager::load_new_scene_() {
-    if (!scene_manager::next_scene_called_) return;
-    auto next_level = (scene)(((int)scene_manager::current_scene_ + 1) %
-                              scene_manager::scenes_map_.size());
-    list<game_element*> elements =
-        data_loader::load(scene_manager::scenes_map_[next_level]);
+    if (!scene_manager::loading_scene_) return;
+    list<game_element*> elements = data_loader::load(
+        scene_manager::scenes_map_[scene_manager::current_scene_]);
     for (game_element* element : elements) {
         game::get_root()->add_child(element);
         auto* player_element = dynamic_cast<player*>(element);
@@ -107,8 +114,8 @@ void scene_manager::load_new_scene_() {
         }
     }
     scene_manager::shadows_.clear();
-    scene_manager::current_scene_ = next_level;
-    scene_manager::next_scene_called_ = false;
+    scene_manager::loading_scene_ = false;
+    renderer::reset_water_waves();
 }
 
 void scene_manager::spawn_shadows_() {
@@ -129,7 +136,8 @@ void scene_manager::spawn_shadows_() {
 void scene_manager::tick_() {
     if (inputs::is_action_pressed(inputs::action::pause) &&
         scene_manager::current_scene_ != scene::opening &&
-        scene_manager::current_scene_ != scene::credits)
-        game::toggle_pause();
+        scene_manager::current_scene_ != scene::credits && !game::is_paused() &&
+        !scene_manager::loading_scene_)
+        game::pause();
     scene_manager::load_new_scene_();
 }
