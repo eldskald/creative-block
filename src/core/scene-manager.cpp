@@ -5,6 +5,7 @@
 #include "core/player.h"
 #include "core/shadow.h"
 #include "engine/game-element.h"
+#include "engine/inputs.h"
 #include "engine/renderer.h"
 #include "imports.h"
 #include "raymath.h"
@@ -123,4 +124,12 @@ void scene_manager::spawn_shadows_() {
         new_shadow->emit_spawn_particles();
         scene_manager::shadows_.push_back(new_shadow);
     }
+}
+
+void scene_manager::tick_() {
+    if (inputs::is_action_pressed(inputs::action::pause) &&
+        scene_manager::current_scene_ != scene::opening &&
+        scene_manager::current_scene_ != scene::credits)
+        game::toggle_pause();
+    scene_manager::load_new_scene_();
 }

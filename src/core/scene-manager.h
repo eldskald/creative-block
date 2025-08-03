@@ -36,4 +36,5 @@ private:
     static void new_shadow_history_(input_history history);
     static void spawn_shadows_();
     static void load_new_scene_();
+    static void tick_();
 };

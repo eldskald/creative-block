@@ -60,7 +60,7 @@
 #define PLAYER_JUMP_BUFFER 0.1f
 #define PLAYER_RESPAWN_TIME 1.0f
 
-#define CONTROLS_ACTIONS {left, right, up, down, jump, shadow, reset, start}
+#define CONTROLS_ACTIONS {left, right, up, down, jump, shadow, pause}
 
 #define CONTROLS_KEYBOARD_LEFT KEY_A, KEY_LEFT
 #define CONTROLS_KEYBOARD_RIGHT KEY_D, KEY_RIGHT
@@ -68,8 +68,7 @@
 #define CONTROLS_KEYBOARD_DOWN KEY_S, KEY_DOWN
 #define CONTROLS_KEYBOARD_JUMP KEY_J
 #define CONTROLS_KEYBOARD_SHADOW KEY_K
-#define CONTROLS_KEYBOARD_RESET KEY_BACKSPACE
-#define CONTROLS_KEYBOARD_START KEY_ENTER
+#define CONTROLS_KEYBOARD_PAUSE KEY_ENTER
 
 #define CONTROLS_GAMEPAD_LEFT GAMEPAD_BUTTON_LEFT_FACE_LEFT
 #define CONTROLS_GAMEPAD_RIGHT GAMEPAD_BUTTON_LEFT_FACE_RIGHT
@@ -80,8 +79,7 @@
         GAMEPAD_BUTTON_RIGHT_FACE_LEFT, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT
 #define CONTROLS_GAMEPAD_SHADOW                                                \
     GAMEPAD_BUTTON_LEFT_TRIGGER_1, GAMEPAD_BUTTON_LEFT_TRIGGER_2
-#define CONTROLS_GAMEPAD_RESET GAMEPAD_BUTTON_MIDDLE_RIGHT
-#define CONTROLS_GAMEPAD_START                                                 \
+#define CONTROLS_GAMEPAD_PAUSE                                                 \
     GAMEPAD_BUTTON_MIDDLE_RIGHT, GAMEPAD_BUTTON_MIDDLE_LEFT
 
 #define CONTROLS_KEYBOARD                                                      \
@@ -92,8 +90,7 @@
         {down, {CONTROLS_KEYBOARD_DOWN}},                                      \
         {jump, {CONTROLS_KEYBOARD_JUMP}},                                      \
         {shadow, {CONTROLS_KEYBOARD_SHADOW}},                                  \
-        {reset, {CONTROLS_KEYBOARD_RESET}},                                    \
-        {start, {CONTROLS_KEYBOARD_START}},                                    \
+        {pause, {CONTROLS_KEYBOARD_PAUSE}},                                    \
     }
 
 #define CONTROLS_GAMEPAD                                                       \
@@ -104,8 +101,7 @@
         {down, {CONTROLS_GAMEPAD_DOWN}},                                       \
         {jump, {CONTROLS_GAMEPAD_JUMP}},                                       \
         {shadow, {CONTROLS_GAMEPAD_SHADOW}},                                   \
-        {reset, {CONTROLS_GAMEPAD_RESET}},                                     \
-        {start, {CONTROLS_GAMEPAD_START}},                                     \
+        {pause, {CONTROLS_GAMEPAD_PAUSE}},                                     \
     }
 
 #define COL_LAYER_PLAYER 0b00000001

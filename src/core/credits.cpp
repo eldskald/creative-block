@@ -27,7 +27,7 @@ void credits::tick_() {
         this->message_->hidden = !this->message_->hidden;
         this->time_ = 0.0f;
     }
-    if (inputs::is_action_pressed(inputs::action::start)) {
+    if (inputs::is_action_pressed(inputs::action::pause)) {
         sfx::play(sfx::select);
         scene_manager::next_scene();
     }

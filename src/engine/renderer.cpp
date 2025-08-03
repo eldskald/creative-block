@@ -1,4 +1,5 @@
 #include "engine/renderer.h"
+#include "core/game.h"
 #include "core/key-gate.h"
 #include "defs.h"
 #include "engine/physics-body.h"
@@ -207,7 +208,7 @@ void renderer::unload() {
 }
 
 void renderer::render() {
-    renderer::update_water_waves_();
+    if (!game::is_paused()) renderer::update_water_waves_();
     renderer::update_window_size_();
     renderer::update_tex_sizes_();
     renderer::render_base_();
@@ -293,6 +294,8 @@ void renderer::update_water_waves_() {
 }
 
 void renderer::update_color_screen_() {
+    if (game::is_paused()) return;
+
     renderer::time_ += GetFrameTime();
     renderer::set_shader_property_(renderer::screen_color_shaders_.at(
                                        renderer::current_screen_color_shader_),

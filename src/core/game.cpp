@@ -11,6 +11,7 @@
 #include <raylib.h>
 
 game_element* game::root_ = nullptr;
+bool game::paused_ = false;
 
 void game::on_start() {
     SetRandomSeed(0);
@@ -34,15 +35,17 @@ void game::on_close() {
 void game::do_game_loop() {
     if (!game::root_) return;
     inputs::tick_();
-    physics_body::trigger_physics_tick_(game::root_);
-    physics_body::update_areas_();
-    game_element::trigger_tick_(game::root_);
-    renderer::render();
+    if (!game::paused_) {
+        physics_body::trigger_physics_tick_(game::root_);
+        physics_body::update_areas_();
+        game_element::trigger_tick_(game::root_);
+        bgm::tick_();
+    }
     sfx::tick_();
-    bgm::tick_();
+    renderer::render();
     game_element::reparent_elements_();
     game_element::delete_marked_();
-    scene_manager::load_new_scene_();
+    scene_manager::tick_();
 }
 
 void game::set_root(game_element* new_root) {
@@ -55,4 +58,12 @@ void game::set_root(game_element* new_root) {
 
 game_element* game::get_root() {
     return game::root_;
+}
+
+bool game::is_paused() {
+    return game::paused_;
+}
+
+void game::toggle_pause() {
+    game::paused_ = !game::paused_;
 }
