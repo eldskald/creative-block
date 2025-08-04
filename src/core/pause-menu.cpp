@@ -4,6 +4,7 @@
 #include "defs.h"
 #include "engine/inputs.h"
 #include "engine/text.h"
+#include <algorithm>
 #include <cmath>
 #include <raylib.h>
 #include <string>
@@ -11,14 +12,20 @@
 using namespace std;
 
 #ifndef WEB
-const int OPTIONS_TOTAL = 3;
+const int OPTIONS_TOTAL = 4;
 #else
-const int OPTIONS_TOTAL = 2;
+const int OPTIONS_TOTAL = 3;
 #endif
 
 pause_menu::option pause_menu::selected_ = pause_menu::option::resume;
+bool pause_menu::one_frame_buffer_ = true;
 
 void pause_menu::tick_() {
+    if (pause_menu::one_frame_buffer_) {
+        pause_menu::one_frame_buffer_ = false;
+        return;
+    }
+
     if (inputs::is_action_pressed(inputs::action::down))
         pause_menu::selected_ =
             (pause_menu::option)((pause_menu::selected_ + 1) % OPTIONS_TOTAL);
@@ -28,10 +35,14 @@ void pause_menu::tick_() {
 
     if (inputs::is_action_pressed(inputs::action::accept))
         pause_menu::select_option_();
+
+    if (pause_menu::selected_ == pause_menu::option::volume)
+        pause_menu::change_volume_();
 }
 
 void pause_menu::reset_state() {
     pause_menu::selected_ = pause_menu::option::resume;
+    pause_menu::one_frame_buffer_ = true;
 }
 
 void pause_menu::render_() {
@@ -51,6 +62,10 @@ void pause_menu::render_() {
                              PAUSE_MENU_RESTART_Y + y,
                              pause_menu::selected_ ==
                                  pause_menu::option::restart);
+    pause_menu::render_volume_(x,
+                               PAUSE_MENU_VOLUME_Y + y,
+                               pause_menu::selected_ ==
+                                   pause_menu::option::volume);
 #ifndef WEB
     pause_menu::render_text_(PAUSE_MENU_QUIT,
                              PAUSE_MENU_QUIT_Y + y,
@@ -72,6 +87,30 @@ void pause_menu::render_text_(string text, float y, bool selected) {
                selected ? MASK_SHADOW_COLOR : MASK_MAIN_COLOR);
 }
 
+void pause_menu::render_volume_(float x, float y, bool selected) {
+    const float convert_to_percent = 100.0f;
+    string volume =
+        to_string((int)(GetMasterVolume() * convert_to_percent)) + "%";
+    Vector2 size = MeasureTextEx(
+        text::label_font_, volume.data(), LABEL_FONT_SIZE, LABEL_FONT_SPACING);
+
+    DrawTextEx(text::label_font_,
+               PAUSE_MENU_VOLUME,
+               (Vector2){x + PAUSE_MENU_VOLUME_PADDING, floor(y - size.y / 2)},
+               LABEL_FONT_SIZE,
+               LABEL_FONT_SPACING,
+               selected ? MASK_SHADOW_COLOR : MASK_MAIN_COLOR);
+
+    DrawTextEx(
+        text::label_font_,
+        volume.data(),
+        (Vector2){x + PAUSE_MENU_WIDTH - PAUSE_MENU_VOLUME_PADDING - size.x,
+                  floor(y - size.y / 2)},
+        LABEL_FONT_SIZE,
+        LABEL_FONT_SPACING,
+        selected ? MASK_SHADOW_COLOR : MASK_MAIN_COLOR);
+}
+
 void pause_menu::select_option_() {
     switch (pause_menu::selected_) {
     case pause_menu::option::resume: {
@@ -83,11 +122,31 @@ void pause_menu::select_option_() {
         game::unpause();
         break;
     }
+    case pause_menu::option::volume: {
+        if (GetMasterVolume() > 0.0f)
+            SetMasterVolume(0.0f);
+        else
+            SetMasterVolume(1.0f);
+        break;
+    }
 #ifndef WEB
     case pause_menu::option::quit: {
         game::close_game();
         break;
     }
 #endif
+    }
+}
+
+void pause_menu::change_volume_() {
+    const float scale = 10.0f;
+    int volume = (int)(GetMasterVolume() * scale);
+    if (inputs::is_action_pressed(inputs::action::left)) {
+        int new_volume = volume - 1;
+        SetMasterVolume(clamp((float)new_volume / scale, 0.0f, 1.0f));
+    }
+    if (inputs::is_action_pressed(inputs::action::right)) {
+        int new_volume = volume + 1;
+        SetMasterVolume(clamp((float)new_volume / scale, 0.0f, 1.0f));
     }
 }

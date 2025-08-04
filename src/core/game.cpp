@@ -53,14 +53,13 @@ void game::do_game_loop() {
         physics_body::update_areas_();
         game_element::trigger_tick_(game::root_);
         bgm::tick_();
-    } else {
-        pause_menu::tick_();
     }
     sfx::tick_();
     renderer::render();
     game_element::reparent_elements_();
     game_element::delete_marked_();
     scene_manager::tick_();
+    if (game::paused_) pause_menu::tick_();
 }
 
 void game::set_root(game_element* new_root) {

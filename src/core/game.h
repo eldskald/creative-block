@@ -24,5 +24,4 @@ private:
 #ifndef WEB
     static bool game_closing_;
 #endif
-
 };

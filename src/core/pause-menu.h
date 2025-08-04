@@ -15,15 +15,18 @@ public:
 
 private:
 #ifdef WEB
-    enum option { resume, restart };
+    enum option { resume, restart, volume };
 #else
-    enum option { resume, restart, quit };
+    enum option { resume, restart, volume, quit };
 #endif
 
     static option selected_;
+    static bool one_frame_buffer_;
 
     static void tick_();
     static void render_();
     static void render_text_(string text, float y, bool selected);
+    static void render_volume_(float x, float y, bool selected);
     static void select_option_();
+    static void change_volume_();
 };

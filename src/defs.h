@@ -32,19 +32,22 @@
 
 #define PAUSE_MENU_WIDTH 160
 #ifndef WEB
-#define PAUSE_MENU_HEIGHT 85
+#define PAUSE_MENU_HEIGHT 100
 #else
-#define PAUSE_MENU_HEIGHT 70
+#define PAUSE_MENU_HEIGHT 85
 #endif
 #define PAUSE_MENU_LINE_WIDTH 2
 #define PAUSE_MENU_TITLE "Game paused"
 #define PAUSE_MENU_TITLE_Y 15
-#define PAUSE_MENU_RESUME "Resume"
+#define PAUSE_MENU_RESUME "Resume game"
 #define PAUSE_MENU_RESUME_Y 40
 #define PAUSE_MENU_RESTART "Restart level"
 #define PAUSE_MENU_RESTART_Y 55
+#define PAUSE_MENU_VOLUME "Volume"
+#define PAUSE_MENU_VOLUME_Y 70
+#define PAUSE_MENU_VOLUME_PADDING 30
 #define PAUSE_MENU_QUIT "Quit game"
-#define PAUSE_MENU_QUIT_Y 70
+#define PAUSE_MENU_QUIT_Y 85
 
 #define OPENING_SCREEN_TITLE_Y 80
 #define OPENING_SCREEN_MSG "Press enter to start"
