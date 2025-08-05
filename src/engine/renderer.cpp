@@ -406,7 +406,6 @@ void renderer::render_base_() {
     sprite::render_sprites_();
     key_gate::render_gates_();
     text::render_texts_();
-    if (game::is_paused()) pause_menu::render_();
 #ifdef DEV
     string fps = to_string(GetFPS()) + " FPS";
     DrawText(fps.data(), 4, 4, 8, DEBUG_COLOR_1); // NOLINT
@@ -455,6 +454,7 @@ void renderer::render_base_() {
                    0.0f,
                    WHITE);
     EndShaderMode();
+    if (game::is_paused()) pause_menu::render_();
     EndTextureMode();
 }
 
