@@ -53,6 +53,7 @@
      respawn,                                                                  \
      next_level,                                                               \
      select,                                                                   \
+     menu_navigate,                                                            \
      key,                                                                      \
      gate}
 #define SFX_ENUMS                                                              \
@@ -64,6 +65,7 @@
      sfx::respawn,                                                             \
      sfx::next_level,                                                          \
      sfx::select,                                                              \
+     sfx::menu_navigate,                                                       \
      sfx::key,                                                                 \
      sfx::gate}
 #define SFX_PATHS                                                              \
@@ -75,6 +77,7 @@
      {sfx::respawn, "assets/sfx/respawn.wav"},                                 \
      {sfx::next_level, "assets/sfx/next-level.wav"},                           \
      {sfx::select, "assets/sfx/select.wav"},                                   \
+     {sfx::menu_navigate, "assets/sfx/menu-navigate.wav"},                     \
      {sfx::key, "assets/sfx/key.wav"},                                         \
      {sfx::gate, "assets/sfx/gate.wav"}}
 

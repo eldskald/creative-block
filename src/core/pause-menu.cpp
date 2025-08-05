@@ -3,6 +3,7 @@
 #include "core/scene-manager.h"
 #include "defs.h"
 #include "engine/inputs.h"
+#include "engine/sfx.h"
 #include "engine/text.h"
 #include <algorithm>
 #include <cmath>
@@ -22,20 +23,26 @@ bool pause_menu::one_frame_buffer_ = true;
 
 void pause_menu::tick_() {
     if (pause_menu::one_frame_buffer_) {
+        sfx::play(sfx::select);
         pause_menu::one_frame_buffer_ = false;
         return;
     }
 
-    if (inputs::is_action_pressed(inputs::action::down))
+    if (inputs::is_action_pressed(inputs::action::down)) {
         pause_menu::selected_ =
             (pause_menu::option)((pause_menu::selected_ + 1) % OPTIONS_TOTAL);
-    if (inputs::is_action_pressed(inputs::action::up))
+        sfx::play(sfx::menu_navigate);
+    }
+    if (inputs::is_action_pressed(inputs::action::up)) {
         pause_menu::selected_ =
             (pause_menu::option)((pause_menu::selected_ + OPTIONS_TOTAL - 1) %
                                  OPTIONS_TOTAL);
-
-    if (inputs::is_action_pressed(inputs::action::accept))
+        sfx::play(sfx::menu_navigate);
+    }
+    if (inputs::is_action_pressed(inputs::action::accept)) {
         pause_menu::select_option_();
+        sfx::play(sfx::select);
+    }
 
     if (pause_menu::selected_ == pause_menu::option::volume)
         pause_menu::change_volume_();
@@ -157,18 +164,22 @@ void pause_menu::change_volume_() {
     if (inputs::is_action_pressed(inputs::action::left)) {
         int new_volume = volume - 1;
         SetMasterVolume(clamp((float)new_volume / scale, 0.0f, 1.0f));
+        sfx::play(sfx::select);
     }
     if (inputs::is_action_pressed(inputs::action::right)) {
         int new_volume = volume + 1;
         SetMasterVolume(clamp((float)new_volume / scale, 0.0f, 1.0f));
+        sfx::play(sfx::select);
     }
 }
 
 #ifndef WEB
 void pause_menu::change_fullscreen_() {
     if (inputs::is_action_pressed(inputs::action::left) ||
-        inputs::is_action_pressed(inputs::action::right))
+        inputs::is_action_pressed(inputs::action::right)) {
         ToggleFullscreen();
+        sfx::play(sfx::select);
+    }
 }
 
 void pause_menu::render_fullscreen_(float x, float y, bool selected) {
