@@ -31,7 +31,8 @@ void pause_menu::tick_() {
             (pause_menu::option)((pause_menu::selected_ + 1) % OPTIONS_TOTAL);
     if (inputs::is_action_pressed(inputs::action::up))
         pause_menu::selected_ =
-            (pause_menu::option)((pause_menu::selected_ - 1) % OPTIONS_TOTAL);
+            (pause_menu::option)((pause_menu::selected_ + OPTIONS_TOTAL - 1) %
+                                 OPTIONS_TOTAL);
 
     if (inputs::is_action_pressed(inputs::action::accept))
         pause_menu::select_option_();
