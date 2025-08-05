@@ -55,13 +55,13 @@ To build and run a development build, run the following:
 bin/dev
 ```
 
-It will make a build, run it and delete it after you close it. Easy for quickly compiling changes and running the game with them. You can also add a `SCENE` env var to load a specific scene on `assets/scenes` by name without the `.dat`, for example:
+It will make a build, run it and delete it after you close it. Easy for quickly compiling changes and running the game with them. You can also add a `SCENE` env var to load at the specified level, or `MUTE=1` to launch the game muted, for example:
 
 ```console
-SCENE=03 bin/dev
+SCENE=3 MUTE=1 bin/dev
 ```
 
-This will run the game starting on level 3, on `assets/scenes/03.dat` file. Only works on dev mode, that is, when running `make dev`.
+This will run the game starting on level 3 with master volume at zero. Only works on dev mode, that is, when running `make dev`.
 
 You can also make a development build that won't be ran automatically or deleted after you closing by running this:
 
