@@ -17,7 +17,7 @@ private:
 #ifdef WEB
     enum option { resume, restart, volume };
 #else
-    enum option { resume, restart, volume, quit };
+    enum option { resume, restart, volume, fullscreen, quit };
 #endif
 
     static option selected_;
@@ -29,4 +29,8 @@ private:
     static void render_volume_(float x, float y, bool selected);
     static void select_option_();
     static void change_volume_();
+#ifndef WEB
+    static void render_fullscreen_(float x, float y, bool selected);
+    static void change_fullscreen_();
+#endif
 };

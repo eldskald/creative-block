@@ -12,7 +12,7 @@
 using namespace std;
 
 #ifndef WEB
-const int OPTIONS_TOTAL = 4;
+const int OPTIONS_TOTAL = 5;
 #else
 const int OPTIONS_TOTAL = 3;
 #endif
@@ -39,6 +39,11 @@ void pause_menu::tick_() {
 
     if (pause_menu::selected_ == pause_menu::option::volume)
         pause_menu::change_volume_();
+
+#ifndef WEB
+    if (pause_menu::selected_ == pause_menu::option::fullscreen)
+        pause_menu::change_fullscreen_();
+#endif
 }
 
 void pause_menu::reset_state() {
@@ -68,6 +73,10 @@ void pause_menu::render_() {
                                pause_menu::selected_ ==
                                    pause_menu::option::volume);
 #ifndef WEB
+    pause_menu::render_fullscreen_(x,
+                                   PAUSE_MENU_FULLSCREEN_Y + y,
+                                   pause_menu::selected_ ==
+                                       pause_menu::option::fullscreen);
     pause_menu::render_text_(PAUSE_MENU_QUIT,
                              PAUSE_MENU_QUIT_Y + y,
                              pause_menu::selected_ == pause_menu::option::quit);
@@ -97,19 +106,18 @@ void pause_menu::render_volume_(float x, float y, bool selected) {
 
     DrawTextEx(text::label_font_,
                PAUSE_MENU_VOLUME,
-               (Vector2){x + PAUSE_MENU_VOLUME_PADDING, floor(y - size.y / 2)},
+               (Vector2){x + PAUSE_MENU_PADDING, floor(y - size.y / 2)},
                LABEL_FONT_SIZE,
                LABEL_FONT_SPACING,
                selected ? MASK_SHADOW_COLOR : MASK_MAIN_COLOR);
 
-    DrawTextEx(
-        text::label_font_,
-        volume.data(),
-        (Vector2){x + PAUSE_MENU_WIDTH - PAUSE_MENU_VOLUME_PADDING - size.x,
-                  floor(y - size.y / 2)},
-        LABEL_FONT_SIZE,
-        LABEL_FONT_SPACING,
-        selected ? MASK_SHADOW_COLOR : MASK_MAIN_COLOR);
+    DrawTextEx(text::label_font_,
+               volume.data(),
+               (Vector2){x + PAUSE_MENU_WIDTH - PAUSE_MENU_PADDING - size.x,
+                         floor(y - size.y / 2)},
+               LABEL_FONT_SIZE,
+               LABEL_FONT_SPACING,
+               selected ? MASK_SHADOW_COLOR : MASK_MAIN_COLOR);
 }
 
 void pause_menu::select_option_() {
@@ -131,6 +139,10 @@ void pause_menu::select_option_() {
         break;
     }
 #ifndef WEB
+    case pause_menu::fullscreen: {
+        ToggleFullscreen();
+        break;
+    }
     case pause_menu::option::quit: {
         game::close_game();
         break;
@@ -151,3 +163,34 @@ void pause_menu::change_volume_() {
         SetMasterVolume(clamp((float)new_volume / scale, 0.0f, 1.0f));
     }
 }
+
+#ifndef WEB
+void pause_menu::change_fullscreen_() {
+    if (inputs::is_action_pressed(inputs::action::left) ||
+        inputs::is_action_pressed(inputs::action::right))
+        ToggleFullscreen();
+}
+
+void pause_menu::render_fullscreen_(float x, float y, bool selected) {
+    string fullscreen = IsWindowFullscreen() ? "On" : "Off";
+    Vector2 size = MeasureTextEx(text::label_font_,
+                                 fullscreen.data(),
+                                 LABEL_FONT_SIZE,
+                                 LABEL_FONT_SPACING);
+
+    DrawTextEx(text::label_font_,
+               PAUSE_MENU_FULLSCREEN,
+               (Vector2){x + PAUSE_MENU_PADDING, floor(y - size.y / 2)},
+               LABEL_FONT_SIZE,
+               LABEL_FONT_SPACING,
+               selected ? MASK_SHADOW_COLOR : MASK_MAIN_COLOR);
+
+    DrawTextEx(text::label_font_,
+               fullscreen.data(),
+               (Vector2){x + PAUSE_MENU_WIDTH - PAUSE_MENU_PADDING - size.x,
+                         floor(y - size.y / 2)},
+               LABEL_FONT_SIZE,
+               LABEL_FONT_SPACING,
+               selected ? MASK_SHADOW_COLOR : MASK_MAIN_COLOR);
+}
+#endif
