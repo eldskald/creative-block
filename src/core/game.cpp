@@ -35,6 +35,9 @@ void game::on_start() {
     text::initialize();
     scene_manager::initialize();
     inputs::initialize();
+#ifdef MUTE
+    SetMasterVolume(0.0f);
+#endif
 }
 
 void game::on_close() {
