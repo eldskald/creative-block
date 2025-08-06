@@ -35,6 +35,7 @@ text_input* txt_2_hf_input = nullptr;
 text_input* txt_3_hf_input = nullptr;
 button* open_test_popup_btn = nullptr;
 popup* file_not_found_popup = nullptr;
+popup* clear_level_popup = nullptr;
 
 void editor::save_tilemap_data() {
     if (file_input->get_input().empty()) return;
@@ -148,6 +149,10 @@ void editor::export_tilemap_data() {
     SaveFileText(filepath.c_str(), data.data());
 }
 
+void editor::clear_tilemap_popup() {
+    clear_level_popup->open();
+}
+
 void editor::clear_tilemap() {
     tilemap_->clear();
     shadows_input->set_input("");
@@ -159,6 +164,7 @@ void editor::clear_tilemap() {
     txt_3_hf_input->set_input("");
     screen_colors_input->set_input("");
     bgm_input->set_input("");
+    popup::close_current_popup();
 }
 
 void editor::change_to_blocks_tileset() {
@@ -212,7 +218,7 @@ void editor::initialize() {
     clear_btn->label = "clear";
     clear_btn->rect =
         (Rectangle){448, TILESET_ORIGIN_Y - 40, 132, 32}; // NOLINT
-    clear_btn->on_click = editor::clear_tilemap;
+    clear_btn->on_click = editor::clear_tilemap_popup;
 
     save_btn = new button();
     save_btn->label = "save";
@@ -289,6 +295,11 @@ void editor::initialize() {
 
     file_not_found_popup = new popup();
     file_not_found_popup->line_2 = "file not found";
+
+    clear_level_popup = new popup();
+    clear_level_popup->line_1 = "Clear level?";
+    clear_level_popup->confirm_button = true;
+    clear_level_popup->on_confirm = editor::clear_tilemap;
 }
 
 void editor::tick() {
