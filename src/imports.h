@@ -1,12 +1,12 @@
 #pragma once
 
 #define SCENES_ENUM                                                            \
-    {opening,  level_01, level_02, level_03, level_04, level_05,               \
-     level_06, level_07, level_08, level_09, level_10, level_11,               \
-     level_12, level_13, level_14, level_15, level_16, level_17,               \
-     level_18, level_19, level_20, level_21, level_22, level_23,               \
-     level_24, level_25, level_26, level_27, level_28, level_29,               \
-     level_30, level_31, level_32, level_33, level_34, credits}
+    {opening,  level_01, level_02, level_03, level_04, level_05, level_06,     \
+     level_07, level_08, level_09, level_10, level_11, level_12, level_13,     \
+     level_14, level_15, level_16, level_17, level_18, level_19, level_20,     \
+     level_21, level_22, level_23, level_24, level_25, level_26, level_27,     \
+     level_28, level_29, level_30, level_31, level_32, level_33, level_34,     \
+     level_35, credits}
 #define SCENES_PATHS                                                           \
     {                                                                          \
         {opening, "assets/scenes/opening.dat"},                                \
@@ -44,6 +44,7 @@
         {level_32, "assets/scenes/32.dat"},                                    \
         {level_33, "assets/scenes/33.dat"},                                    \
         {level_34, "assets/scenes/34.dat"},                                    \
+        {level_35, "assets/scenes/35.dat"},                                    \
         {credits, "assets/scenes/credits.dat"}}
 
 #define SFX_DEF_ENUM                                                           \
