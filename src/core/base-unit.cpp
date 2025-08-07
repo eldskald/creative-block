@@ -1,6 +1,5 @@
 #include "core/base-unit.h"
 #include "defs.h"
-#include "imports.h"
 #include <algorithm>
 #include <cmath>
 #include <raylib.h>
@@ -18,6 +17,7 @@ void base_unit::press_jump() {
         this->is_jumping_ = true;
         this->is_pre_buffering_jump_ = false;
         this->jumped_();
+        if (this->get_carrier()) this->get_carrier()->let_go_of(this);
     } else {
         this->is_pre_buffering_jump_ = true;
         this->jump_buffer_timer_ = 0.0f;
@@ -75,6 +75,7 @@ void base_unit::tick_() {
         this->is_jumping_ = true;
         this->is_pre_buffering_jump_ = false;
         this->jumped_();
+        if (this->get_carrier()) this->get_carrier()->let_go_of(this);
     }
     if (this->is_grounded()) {
         this->jump_buffer_timer_ = 0.0f;
@@ -103,7 +104,7 @@ void base_unit::tick_() {
     // Only does so if it's not about to be deleted because when deleting it
     // we need to clear the pointers to it on its carrier/carrieds, and because
     // this is on tick_(), this can get carried again.
-    if (!this->is_marked_for_deletion()) {
+    if (!this->is_marked_for_deletion() && !this->is_jumping_) {
 
         // Ok, this is how we're going to do this: if it's already carried and
         // we find it standing on top of multiple units (say it's on top of a
