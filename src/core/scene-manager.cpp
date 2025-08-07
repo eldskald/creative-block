@@ -114,6 +114,7 @@ void scene_manager::load_new_scene_() {
         }
     }
     scene_manager::shadows_.clear();
+    scene_manager::shadow_histories_.clear();
     scene_manager::loading_scene_ = false;
     renderer::reset_water_waves();
 }
