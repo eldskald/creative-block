@@ -6,7 +6,7 @@
      level_14, level_15, level_16, level_17, level_18, level_19, level_20,     \
      level_21, level_22, level_23, level_24, level_25, level_26, level_27,     \
      level_28, level_29, level_30, level_31, level_32, level_33, level_34,     \
-     level_35, credits}
+     level_35, level_36, credits}
 #define SCENES_PATHS                                                           \
     {                                                                          \
         {opening, "assets/scenes/opening.dat"},                                \
@@ -45,6 +45,7 @@
         {level_33, "assets/scenes/33.dat"},                                    \
         {level_34, "assets/scenes/34.dat"},                                    \
         {level_35, "assets/scenes/35.dat"},                                    \
+        {level_36, "assets/scenes/36.dat"},                                    \
         {credits, "assets/scenes/credits.dat"}}
 
 #define SFX_DEF_ENUM                                                           \
