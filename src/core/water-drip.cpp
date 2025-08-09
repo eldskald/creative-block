@@ -21,6 +21,8 @@ water_drip::water_drip()
 }
 
 void water_drip::tick_() {
+    if (this->is_marked_for_deletion()) return;
+
     this->to_next_particle_ -= GetFrameTime();
     if (this->to_next_particle_ <= PARTICLE_DRIP_FRAME_2_TIME) {
         this->atlas_coords = PARTICLE_DRIP_FRAME_2_ATLAS_COORDS;
@@ -66,6 +68,8 @@ water_drip::sub_particle_::sub_particle_(Vector2 pos, Vector2 vel) {
 }
 
 void water_drip::particle_::tick_() {
+    if (this->is_marked_for_deletion()) return;
+
     if (!this->get_detected_bodies().empty()) {
         this->mark_for_deletion();
         this->spawn_sub_particles_();

@@ -22,6 +22,8 @@ puff::puff()
 }
 
 void puff::tick_() {
+    if (this->is_marked_for_deletion()) return;
+
     this->to_next_particle_ -= GetFrameTime();
     if (this->to_next_particle_ <= 0.0f && this->free_) {
         this->free_ = false;

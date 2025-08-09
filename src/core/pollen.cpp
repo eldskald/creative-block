@@ -16,6 +16,8 @@ pollen::pollen()
 }
 
 void pollen::tick_() {
+    if (this->is_marked_for_deletion()) return;
+
     this->to_next_particle_ -= GetFrameTime();
     if (this->to_next_particle_ <= 0.0f) {
         this->spawn_particle_();

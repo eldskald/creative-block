@@ -5,7 +5,6 @@
 #include "engine/physics-body.h"
 #include "engine/sprite.h"
 #include "imports.h"
-#include <cmath>
 #include <raylib.h>
 
 using namespace std;
@@ -21,6 +20,8 @@ wisp::wisp()
 }
 
 void wisp::tick_() {
+    if (this->is_marked_for_deletion()) return;
+
     this->to_next_particle_ -= GetFrameTime();
     if (this->to_next_particle_ <= 0.0f && this->free_) {
         this->free_ = false;

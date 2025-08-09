@@ -21,6 +21,8 @@ raindrop::raindrop()
 }
 
 void raindrop::tick_() {
+    if (this->is_marked_for_deletion()) return;
+
     this->to_next_particle_ -= GetFrameTime();
     if (this->to_next_particle_ <= 0.0f) {
         this->spawn_particle_();
@@ -68,6 +70,8 @@ raindrop::sub_particle_::sub_particle_(Vector2 pos, Vector2 vel) {
 }
 
 void raindrop::particle_::tick_() {
+    if (this->is_marked_for_deletion()) return;
+
     if (!this->get_detected_bodies().empty()) {
         this->mark_for_deletion();
         this->spawn_sub_particles_();
