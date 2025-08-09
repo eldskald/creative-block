@@ -47,7 +47,6 @@
     <canvas class=emscripten id=canvas oncontextmenu=event.preventDefault() tabindex=-1></canvas>
     <p id="output" />
     <input type="button" value="FULLSCREEN" onclick="Module.requestFullscreen(false, true)" />
-    <input type="button" id="btn-audio" value="MUTE" onclick="toggleAudio()">
     <script>
         var Module = {
             print: (function () {
@@ -67,35 +66,6 @@
                 return canvas;
             })()
         };
-    </script>
-    <script type='text/javascript'>
-        var audioBtn = document.querySelector('#btn-audio');
-
-        // An array of all contexts to resume on the page
-        const audioContexList = [];
-        (function() {
-            // A proxy object to intercept AudioContexts and
-            // add them to the array for tracking and resuming later
-            self.AudioContext = new Proxy(self.AudioContext, {
-                construct(target, args) {
-                    const result = new target(...args);
-                    audioContexList.push(result);
-                    if (result.state == "suspended") audioBtn.value = "RESUME";
-                    return result;
-                }
-            });
-        })();
-
-        function toggleAudio() {
-            var resumed = false;
-            audioContexList.forEach(ctx => {
-                if (ctx.state == "suspended") { ctx.resume(); resumed = true; }
-                else if (ctx.state == "running") ctx.suspend();
-            });
-
-            if (resumed) audioBtn.value = "MUTE";
-            else audioBtn.value = "RESUME";
-        }
     </script>
     {{{ SCRIPT }}}
 </body>
