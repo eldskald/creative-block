@@ -38,6 +38,9 @@ void game::on_start() {
 #ifdef MUTE
     SetMasterVolume(0.0f);
 #endif
+#if !WEB && !NOFULLSCREEN
+    ToggleFullscreen();
+#endif
 }
 
 void game::on_close() {
