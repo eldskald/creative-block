@@ -1,12 +1,12 @@
 
 # project
-/build
 /lib
 /include
-/.tmp
-/emsdk
 level-editor.*
 creative-block.*
+linux.zip
+windows.zip
+webgl.zip
 .env
 
 # ripgrep

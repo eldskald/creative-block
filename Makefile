@@ -19,7 +19,7 @@ LIBS_DIR 		:= lib
 LINUX_LIBS 		:= $(LIBS_DIR)/linux
 WIN_LIBS 		:= $(LIBS_DIR)/windows
 WEB_LIBS 		:= $(LIBS_DIR)/web
-BUILD_DIR 		:= build
+WEB_DEV_DIR		:= .dev-server
 
 ifeq ($(DEV_PLATFORM), Linux)
 	DEV_LIBS := $(LINUX_LIBS)
@@ -59,11 +59,11 @@ WEB_LINK_FLAGS = -L./$(WEB_LIBS) -lraylib
 .PHONY: all clean dev web-dev linux windows web editor
 
 # Default target, builds for all platforms
-all: linux windows web
+all: linux windows webgl
 
 # Clean target, deletes builds
 clean:
-	rm -rf ./$(BUILD_DIR)
+	rm -rf linux.zip windows.zip webgl.zip
 
 # Build a development build, can be ran on the compiler or sent to others with development tools
 dev:
@@ -71,37 +71,28 @@ dev:
 
 # Build a development build for web. It's web build with dev flags for logging and debugging
 web-dev:
-	-mkdir -p $(BUILD_DIR)
-	emcc $(call rwildcard,src,*.cpp) -o $(BUILD_DIR)/index.html $(WEB_COMPILE_FLAGS) $(WEB_LINK_FLAGS) -DDEV -s ASSERTIONS=1
-	rm $(BUILD_DIR)/index.*
+	mkdir -p $(WEB_DEV_DIR)
+	emcc $(call rwildcard,src,*.cpp) -o $(WEB_DEV_DIR)/index.html $(WEB_COMPILE_FLAGS) $(WEB_LINK_FLAGS) -DDEV -s ASSERTIONS=1
+	rm $(WEB_DEV_DIR)
 
 
 # Build for the Linux platform, puts the binary at the build target folder
 linux:
-	-rm $(BUILD_DIR)/$(APP_NAME)-linux.zip
-	-mkdir -p $(BUILD_DIR)
-	g++ $(call rwildcard,src,*.cpp) -o $(BUILD_DIR)/$(APP_NAME).x64_86 $(LINUX_COMPILE_FLAGS) $(LINUX_LINK_FLAGS)
-	cp -r assets $(BUILD_DIR)
-	cd $(BUILD_DIR) && zip -r -q $(APP_NAME)-linux.zip $(APP_NAME).x64_86 assets
-	rm $(BUILD_DIR)/$(APP_NAME).x64_86
-	rm -r $(BUILD_DIR)/assets
+	g++ $(call rwildcard,src,*.cpp) -o $(APP_NAME).x64_86 $(LINUX_COMPILE_FLAGS) $(LINUX_LINK_FLAGS)
+	zip -r -q linux.zip $(APP_NAME).x64_86 assets
+	rm $(APP_NAME).x64_86
 
 # Build for the Windows platform, puts the binary at the build target folder
 windows:
-	-rm $(BUILD_DIR)/$(APP_NAME)-windows.zip
-	-mkdir -p $(BUILD_DIR)
-	x86_64-w64-mingw32-g++ $(call rwildcard,src,*.cpp) -o $(BUILD_DIR)/$(APP_NAME).exe $(WIN_COMPILE_FLAGS) $(WIN_LINK_FLAGS)
-	cp -r assets $(BUILD_DIR)
-	cd $(BUILD_DIR) && zip -r -q $(APP_NAME)-windows.zip $(APP_NAME).exe assets
-	rm -r $(BUILD_DIR)/$(APP_NAME).exe $(BUILD_DIR)/assets
+	x86_64-w64-mingw32-g++ $(call rwildcard,src,*.cpp) -o $(APP_NAME).exe $(WIN_COMPILE_FLAGS) $(WIN_LINK_FLAGS)
+	zip -r -q windows.zip $(APP_NAME).exe assets
+	rm $(APP_NAME).exe
 
 # Build for Web
-web:
-	-rm $(BUILD_DIR)/$(APP_NAME)-web.zip
-	-mkdir -p $(BUILD_DIR)
-	emcc $(call rwildcard,src,*.cpp) -o $(BUILD_DIR)/index.html $(WEB_COMPILE_FLAGS) $(WEB_LINK_FLAGS)
-	cd $(BUILD_DIR) && zip -r -q $(APP_NAME)-web.zip index.html index.js index.wasm index.data
-	rm $(BUILD_DIR)/index.*
+webgl:
+	emcc $(call rwildcard,src,*.cpp) -o index.html $(WEB_COMPILE_FLAGS) $(WEB_LINK_FLAGS)
+	zip -r -q webgl.zip index.html index.js index.wasm index.data
+	rm index.*
 
 # Editor target, compiles the level editor and places it at the project root. Has debugger info.
 editor:
