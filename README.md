@@ -43,11 +43,11 @@ To make a build, run one of these commands:
 ```console
 make linux   # Makes a Linux build
 make windows # Makes a Windows build
-make web     # Makes a Web (HTML5) build
+make web     # Makes a WebGL (HTML5) build
 make         # All of the above
 ```
 
-It will create a `build` directory and put a zip file with the build there.
+This will create `linux.zip`, `windows.zip` and `webgl.zip` that can be sent to anyone to unzip and run the game.
 
 To build and run a development build, run the following:
 
@@ -55,13 +55,7 @@ To build and run a development build, run the following:
 bin/dev
 ```
 
-It will make a build, run it and delete it after you close it. Easy for quickly compiling changes and running the game with them. You can also add a `SCENE` env var to load at the specified level, or `MUTE=1` to launch the game muted, for example:
-
-```console
-SCENE=3 MUTE=1 bin/dev
-```
-
-This will run the game starting on level 3 with master volume at zero. Only works on dev mode, that is, when running `make dev`.
+It will make a build, run it and delete it after you close it. Easy for quickly compiling changes and running the game with them.
 
 You can also make a development build that won't be ran automatically or deleted after you closing by running this:
 
@@ -71,6 +65,22 @@ make web-dev
 ```
 
 This will put the build at the project root. Can be ran on a debugger and can be sent to testers to use with the built-in dev tools. The web version builds it for web, with logging, sanitizing and assertions enabled.
+
+When doing a dev build, you can also add a `SCENE` env var to load at the specified level, or `MUTE=1` to launch the game muted, or `NOFULLSCREEN=1` to not launch it at fullscreen, for example:
+
+```console
+SCENE=3 MUTE=1 bin/dev
+```
+
+This will run the game starting on level 3 with master volume at zero, fullscreen.
+
+```console
+NOFULLSCREEN=1 bin/dev
+```
+
+This will run the game at the start, windowed at full volume.
+
+These `SCENE`, `NOFULLSCREEN` and `MUTE` commands only work on dev mode, that is, when running `bin/dev` or `make dev`, won't work on release builds.
 
 To format and lint the whole project, run the following:
 
