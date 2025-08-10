@@ -47,7 +47,7 @@ make web     # Makes a Web (HTML5) build
 make         # All of the above
 ```
 
-It will create a `build` directory and put the binary `app` in there, just run it to play the game.
+It will create a `build` directory and put a zip file with the build there.
 
 To build and run a development build, run the following:
 
