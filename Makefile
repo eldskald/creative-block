@@ -76,7 +76,7 @@ dev:
 web-dev:
 	mkdir -p $(WEB_DEV_DIR)
 	emcc $(call rwildcard,src,*.cpp) -o $(WEB_DEV_DIR)/index.html $(WEB_COMPILE_FLAGS) $(WEB_LINK_FLAGS) -DDEV -s ASSERTIONS=1
-	rm $(WEB_DEV_DIR)
+	rm -r $(WEB_DEV_DIR)
 
 
 # Build for the Linux platform, puts the binary at the build target folder

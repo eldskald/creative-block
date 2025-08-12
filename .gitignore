@@ -2,6 +2,7 @@
 # project
 /lib
 /include
+/.dev-server
 level-editor.*
 creative-block.*
 linux.zip

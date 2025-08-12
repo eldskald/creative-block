@@ -13,5 +13,5 @@ then
 fi
 
 make web-dev
-cd build/web
+cd .dev-server
 python -m http.server ${PORT}
