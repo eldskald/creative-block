@@ -2124,8 +2124,8 @@ collision_layer = 00000100
 water_level = 128
 
 [key_gate]
-pos = (144,80)
-height = 24
+pos = (144,72)
+height = 32
 key_positions = (240,32)
 
 [player]
