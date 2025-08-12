@@ -87,11 +87,7 @@ void player::shadow_tick_() {
         scene_manager::shadow_pressed(this->history_, this);
         this->history_.clear();
         this->time_ = 0.0f;
-        for (auto action : {inputs::action::left,
-                            inputs::action::right,
-                            inputs::action::down,
-                            inputs::action::up,
-                            inputs::action::jump}) {
+        for (auto action : {inputs::action::left, inputs::action::right}) {
             if (inputs::is_action_down(action)) {
                 this->history_.push_back((input){action, true, this->time_});
             }
