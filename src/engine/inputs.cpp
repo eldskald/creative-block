@@ -36,7 +36,9 @@ void inputs::tick_() {
 
 bool inputs::is_action_down_(action act) {
     for (auto button : inputs::action_buttons_[act]) {
-        if (IsGamepadButtonDown(0, button)) return true;
+        for (int i = 0; i < CONTROLLER_IDS; i++) {
+            if (IsGamepadButtonDown(i, button)) return true;
+        }
     }
     for (auto key : inputs::action_keys_[act]) {
         if (IsKeyDown(key)) return true;

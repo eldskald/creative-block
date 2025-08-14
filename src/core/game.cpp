@@ -14,6 +14,11 @@
 game_element* game::root_ = nullptr;
 bool game::paused_ = false;
 
+#if !WEB && !NOFULLSCREEN
+bool game::first_frame_ = false;
+bool game::second_frame_ = false;
+#endif
+
 #ifndef WEB
 bool game::game_closing_ = false;
 
@@ -38,9 +43,6 @@ void game::on_start() {
 #ifdef MUTE
     SetMasterVolume(0.0f);
 #endif
-#if !WEB && !NOFULLSCREEN
-    ToggleFullscreen();
-#endif
 }
 
 void game::on_close() {
@@ -52,6 +54,15 @@ void game::on_close() {
 }
 
 void game::do_game_loop() {
+#if !WEB && !NOFULLSCREEN
+    if (!game::first_frame_) {
+        game::first_frame_ = true;
+    }
+    if (game::first_frame_ && !game::second_frame_) {
+        ToggleFullscreen();
+        game::second_frame_ = true;
+    }
+#endif
     if (!game::root_) return;
     inputs::tick_();
     if (!game::paused_) {

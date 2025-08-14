@@ -31,7 +31,7 @@ endif
 DEV_COMPILE_FLAGS = -std=c++17 -Wall -I./src -I./$(INCLUDE_DIR) -DDEV -fsanitize=address
 DEV_LINK_FLAGS = -L./$(DEV_LIBS)
 ifeq ($(DEV_PLATFORM), Linux)
-	DEV_LINK_FLAGS += -lraylib -lSDL2 -lSDL2main -lGL -lm -lpthread -ldl -lrt -lX11
+	DEV_LINK_FLAGS += -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 	EXT := .x86_64
 endif
 ifeq ($(DEV_PLATFORM), Windows)
@@ -52,7 +52,7 @@ EDITOR_COMPILE_FLAGS = -std=c++17 -Wall -I./$(INCLUDE_DIR)
 EDITOR_LINK_FLAGS = $(DEV_LINK_FLAGS)
 
 LINUX_COMPILE_FLAGS = -Wall -I./src -I./$(INCLUDE_DIR)
-LINUX_LINK_FLAGS = -L./$(LINUX_LIBS) -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -lSDL2 -lSDL2main
+LINUX_LINK_FLAGS = -L./$(LINUX_LIBS) -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 WIN_COMPILE_FLAGS = -Wall -I./src -I./$(INCLUDE_DIR)
 WIN_LINK_FLAGS = -L./$(WIN_LIBS) -lraylib -lgdi32 -lwinmm -lpthread -static -static-libgcc -static-libstdc++
 WEB_COMPILE_FLAGS = -Os -Wall -I./src -I./$(INCLUDE_DIR) -I$(EMSCRIPTEN_PATH)/cache/sysroot/include --preload-file assets --shell-file $(BUILD_WEB_SHELL) -DWEB -s USE_GLFW=3 -s EXPORTED_RUNTIME_METHODS=HEAPF32,requestFullscreen
@@ -77,7 +77,6 @@ web-dev:
 	mkdir -p $(WEB_DEV_DIR)
 	emcc $(call rwildcard,src,*.cpp) -o $(WEB_DEV_DIR)/index.html $(WEB_COMPILE_FLAGS) $(WEB_LINK_FLAGS) -DDEV -s ASSERTIONS=1
 	rm -r $(WEB_DEV_DIR)
-
 
 # Build for the Linux platform, puts the binary at the build target folder
 linux:

@@ -10,23 +10,13 @@ PATH=${PATH}:${EMSCRIPTEN_PATH}
 rm -rf ./lib ./include
 mkdir -p ./lib ./include ./lib/linux ./lib/windows ./lib/web
 
-# SDL2 for linux
-git clone --depth 1 --branch release-2.32.x https://github.com/libsdl-org/SDL.git
-cd SDL
-./configure
-make
-sudo make install
-cp include/* ../include
-cd ..
-rm -rf SDL
-
 # raylib for linux
 git clone --depth 1 --branch 5.5 https://github.com/raysan5/raylib.git
 cd raylib/src
-make PLATFORM=PLATFORM_DESKTOP_SDL SDL_INCLUDE_PATH=../../include
+make PLATFORM=PLATFORM_DESKTOP
+cp libraylib.a ../../lib/linux
 cp raylib.h ../../include
 cp raymath.h ../../include
-cp libraylib.a ../../lib/linux
 cd ../..
 rm -rf raylib
 

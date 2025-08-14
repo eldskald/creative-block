@@ -24,4 +24,8 @@ private:
 #ifndef WEB
     static bool game_closing_;
 #endif
+#if !WEB && !NOFULLSCREEN
+    static bool first_frame_;
+    static bool second_frame_;
+#endif
 };
