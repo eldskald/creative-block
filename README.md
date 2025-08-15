@@ -2,6 +2,8 @@
 
 This project is me trying to learn C++ with [raylib](https://github.com/raysan5/raylib).
 
+You can play the game or download it on [eldskald.itch.io/creative-block](https://eldskald.itch.io/creative-block).
+
 ## Dependencies
 
 This project is using the GNU Toolchain for C/C++ development, in particular, the [GNU Compiler Collection](https://www.gnu.org/software/gcc), the [MinGW-w64](https://www.mingw-w64.org/) compilers and [make](https://www.gnu.org/software/make). If you want to make an HTML5 build, you need to install [emsdk](https://emscripten.org/docs/getting_started/downloads.html). See more details on below.
@@ -20,7 +22,7 @@ Then, run the following to install dependencies:
 bin/install-dependencies
 ```
 
-This will install [raylib](https://github.com/raysan5/raylib) and [SDL2](https://wiki.libsdl.org/SDL2/FrontPage) on this project so you can compile it. You need [emsdk](https://emscripten.org/docs/getting_started/downloads.html) and its path on `.env` to compile it for web. If you don't have it, it will still work for the desktop versions. More info on the web version later.
+This will install [raylib](https://github.com/raysan5/raylib) on this project so you can compile it. You need [emsdk](https://emscripten.org/docs/getting_started/downloads.html) and its path on `.env` to compile it for web. If you don't have it, it will still work for the desktop versions. More info on the web version later.
 
 To erase dependencies and builds in case you want to redo everything, run:
 
