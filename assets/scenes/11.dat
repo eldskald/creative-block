@@ -1718,7 +1718,7 @@ water_level = 152
 [key_gate]
 pos = (160,72)
 height = 32
-key_positions = (56,48)
+key_positions = (56,40)
 
 [player]
 pos = (56,104)
@@ -1735,77 +1735,77 @@ tint = (255,0,0,255)
 animation = ((0,4),0.08);((0,5),0.08);((0,6),0.08);((1,6),0.08);((2,6),0.08);((2,5),0.08);((2,4),0.08);((1,4),0.08)
 
 [sprite]
-pos = (40,72)
+pos = (40,64)
 atlas_coords = (5,7)
 tint = (255,0,0,255)
 
 [sprite]
-pos = (48,72)
+pos = (48,64)
 atlas_coords = (5,7)
 tint = (255,0,0,255)
 
 [sprite]
-pos = (56,72)
+pos = (56,64)
 atlas_coords = (5,7)
 tint = (255,0,0,255)
 
 [sprite]
-pos = (64,72)
+pos = (64,64)
 atlas_coords = (5,7)
 tint = (255,0,0,255)
 
 [sprite]
-pos = (72,72)
+pos = (72,64)
 atlas_coords = (5,7)
 tint = (255,0,0,255)
 
 [sprite]
-pos = (80,72)
+pos = (80,64)
 atlas_coords = (5,7)
 tint = (255,0,0,255)
 
 [sprite]
-pos = (88,72)
+pos = (88,64)
 atlas_coords = (5,7)
 tint = (255,0,0,255)
 
 [sprite]
-pos = (96,72)
+pos = (96,64)
 atlas_coords = (5,7)
 tint = (255,0,0,255)
 
 [sprite]
-pos = (104,72)
+pos = (104,64)
 atlas_coords = (5,7)
 tint = (255,0,0,255)
 
 [sprite]
-pos = (112,72)
+pos = (112,64)
 atlas_coords = (5,7)
 tint = (255,0,0,255)
 
 [sprite]
-pos = (120,72)
+pos = (120,64)
 atlas_coords = (5,7)
 tint = (255,0,0,255)
 
 [sprite]
-pos = (128,72)
+pos = (128,64)
 atlas_coords = (5,7)
 tint = (255,0,0,255)
 
 [sprite]
-pos = (136,72)
+pos = (136,64)
 atlas_coords = (5,7)
 tint = (255,0,0,255)
 
 [sprite]
-pos = (144,72)
+pos = (144,64)
 atlas_coords = (5,7)
 tint = (255,0,0,255)
 
 [physics_body]
-pos = (40,72)
+pos = (40,64)
 type = fixed
 one_way = true
 collision_box = (0,0,112,4)
